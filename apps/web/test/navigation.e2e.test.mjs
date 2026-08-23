@@ -19,7 +19,7 @@ async function waitForServer(child) {
     output += chunk.toString();
   });
 
-  for (let attempt = 0; attempt < 40; attempt += 1) {
+  for (let attempt = 0; attempt < 120; attempt += 1) {
     try {
       const response = await fetch(`${baseUrl}/`);
       if (response.ok) return;
