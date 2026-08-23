@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/growing-guide.schema.json",
+  "title": "WACHUMA Growing Guide",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "publicId",
+    "guideKey",
+    "version",
+    "title",
+    "biologicalEntityPublicId",
+    "status",
+    "claims"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "publicId": { "type": "string", "minLength": 1 },
+    "guideKey": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "biologicalEntityPublicId": { "type": "string", "minLength": 1 },
+    "climateContext": { "type": "string" },
+    "techniqueContext": { "type": "string" },
+    "regionContext": { "type": "string" },
+    "status": { "enum": ["draft", "review", "published", "archived"] },
+    "summary": { "type": "string" },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    }
+  },
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sectionKey",
+        "statement",
+        "evidenceLevel",
+        "sourcePublicId",
+        "assertionType"
+      ],
+      "properties": {
+        "sectionKey": {
+          "enum": [
+            "propagation",
+            "substrate",
+            "watering",
+            "light",
+            "temperature",
+            "humidity",
+            "nutrition",
+            "calendar",
+            "pests",
+            "diseases",
+            "transplant",
+            "fruiting",
+            "harvest",
+            "observations",
+            "bibliography"
+          ]
+        },
+        "statement": { "type": "string", "minLength": 1 },
+        "evidenceLevel": { "type": "string", "minLength": 1 },
+        "sourcePublicId": { "type": "string", "minLength": 1 },
+        "assertionType": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

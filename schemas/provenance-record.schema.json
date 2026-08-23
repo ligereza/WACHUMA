@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.example/schemas/provenance-record.schema.json",
+  "title": "WACHUMA provenance record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "recordId",
+    "entityType",
+    "entityId",
+    "source",
+    "sourceRecordId",
+    "retrievedAt",
+    "license",
+    "attribution",
+    "assertionType",
+    "rawPayload",
+    "importerVersion",
+    "status"
+  ],
+  "properties": {
+    "recordId": { "type": "string", "minLength": 1 },
+    "entityType": {
+      "type": "string",
+      "enum": [
+        "taxon",
+        "biological_entity",
+        "specimen",
+        "culture",
+        "observation",
+        "place",
+        "media",
+        "source"
+      ]
+    },
+    "entityId": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "sourceRecordId": { "type": "string", "minLength": 1 },
+    "sourceUrl": { "type": "string", "format": "uri" },
+    "retrievedAt": { "type": "string", "format": "date-time" },
+    "license": { "type": "string", "minLength": 1 },
+    "attribution": { "type": "string", "minLength": 1 },
+    "assertionType": {
+      "type": "string",
+      "enum": [
+        "taxonomic_fact",
+        "contemporary_observation",
+        "historical_source",
+        "archaeological_evidence",
+        "academic_publication",
+        "community_knowledge",
+        "editorial_interpretation"
+      ]
+    },
+    "rawPayload": { "type": "object" },
+    "rawChecksum": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "importerVersion": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "accepted", "rejected", "superseded"]
+    }
+  }
+}

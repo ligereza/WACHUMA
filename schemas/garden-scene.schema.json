@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/garden-scene.schema.json",
+  "title": "WACHUMA Garden Scene",
+  "description": "Versioned, provenance-aware scene layout for the WACHUMA 3D garden.",
+  "type": "object",
+  "required": ["schemaVersion", "scene", "objects"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "type": "string", "const": "1.0" },
+    "scene": { "$ref": "#/$defs/scene" },
+    "objects": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/object" }
+    },
+    "recipes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/recipe" }
+    },
+    "assets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/asset" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "visibility": {
+      "type": "string",
+      "enum": ["public", "restricted", "sensitive", "community-controlled"]
+    },
+    "vector3": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" }
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "quaternion": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" }
+      ],
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "transform": {
+      "type": "object",
+      "required": ["position", "rotation", "scale"],
+      "properties": {
+        "position": { "$ref": "#/$defs/vector3" },
+        "rotation": { "$ref": "#/$defs/quaternion" },
+        "scale": { "$ref": "#/$defs/vector3" }
+      },
+      "additionalProperties": false
+    },
+    "scene": {
+      "type": "object",
+      "required": [
+        "id",
+        "publicId",
+        "name",
+        "coordinateSystem",
+        "units",
+        "visibility",
+        "version"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "publicId": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "locationId": { "$ref": "#/$defs/id" },
+        "coordinateSystem": { "enum": ["local-meter", "wgs84"] },
+        "units": { "const": "meters" },
+        "visibility": { "$ref": "#/$defs/visibility" },
+        "version": { "type": "integer", "minimum": 1 },
+        "defaultSeed": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "object": {
+      "type": "object",
+      "required": [
+        "id",
+        "publicId",
+        "objectType",
+        "label",
+        "sceneAssetId",
+        "transform",
+        "representationType",
+        "visibility"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "publicId": { "$ref": "#/$defs/id" },
+        "objectType": {
+          "enum": [
+            "specimen",
+            "biological-entity",
+            "planting-bed",
+            "container",
+            "terrain",
+            "decorative",
+            "marker"
+          ]
+        },
+        "label": { "type": "string", "minLength": 1 },
+        "specimenId": { "$ref": "#/$defs/id" },
+        "biologicalEntityId": { "$ref": "#/$defs/id" },
+        "sceneAssetId": { "$ref": "#/$defs/id" },
+        "transform": { "$ref": "#/$defs/transform" },
+        "representationType": {
+          "enum": [
+            "scientific-reference",
+            "specimen-capture",
+            "cultivar-reference",
+            "procedural-interpretation",
+            "artistic-representation"
+          ]
+        },
+        "visibility": { "$ref": "#/$defs/visibility" },
+        "metadata": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "asset": {
+      "type": "object",
+      "required": [
+        "id",
+        "publicId",
+        "format",
+        "origin",
+        "uri",
+        "contentHash",
+        "license",
+        "attribution",
+        "visibility"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "publicId": { "$ref": "#/$defs/id" },
+        "format": {
+          "enum": ["glb", "gltf", "obj", "blend", "texture", "thumbnail"]
+        },
+        "origin": {
+          "enum": ["imported", "procedural", "specimen-capture", "editorial"]
+        },
+        "uri": { "type": "string", "minLength": 1 },
+        "contentHash": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "license": { "type": "string", "minLength": 1 },
+        "attribution": { "type": "string", "minLength": 1 },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "visibility": { "$ref": "#/$defs/visibility" },
+        "metadata": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "recipe": {
+      "type": "object",
+      "required": [
+        "id",
+        "publicId",
+        "algorithm",
+        "algorithmVersion",
+        "seed",
+        "parameters",
+        "constraints",
+        "status",
+        "visibility"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "publicId": { "$ref": "#/$defs/id" },
+        "algorithm": { "type": "string", "minLength": 1 },
+        "algorithmVersion": { "type": "string", "minLength": 1 },
+        "seed": { "type": "integer" },
+        "parameters": { "type": "object" },
+        "constraints": { "type": "object" },
+        "targetBiologicalEntityId": { "$ref": "#/$defs/id" },
+        "targetSpecimenId": { "$ref": "#/$defs/id" },
+        "generatedAssetId": { "$ref": "#/$defs/id" },
+        "sourceIds": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "status": {
+          "enum": ["draft", "validated", "generated", "failed", "archived"]
+        },
+        "visibility": { "$ref": "#/$defs/visibility" }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        { "required": ["targetBiologicalEntityId"] },
+        { "required": ["targetSpecimenId"] }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

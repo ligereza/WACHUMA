@@ -1,0 +1,41 @@
+{
+  "name": "wachuma",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Jardín digital, atlas biológico y base de conocimiento biocultural.",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:migrate": "pnpm --filter @wachuma/db migrate",
+    "db:seed": "pnpm --filter @wachuma/db seed",
+    "db:verify": "node scripts/verify-db.mjs",
+    "import:gbif:snapshot": "pnpm --filter @wachuma/importer-gbif build && node scripts/fetch-gbif-snapshot.mjs",
+    "quality:content": "node scripts/validate-content.mjs",
+    "quality:licenses": "node scripts/validate-licenses.mjs",
+    "quality:migrations": "node scripts/validate-migrations.mjs",
+    "quality:procedural": "node scripts/validate-procedural-adapter.mjs",
+    "validate:glb": "node scripts/validate-glb.mjs",
+    "verify:release": "node scripts/verify-release.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.3",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "gltf-validator": "2.0.0-dev.3.10",
+    "prettier": "^3.6.2",
+    "tsx": "^4.19.3",
+    "turbo": "^2.5.6",
+    "typescript": "^5.9.2"
+  }
+}

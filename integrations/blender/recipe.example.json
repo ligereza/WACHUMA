@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/procedural-adapter-request.schema.json",
+  "schemaVersion": "1.0",
+  "recipe": {
+    "publicId": "recipe-blender-geometry-nodes-echinopsis-demo",
+    "algorithm": "blender-geometry-nodes-cactus",
+    "algorithmVersion": "0.1.0",
+    "seed": 304,
+    "parameters": {
+      "height": 2.35,
+      "radius": 0.34,
+      "ribs": 7,
+      "areolesPerRib": 14
+    },
+    "constraints": {
+      "taxonomicClaim": false,
+      "sourceRequiredForScientificUse": true
+    },
+    "targetBiologicalEntityId": "biological-entity-echinopsis-pachanoi",
+    "sourceIds": []
+  },
+  "output": {
+    "format": "glb",
+    "assetPath": "./echinopsis-pachanoi-blender.glb",
+    "manifestPath": "./echinopsis-pachanoi-blender.manifest.json"
+  },
+  "generator": {
+    "algorithm": "blender-geometry-nodes-cactus",
+    "algorithmVersion": "0.1.0",
+    "runtime": "Blender 4.x/5.x Geometry Nodes",
+    "repositoryUrl": "https://www.blender.org/",
+    "license": "GPL-2.0-or-later",
+    "attribution": "Blender Foundation; WACHUMA external adapter"
+  }
+}

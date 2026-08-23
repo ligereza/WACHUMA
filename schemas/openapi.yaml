@@ -1,0 +1,1027 @@
+openapi: 3.1.0
+info:
+  title: WACHUMA API
+  version: 0.1.0
+  description: API pública y protegida para el jardín digital biocultural.
+servers:
+  - url: /api/v1
+paths:
+  /health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          description: Servicio disponible
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, service]
+                properties:
+                  status: { type: string, enum: [ok] }
+                  service: { type: string }
+  /species:
+    get:
+      operationId: listSpecies
+      summary: Explorar especies y entidades biológicas publicables
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema: { type: string, maxLength: 160 }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 24 }
+      responses:
+        "200":
+          description: Especies publicables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SpeciesSummary"
+  /species/{publicId}:
+    get:
+      operationId: getSpecies
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Ficha de especie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpeciesDocument"
+        "404":
+          description: No encontrada
+  /scenes:
+    get:
+      operationId: listScenes
+      summary: Listar escenas 3D publicables
+      responses:
+        "200":
+          description: Escenas visibles para el público
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SceneSummary"
+  /scenes/{publicId}:
+    get:
+      operationId: getScene
+      summary: Obtener una escena 3D con filtros de visibilidad aplicados
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Escena 3D pública
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GardenSceneDocument"
+        "404":
+          description: Escena no encontrada
+  /garden/specimens:
+    get:
+      operationId: listPublicSpecimens
+      summary: Listar ejemplares con visibilidad pública
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 24 }
+      responses:
+        "200":
+          description: Ejemplares públicos sin ubicaciones exactas privadas
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+  /garden/locations:
+    get:
+      operationId: listPublicGardenLocations
+      summary: Listar ubicaciones públicas del jardín
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 500, default: 100 }
+      responses:
+        "200":
+          description: Ubicaciones públicas sin geometría exacta privada
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+  /specimens/{publicId}:
+    get:
+      operationId: getPublicSpecimen
+      summary: Obtener un ejemplar público y su URL de identificación
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Ejemplar público
+          content:
+            application/json:
+              schema: { type: object }
+        "404":
+          description: Ejemplar no encontrado o no publicable
+  /lineage/{publicId}:
+    get:
+      operationId: getPublicLineage
+      summary: Obtener un árbol de linaje con relaciones públicas
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Árbol y relaciones de linaje publicables
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [subjectPublicId, relationships, tree]
+                properties:
+                  subjectPublicId: { type: string }
+                  relationships: { type: array, items: { type: object } }
+                  tree: { type: object }
+        "404":
+          description: Sujeto no encontrado o no publicable
+  /guides:
+    get:
+      operationId: listGrowingGuides
+      summary: Listar manuales de cultivo publicados
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 24 }
+      responses:
+        "200":
+          description: Manuales publicados con claims versionados
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+  /guides/{publicId}:
+    get:
+      operationId: getGrowingGuide
+      summary: Obtener un manual de cultivo publicado
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Manual publicado
+          content:
+            application/json:
+              schema: { type: object }
+        "404":
+          description: Manual no encontrado o no publicado
+  /cultivation/events:
+    get:
+      operationId: listPublicCultivationEvents
+      summary: Listar eventos de cultivo públicos
+      parameters:
+        - name: specimenPublicId
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        "200":
+          description: Observaciones y eventos sin ubicaciones exactas privadas
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+  /culture/relations:
+    get:
+      operationId: listPublicCulturalRelations
+      summary: Listar relaciones culturales aceptadas y públicas
+      parameters:
+        - name: subjectPublicId
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        "200":
+          description: Relaciones con fuente, perspectiva, sensibilidad y contexto
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+  /map/places:
+    get:
+      operationId: listPublicPlaces
+      summary: Obtener geometrías públicas redondeadas
+      responses:
+        "200":
+          description: Lugares publicables sin geometría exacta
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+  /observations:
+    get:
+      operationId: listPublicObservations
+      summary: Listar observaciones públicas con geometría segura y procedencia
+      parameters:
+        - name: subjectPublicId
+          in: query
+          required: false
+          schema: { type: string }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 500, default: 100 }
+      responses:
+        "200":
+          description: Observaciones públicas sin geometría exacta
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PublicObservation" }
+  /claims:
+    get:
+      operationId: listPublicClaims
+      summary: Listar afirmaciones públicas con evidencia y revisión
+      parameters:
+        - name: subjectPublicId
+          in: query
+          required: false
+          schema: { type: string }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 500, default: 100 }
+      responses:
+        "200":
+          description: Afirmaciones aceptadas y atribuibles
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PublicClaim" }
+  /derivations:
+    get:
+      operationId: listPublicDerivations
+      summary: Listar eventos públicos de derivación de material biológico
+      parameters:
+        - name: subjectPublicId
+          in: query
+          required: false
+          schema: { type: string }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 500, default: 100 }
+      responses:
+        "200":
+          description: Eventos y materiales derivados publicados
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PublicDerivationEvent" }
+  /traits:
+    get:
+      operationId: listPublicTraitMeasurements
+      summary: Listar mediciones públicas de rasgos ecológicos o de cultivo
+      parameters:
+        - name: subjectPublicId
+          in: query
+          required: false
+          schema: { type: string }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 500, default: 100 }
+      responses:
+        "200":
+          description: Mediciones con unidad, método y fuente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PublicTraitMeasurement" }
+  /sources:
+    get:
+      operationId: listPublicSources
+      summary: Listar bibliografía y fuentes atribuibles
+      responses:
+        "200":
+          description: Fuentes enlazadas a datos públicos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+
+  /admin/locations:
+    get:
+      operationId: listAdminLocations
+      summary: Listar ubicaciones para gestión protegida
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Ubicaciones visibles para el equipo autenticado
+          content:
+            application/json:
+              schema:
+                {
+                  type: array,
+                  items: { $ref: "#/components/schemas/AdminLocation" },
+                }
+        "403": { description: Credenciales ausentes o inválidas }
+        "503": { description: Persistencia no configurada }
+    post:
+      operationId: createAdminLocation
+      summary: Crear una ubicación del jardín
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminLocationInput" }
+      responses:
+        "201":
+          description: Ubicación creada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminLocation" }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "409": { description: Identificador duplicado }
+
+  /admin/locations/{publicId}:
+    parameters:
+      - name: publicId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getAdminLocation
+      summary: Obtener una ubicación para gestión protegida
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Ubicación
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminLocation" }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ubicación no encontrada }
+    patch:
+      operationId: updateAdminLocation
+      summary: Actualizar una ubicación
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminLocationUpdate" }
+      responses:
+        "200":
+          description: Ubicación actualizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminLocation" }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ubicación no encontrada }
+    delete:
+      operationId: archiveAdminLocation
+      summary: Archivar una ubicación sin eliminar su historial
+      security: [{ bearerAuth: [] }]
+      responses:
+        "204": { description: Ubicación archivada }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ubicación no encontrada }
+
+  /admin/specimens:
+    get:
+      operationId: listAdminSpecimens
+      summary: Listar ejemplares para gestión protegida
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Ejemplares, incluidos los restringidos
+          content:
+            application/json:
+              schema:
+                {
+                  type: array,
+                  items: { $ref: "#/components/schemas/AdminSpecimen" },
+                }
+        "403": { description: Credenciales ausentes o inválidas }
+    post:
+      operationId: createAdminSpecimen
+      summary: Crear un ejemplar
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminSpecimenInput" }
+      responses:
+        "201":
+          description: Ejemplar creado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminSpecimen" }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Entidad biológica no encontrada }
+
+  /admin/specimens/{publicId}:
+    parameters:
+      - name: publicId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getAdminSpecimen
+      summary: Obtener un ejemplar para gestión protegida
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Ejemplar
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminSpecimen" }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ejemplar no encontrado }
+    patch:
+      operationId: updateAdminSpecimen
+      summary: Actualizar un ejemplar
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminSpecimenUpdate" }
+      responses:
+        "200":
+          description: Ejemplar actualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminSpecimen" }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ejemplar no encontrado }
+    delete:
+      operationId: archiveAdminSpecimen
+      summary: Archivar un ejemplar sin borrar su procedencia
+      security: [{ bearerAuth: [] }]
+      responses:
+        "204": { description: Ejemplar archivado }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ejemplar no encontrado }
+
+  /admin/specimens/{publicId}/location:
+    parameters:
+      - name: publicId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: assignAdminSpecimenLocation
+      summary: Asignar ubicación actual a un ejemplar
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [locationPublicId]
+              properties:
+                locationPublicId: { type: string }
+                startsAt: { type: string, format: date-time }
+      responses:
+        "200":
+          description: Asignación actualizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminSpecimen" }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ejemplar o ubicación no encontrada }
+    delete:
+      operationId: clearAdminSpecimenLocation
+      summary: Cerrar la ubicación actual de un ejemplar
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Asignación cerrada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminSpecimen" }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ejemplar no encontrado }
+
+  /admin/cultivation/events:
+    post:
+      operationId: createAdminCultivationEvent
+      summary: Registrar un evento de cultivo
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminCultivationEventInput" }
+      responses:
+        "201":
+          description: Evento registrado
+          content:
+            application/json:
+              schema: { type: object }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Ejemplar, ubicación o fuente no encontrada }
+
+  /admin/culture/relations:
+    get:
+      operationId: listAdminCulturalRelations
+      summary: Listar relaciones culturales para revisión protegida
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Relaciones, incluidos borradores y restringidas
+          content:
+            application/json:
+              schema:
+                {
+                  type: array,
+                  items: { $ref: "#/components/schemas/AdminCulturalRelation" },
+                }
+        "403": { description: Credenciales ausentes o inválidas }
+    post:
+      operationId: createAdminCulturalRelation
+      summary: Registrar una relación cultural con procedencia explícita
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminCulturalRelationInput" }
+      responses:
+        "201":
+          description: Relación registrada como borrador o revisión
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminCulturalRelation" }
+        "400": { description: Entrada inválida o contexto insuficiente }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Sujeto, comunidad, lugar o fuente no encontrada }
+
+  /admin/culture/relations/{publicId}:
+    parameters:
+      - name: publicId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getAdminCulturalRelation
+      summary: Obtener una relación para revisión protegida
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Relación cultural
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminCulturalRelation" }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Relación no encontrada }
+
+  /admin/culture/relations/{publicId}/takedown:
+    parameters:
+      - name: publicId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: takedownAdminCulturalRelation
+      summary: Retirar una relación cultural y conservar su procedencia
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminCulturalTakedownInput" }
+      responses:
+        "200":
+          description: Relación retirada, restringida y marcada como rechazada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminCulturalRelation" }
+        "400": { description: Motivo inválido }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Relación no encontrada }
+    patch:
+      operationId: updateAdminCulturalRelation
+      summary: Actualizar contexto o estado de revisión
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminCulturalRelationUpdate" }
+      responses:
+        "200":
+          description: Relación actualizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminCulturalRelation" }
+        "400": { description: Entrada inválida o contexto insuficiente }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Relación no encontrada }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+  schemas:
+    ApiError:
+      type: object
+      required: [error, message]
+      properties:
+        error: { type: string }
+        message: { type: string }
+        requestId: { type: string }
+        details: { type: object }
+    SpeciesSummary:
+      type: object
+      required:
+        [
+          publicId,
+          scientificName,
+          displayName,
+          rank,
+          taxonomicStatus,
+          entityType,
+          visibility,
+          externalIdentifiers,
+        ]
+      properties:
+        publicId: { type: string }
+        scientificName: { type: string }
+        displayName: { type: string }
+        rank: { type: string }
+        taxonomicStatus: { type: string }
+        entityType: { type: string }
+        acceptedName: { type: string }
+        visibility: { type: string }
+        externalIdentifiers:
+          type: array
+          items:
+            type: object
+            required: [namespace, identifier]
+            properties:
+              namespace: { type: string }
+              identifier: { type: string }
+              canonicalUrl: { type: string, format: uri }
+    PublicObservation:
+      type: object
+      required:
+        [
+          publicId,
+          subjectPublicId,
+          observedAt,
+          observationBasis,
+          environment,
+          uncertainty,
+        ]
+      properties:
+        publicId: { type: string }
+        subjectPublicId: { type: string }
+        observedAt: { type: string, format: date-time }
+        observationBasis:
+          { type: string, enum: [human, photo, specimen, external] }
+        protocolPublicId: { type: string }
+        placePublicId: { type: string }
+        placeName: { type: string }
+        geometryPublic: { type: object }
+        environment: { type: object }
+        uncertainty: { type: object }
+        sourcePublicId: { type: string }
+        sourceRecordId: { type: string }
+    PublicClaim:
+      type: object
+      required:
+        [
+          publicId,
+          subjectType,
+          subjectId,
+          predicate,
+          assertionType,
+          evidenceLevel,
+          sourceId,
+          visibility,
+          license,
+          reviewStatus,
+        ]
+      properties:
+        publicId: { type: string }
+        subjectType: { type: string }
+        subjectId: { type: string }
+        subjectPublicId: { type: string }
+        predicate: { type: string }
+        objectType: { type: string }
+        objectId: { type: string }
+        objectUri: { type: string, format: uri }
+        objectText: { type: string }
+        value: { type: object }
+        assertionType: { type: string }
+        evidenceLevel: { type: string }
+        authorAgentId: { type: string }
+        sourceId: { type: string }
+        sourcePublicId: { type: string }
+        sourceRecordId: { type: string }
+        authorPerspective: { type: string }
+        recordedOn: { type: string, format: date }
+        visibility: { type: string }
+        license: { type: string }
+        reviewStatus: { type: string }
+    PublicDerivationEvent:
+      type: object
+      required: [publicId, eventType, occurredAt, visibility, materials]
+      properties:
+        publicId: { type: string }
+        eventType: { type: string }
+        method: { type: string }
+        occurredAt: { type: string, format: date-time }
+        operatorAgentId: { type: string }
+        locationId: { type: string }
+        sourceId: { type: string }
+        notes: { type: string }
+        visibility: { type: string }
+        materials: { type: array, items: { type: object } }
+    PublicTraitMeasurement:
+      type: object
+      required:
+        [
+          publicId,
+          traitDefinitionId,
+          traitNamespace,
+          traitIdentifier,
+          traitLabel,
+          measuredAt,
+          uncertainty,
+          sourceId,
+          visibility,
+        ]
+      properties:
+        publicId: { type: string }
+        traitDefinitionId: { type: string }
+        traitNamespace: { type: string }
+        traitIdentifier: { type: string }
+        traitLabel: { type: string }
+        taxonId: { type: string }
+        biologicalEntityId: { type: string }
+        specimenId: { type: string }
+        observationId: { type: string }
+        valueNumeric: { type: number }
+        valueText: { type: string }
+        value: { type: object }
+        unit: { type: string }
+        measuredAt: { type: string, format: date-time }
+        method: { type: string }
+        uncertainty: { type: object }
+        protocolId: { type: string }
+        sourceId: { type: string }
+        visibility: { type: string }
+    SpeciesDocument:
+      allOf:
+        - $ref: "#/components/schemas/SpeciesSummary"
+        - type: object
+          required:
+            [
+              id,
+              description,
+              ecology,
+              distribution,
+              cultivation,
+              vernacularNames,
+              culturalRelations,
+              history,
+              sources,
+              relatedSpecies,
+              media,
+            ]
+          properties:
+            id: { type: string }
+            taxonId: { type: string }
+            taxonomicVariants: { type: array, items: { type: object } }
+            description: { type: string }
+            ecology: { type: array, items: { type: string } }
+            distribution: { type: array, items: { type: object } }
+            cultivation: { type: array, items: { type: string } }
+            vernacularNames: { type: array, items: { type: object } }
+            culturalRelations: { type: array, items: { type: object } }
+            history: { type: array, items: { type: string } }
+            sources: { type: array, items: { type: object } }
+            relatedSpecies:
+              {
+                type: array,
+                items: { $ref: "#/components/schemas/SpeciesSummary" },
+              }
+            media: { type: array, items: { type: object } }
+    SceneSummary:
+      type: object
+      required: [publicId, name, visibility, version, objectCount]
+      properties:
+        publicId: { type: string }
+        name: { type: string }
+        visibility: { type: string }
+        version: { type: integer }
+        objectCount: { type: integer }
+    GardenSceneDocument:
+      type: object
+      required: [schemaVersion, scene, assets, objects, recipes]
+      properties:
+        schemaVersion: { type: string }
+        scene: { type: object }
+        assets: { type: array, items: { type: object } }
+        objects: { type: array, items: { type: object } }
+        recipes: { type: array, items: { type: object } }
+    AdminLocationInput:
+      type: object
+      required: [publicId, name, locationType, visibility]
+      properties:
+        publicId: { type: string }
+        name: { type: string }
+        locationType: { type: string }
+        parentPublicId: { type: string }
+        geometryPublic: { type: object }
+        geometryExact:
+          { type: object, description: Nunca se devuelve en DTOs públicos }
+        visibility: { type: string }
+        notes: { type: string }
+    AdminLocationUpdate:
+      type: object
+      minProperties: 1
+      description: Todos los campos son opcionales en una actualización; publicId se toma de la ruta.
+      properties:
+        name: { type: string }
+        locationType: { type: string }
+        parentPublicId: { type: string }
+        geometryPublic: { type: object }
+        geometryExact:
+          { type: object, description: Nunca se devuelve en DTOs públicos }
+        visibility: { type: string }
+        notes: { type: string }
+    AdminLocation:
+      type: object
+      required: [publicId, name, locationType, visibility]
+      properties:
+        publicId: { type: string }
+        name: { type: string }
+        locationType: { type: string }
+        parentPublicId: { type: string }
+        geometryPublic: { type: object }
+        visibility: { type: string }
+        notes: { type: string }
+    AdminSpecimenInput:
+      type: object
+      required:
+        [publicId, specimenType, biologicalEntityPublicId, status, visibility]
+      properties:
+        publicId: { type: string }
+        specimenType: { type: string }
+        biologicalEntityPublicId: { type: string }
+        status: { type: string }
+        visibility: { type: string }
+        acquiredAt: { type: string, format: date-time }
+        notes: { type: string }
+    AdminSpecimenUpdate:
+      type: object
+      minProperties: 1
+      properties:
+        specimenType: { type: string }
+        biologicalEntityPublicId: { type: string }
+        status: { type: string }
+        visibility: { type: string }
+        acquiredAt: { type: string, format: date-time }
+        notes: { type: string }
+    AdminSpecimen:
+      type: object
+      required:
+        [publicId, specimenType, biologicalEntityPublicId, status, visibility]
+      properties:
+        publicId: { type: string }
+        specimenType: { type: string }
+        biologicalEntityPublicId: { type: string }
+        status: { type: string }
+        visibility: { type: string }
+        acquiredAt: { type: string, format: date-time }
+        notes: { type: string }
+        currentLocationPublicId: { type: string }
+    AdminCultivationEventInput:
+      type: object
+      required: [specimenPublicId, eventType, occurredAt]
+      properties:
+        specimenPublicId: { type: string }
+        locationPublicId: { type: string }
+        eventType: { type: string }
+        occurredAt: { type: string, format: date-time }
+        notes: { type: string }
+        measurements: { type: object }
+        sourcePublicId: { type: string }
+    AdminCulturalRelationInput:
+      type: object
+      required:
+        [
+          publicId,
+          relationType,
+          subjectPublicId,
+          description,
+          sourcePublicId,
+          evidenceLevel,
+          assertionType,
+          authorPerspective,
+          sensitivity,
+          accessLevel,
+          license,
+          reviewStatus,
+        ]
+      properties:
+        publicId: { type: string }
+        relationType: { type: string }
+        subjectPublicId: { type: string }
+        valueText: { type: string }
+        description: { type: string }
+        culturePublicId: { type: string }
+        communityPublicId: { type: string }
+        placePublicId: { type: string }
+        historicalPeriodPublicId: { type: string }
+        documentedByAgentPublicId: { type: string }
+        sourcePublicId: { type: string }
+        evidenceLevel: { type: string }
+        assertionType: { type: string }
+        authorPerspective: { type: string }
+        sensitivity: { type: string }
+        accessLevel: { type: string }
+        license: { type: string }
+        reviewNote: { type: string }
+        reviewStatus: { type: string }
+        recordedOn: { type: string, format: date }
+      anyOf:
+        - required: [communityPublicId]
+        - required: [culturePublicId]
+    AdminCulturalRelationUpdate:
+      type: object
+      minProperties: 1
+      properties:
+        relationType: { type: string }
+        valueText: { type: string }
+        description: { type: string }
+        culturePublicId: { type: string, nullable: true }
+        communityPublicId: { type: string }
+        placePublicId: { type: string }
+        historicalPeriodPublicId: { type: string, nullable: true }
+        documentedByAgentPublicId: { type: string, nullable: true }
+        sourcePublicId: { type: string }
+        evidenceLevel: { type: string }
+        assertionType: { type: string }
+        authorPerspective: { type: string }
+        sensitivity: { type: string }
+        accessLevel: { type: string }
+        license: { type: string }
+        reviewNote: { type: string }
+        reviewStatus: { type: string }
+        recordedOn: { type: string, format: date }
+    AdminCulturalTakedownInput:
+      type: object
+      required: [reason]
+      properties:
+        reason: { type: string, minLength: 1, maxLength: 4000 }
+    AdminCulturalRelation:
+      allOf:
+        - $ref: "#/components/schemas/AdminCulturalRelationInput"

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://wachuma.org/schemas/cultural-relation.schema.json",
+  "schemaVersion": "1.0",
+  "relations": [
+    {
+      "publicId": "cultural-relation-wachuma-demo",
+      "subjectPublicId": "biological-entity-echinopsis-pachanoi",
+      "relationType": "vernacular_name",
+      "valueText": "wachuma",
+      "description": "Registro de demostración para mostrar procedencia y perspectiva; no es una afirmación histórica publicada.",
+      "communityPublicId": "community-demo-pending-review",
+      "historicalPeriodPublicId": "period-wachuma-demo",
+      "documentedByAgentPublicId": "agent-wachuma-editorial-demo",
+      "sourcePublicId": "source-wachuma-demo-editorial",
+      "evidenceLevel": "unverified",
+      "assertionType": "editorial_interpretation",
+      "authorPerspective": "WACHUMA editorial demo",
+      "sensitivity": "sensitive",
+      "accessLevel": "restricted",
+      "license": "WACHUMA-PROJECT",
+      "reviewNote": "No publicar: requiere revisión de procedencia, contexto y consentimiento.",
+      "recordedOn": "2026-08-21",
+      "reviewStatus": "draft"
+    }
+  ]
+}

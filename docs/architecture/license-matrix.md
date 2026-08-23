@@ -1,0 +1,96 @@
+# Matriz de licencias y política de reutilización
+
+Esta tabla es una guía de ingeniería, no asesoría legal. Antes de redistribuir
+código, contenido, imágenes o datasets se debe revisar el aviso de licencia del
+artefacto exacto y registrar la decisión.
+
+## Referencias de producto y código
+
+| Artefacto                  | Licencia observada                                 | Uso previsto en WACHUMA                                                        | Estado                                                                 |
+| -------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| WACHUMA código actual      | MIT (`LICENSE`)                                    | Código propio del núcleo                                                       | Aplicable al código original; no cubre datasets                        |
+| WACHUMA contenido original | CC BY 4.0 (`LICENSE-CONTENT.md`)                   | Documentación y fixtures originales                                            | Excepciones por registro y restricciones comunitarias                  |
+| HortusFox                  | MIT                                                | Inspiración de jardín, ubicaciones, eventos, fotos, inventario y QR            | Sin código copiado                                                     |
+| WOLS especificación        | CC BY 4.0                                          | Implementación independiente de identificadores, generaciones y QR             | Con atribución si se reutiliza texto/artefacto; preferir diseño propio |
+| WOLS ejemplos/bibliotecas  | Apache-2.0                                         | Solo si se incorpora un componente concreto tras revisar el repositorio exacto | Fuera del MVP                                                          |
+| Darwin Core / TDWG         | Estándar abierto; términos con condiciones propias | Crosswalk y exportación de biodiversidad                                       | No copiar datasets; conservar URI y versión del término                |
+| ETS                        | CC BY 4.0                                          | Vocabulario versionado de rasgos ecológicos                                    | Atribuir y conservar versión/DOI                                       |
+| PPO                        | Ontología OBO                                      | Mapeo de fenología y estados observables                                       | Referenciar IRIs; no duplicar sin necesidad                            |
+| PROV-O                     | Recomendación W3C                                  | Exportación de procedencia                                                     | Usar como vocabulario de salida                                        |
+| RO-Crate                   | Apache-2.0                                         | Paquetes reproducibles de especies, ejemplares y escenas                       | Seguir la especificación y conservar metadata                          |
+| Local Contexts             | Protocolos y etiquetas comunitarias                | Referencia de gobernanza y permisos                                            | No tratar una etiqueta como licencia legal                             |
+| Cédulas del Jardín         | GPL-3 código / GFDL contenido según documentación  | Inspiración editorial multilingüe                                              | No copiar código ni importar contenido sin revisión                    |
+| DINA                       | Revisar por módulo                                 | Modelo de muestras, derivados y procesos                                       | Adaptar conceptos; no incorporar el stack completo                     |
+| Cultivare                  | No se observa LICENSE en el árbol visible          | Inspiración para strains, culturas, barcodes y genealogía                      | No copiar código, esquema o UI                                         |
+| OpenFarm código            | MIT                                                | Estudiar el concepto de guías                                                  | No usar como backend; está archivado                                   |
+| OpenFarm datos             | CC0 según README                                   | Referencia de política, no import automático                                   | Verificar cualquier dato individual antes de importar                  |
+| farmOS                     | GPL-2.0                                            | Vocabulario de assets, locations, logs y actividades                           | No incorporar código                                                   |
+| Arches                     | AGPL-3.0                                           | Inspiración de patrimonio y geoespacial                                        | No incorporar código                                                   |
+| Wikibase Suite             | BSD-3-Clause para la suite                         | Referencia de despliegue futuro                                                | Componentes internos mantienen licencias propias                       |
+| Enveda Ethnobotany         | GPL-2.0 para el repositorio                        | Estudiar normalización y reproducibilidad                                      | No importar código/datos sin revisión separada                         |
+| pyGBIF                     | MIT                                                | Cliente/importador auxiliar si se usa Python fuera del worker TS               | La licencia del cliente no licencia datos GBIF                         |
+| FungalTraits               | MIT + `LICENSE` para paquete                       | Importador futuro de traits versionados                                        | Resolver licencia/metadatos del dataset por release                    |
+| Mycodo                     | GPL-3.0                                            | Integración conceptual futura                                                  | Fuera del MVP; no copiar código                                        |
+| Three.js                   | MIT                                                | Renderizado 3D web                                                             | Conservar aviso de licencia                                            |
+| React Three Fiber          | MIT                                                | Integración declarativa con React                                              | Conservar aviso de licencia                                            |
+| Drei                       | MIT                                                | Controles y utilidades del visor                                               | Conservar aviso de licencia                                            |
+| glTF-Transform             | MIT                                                | Optimización y transformación de GLB/glTF                                      | Usar como herramienta de pipeline                                      |
+| glTF Validator             | Apache-2.0                                         | Validación de assets 3D                                                        | Usar en CI/pipeline                                                    |
+| Blender / Geometry Nodes   | GPL-2.0-or-later para el software                  | Generación avanzada externa                                                    | No integrar código GPL en el núcleo web                                |
+| OpenAlea PlantGL / L-Py    | CeCILL-C / CeCILL                                  | Investigación y generación científica                                          | Worker externo tras revisión de distribución                           |
+| Helios                     | GPL-2.0 en el núcleo                               | Simulación vegetal futura                                                      | No dependencia del núcleo web; worker aislado                          |
+| PyHelios                   | MIT bindings; depende de Helios                    | Prototipos de simulación                                                       | Auditar la combinación antes de distribuir                             |
+| IRCSS Geometry Nodes       | MIT                                                | Estudio de nodos procedurales                                                  | Revisar assets `.blend` por separado                                   |
+| FloraForge                 | Paper/proyecto experimental                        | Descriptor paramétrico e ideas de fitting                                      | No dependencia runtime del MVP                                         |
+| ngPlant                    | BSD para core; GPL-2 para aplicaciones             | Referencia o adaptador opcional                                                | Revisar componentes y modelos por separado                             |
+| Arbaro                     | GPL-2.0                                            | Referencia de árboles/cactus procedurales                                      | No dependencia del MVP                                                 |
+| Sverchok                   | GPL-3.0                                            | Referencia de nodos paramétricos                                               | No copiar addons al núcleo                                             |
+
+## Dependencias directas del MVP
+
+| Dependencia                   | Licencia declarada | Uso en WACHUMA                     | Regla de release                                                         |
+| ----------------------------- | ------------------ | ---------------------------------- | ------------------------------------------------------------------------ |
+| Next.js                       | MIT                | Aplicación web y páginas estáticas | Conservar avisos de la dependencia                                       |
+| React / React DOM             | MIT                | UI y componentes                   | Conservar avisos de la dependencia                                       |
+| Fastify                       | MIT                | API HTTP                           | Conservar avisos de la dependencia                                       |
+| `@fastify/swagger` / UI       | MIT                | OpenAPI y documentación            | Verificar avisos de cada paquete                                         |
+| `postgres`                    | MIT                | Driver PostgreSQL                  | No confundir licencia del driver con la de los datos                     |
+| `zod`                         | MIT                | Contratos de entrada               | Conservar avisos de la dependencia                                       |
+| `yaml`                        | ISC                | Carga del contrato OpenAPI         | Conservar avisos de la dependencia                                       |
+| `pg-boss`                     | MIT                | Cola durable del worker PostgreSQL | Reintentos/backoff y dead-letter cubiertos por contrato; conservar aviso |
+| `three`                       | MIT                | Render 3D                          | Conservar avisos de la dependencia                                       |
+| `@react-three/fiber` / `drei` | MIT                | Integración React-Three            | Conservar avisos de cada paquete                                         |
+| `gltf-validator`              | Apache-2.0         | Gate del asset GLB                 | Conservar NOTICE si se redistribuye                                      |
+
+## Fuentes y datasets externos
+
+| Fuente                   | Regla operativa                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GBIF                     | Guardar licencia del dataset/ocurrencia, publisher, dataset key, DOI/cita, URL y fecha de recuperación. La licencia efectiva puede ser CC0, CC BY o CC BY-NC; la multimedia conserva su licencia individual. Revisar [uso de datos GBIF](https://techdocs.gbif.org/en/data-use/) y [multimedia](https://techdocs.gbif.org/en/data-publishing/multimedia-publishing) antes de publicar. |
+| iNaturalist              | Guardar licencia individual de observación y de cada foto/sonido. Si la licencia es `none`/all rights reserved, no descargar ni republicar el medio.                                                                                                                                                                                                                                   |
+| Wikidata                 | Datos estructurados CC0; conservar `wikidata_id`, URL y fecha. Texto de otros namespaces puede tener CC BY-SA 4.0.                                                                                                                                                                                                                                                                     |
+| POWO/Kew/IPNI            | Usar licencia del registro/dataset y de cada multimedia; conservar atribución Kew y fecha de consulta.                                                                                                                                                                                                                                                                                 |
+| GeoNames                 | CC BY; mostrar atribución y conservar URL/identificador.                                                                                                                                                                                                                                                                                                                               |
+| DOI/ORCID                | Son identificadores y metadatos; la licencia del artículo, perfil o documento enlazado se resuelve en su fuente.                                                                                                                                                                                                                                                                       |
+| Conocimiento comunitario | No se trata como “open data” por defecto. Cada relación declara acceso (`public`, `restricted`, `sensitive`, `community-controlled`), licencia o restricción y comunidad relacionada.                                                                                                                                                                                                  |
+
+## Política de distribución de WACHUMA
+
+- Código propio: MIT (`LICENSE`).
+- Documentación y contenido editorial propio: CC BY 4.0 (`LICENSE-CONTENT.md`).
+- Datos de terceros: mantienen la licencia de origen y no quedan cubiertos por
+  la licencia del repositorio.
+- Fotografías y sonidos: nunca se incluyen en una exportación sin una licencia
+  compatible y una atribución renderizable.
+- Un registro `community-controlled` no se publica automáticamente aunque su
+  fuente esté disponible en línea.
+- `LICENSES/THIRD_PARTY.md` y un export de atribuciones deben acompañar cada
+  release con imports.
+
+## Pendientes antes de una release pública
+
+1. [x] Elegir formalmente licencia de código y contenido base.
+2. [ ] Añadir detector de licencias para dependencias y SBOM.
+3. [ ] Definir procedimiento de takedown/corrección de fuentes y medios.
+4. [ ] Revisar con asesoría legal la combinación de CC BY-NC, CC BY-SA, datos
+       comunitarios y exportaciones masivas.

@@ -1,0 +1,46 @@
+name: WACHUMA verification
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: wachuma
+          POSTGRES_USER: wachuma
+          POSTGRES_PASSWORD: wachuma-ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U wachuma -d wachuma"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run reproducible release gate
+        env:
+          DATABASE_URL: postgres://wachuma:wachuma-ci@localhost:5432/wachuma
+        run: pnpm verify:release

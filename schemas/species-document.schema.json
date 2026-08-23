@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/species-document.schema.json",
+  "title": "WACHUMA Species Document",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "publicId",
+    "scientificName",
+    "description",
+    "externalIdentifiers",
+    "vernacularNames",
+    "sources"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "publicId": { "type": "string", "minLength": 1 },
+    "scientificName": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "externalIdentifiers": { "type": "array", "items": { "type": "object" } },
+    "taxonomicVariants": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/taxonomicVariant" }
+    },
+    "vernacularNames": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/culturalName" }
+    },
+    "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } }
+  },
+  "$defs": {
+    "taxonomicVariant": {
+      "type": "object",
+      "required": [
+        "name",
+        "relationType",
+        "context",
+        "sourcePublicId",
+        "reviewStatus"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "relationType": {
+          "enum": ["historical_combination", "synonym", "unresolved_variant"]
+        },
+        "context": { "type": "string", "minLength": 1 },
+        "sourcePublicId": { "type": "string", "minLength": 1 },
+        "reviewStatus": {
+          "enum": ["draft", "under-review", "accepted", "rejected"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "culturalName": {
+      "type": "object",
+      "required": [
+        "term",
+        "context",
+        "sourcePublicId",
+        "accessLevel",
+        "reviewStatus"
+      ],
+      "properties": {
+        "term": { "type": "string", "minLength": 1 },
+        "context": { "type": "string", "minLength": 1 },
+        "sourcePublicId": { "type": "string", "minLength": 1 },
+        "accessLevel": {
+          "enum": ["public", "restricted", "sensitive", "community-controlled"]
+        },
+        "reviewStatus": {
+          "enum": ["draft", "under-review", "accepted", "rejected"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "publicId",
+        "title",
+        "citation",
+        "license",
+        "attribution",
+        "assertionType"
+      ],
+      "properties": {
+        "publicId": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "citation": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "license": { "type": "string", "minLength": 1 },
+        "attribution": { "type": "string", "minLength": 1 },
+        "assertionType": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

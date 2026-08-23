@@ -1,0 +1,97 @@
+{
+  "$schema": "https://wachuma.org/schemas/garden-scene.schema.json",
+  "schemaVersion": "1.0",
+  "scene": {
+    "id": "scene-demo-echinopsis",
+    "publicId": "garden-demo-echinopsis-pachanoi",
+    "name": "Patio de demostración · Echinopsis pachanoi",
+    "description": "Escena ficticia para probar objetos visuales, recetas y ejemplares privados.",
+    "coordinateSystem": "local-meter",
+    "units": "meters",
+    "visibility": "restricted",
+    "version": 1,
+    "defaultSeed": 304
+  },
+  "assets": [
+    {
+      "id": "asset-procedural-cactus-304",
+      "publicId": "procedural-cactus-echinopsis-304",
+      "format": "glb",
+      "origin": "procedural",
+      "uri": "/models/echinopsis-pachanoi-demo.glb",
+      "contentHash": "e14f510f05ea363fbe3f2fbde298f47c731e7e7ef597e46e824bae2e8701e209",
+      "title": "Representación procedural de cactus",
+      "license": "WACHUMA-PROJECT",
+      "attribution": "Generador parametric-cactus propio de WACHUMA",
+      "visibility": "public",
+      "metadata": {
+        "representationType": "procedural-interpretation",
+        "taxonomicClaim": false
+      }
+    }
+  ],
+  "objects": [
+    {
+      "id": "object-private-specimen-01",
+      "publicId": "scene-object-private-specimen-01",
+      "objectType": "specimen",
+      "label": "Ejemplar privado 01",
+      "specimenId": "specimen-demo-01",
+      "sceneAssetId": "asset-procedural-cactus-304",
+      "transform": {
+        "position": [-0.95, 0, 0],
+        "rotation": [0, 0, 0, 1],
+        "scale": [1, 1, 1]
+      },
+      "representationType": "procedural-interpretation",
+      "visibility": "restricted",
+      "metadata": {
+        "seed": 304
+      }
+    },
+    {
+      "id": "object-private-specimen-02",
+      "publicId": "scene-object-private-specimen-02",
+      "objectType": "specimen",
+      "label": "Ejemplar privado 02",
+      "specimenId": "specimen-demo-02",
+      "sceneAssetId": "asset-procedural-cactus-304",
+      "transform": {
+        "position": [1.05, 0, 0.15],
+        "rotation": [0, 0, 0, 1],
+        "scale": [0.72, 0.72, 0.72]
+      },
+      "representationType": "procedural-interpretation",
+      "visibility": "restricted",
+      "metadata": {
+        "seed": 914
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "id": "recipe-parametric-cactus-304",
+      "publicId": "recipe-echinopsis-pachanoi-cactus-304",
+      "algorithm": "parametric-cactus",
+      "algorithmVersion": "0.1.0",
+      "seed": 304,
+      "parameters": {
+        "height": 2.35,
+        "radius": 0.34,
+        "ribs": 7,
+        "areolesPerRib": 14,
+        "branching": 0.24,
+        "maturity": 0.72
+      },
+      "constraints": {
+        "taxonomicClaim": false,
+        "sourceRequiredForScientificUse": true
+      },
+      "targetBiologicalEntityId": "biological-entity-echinopsis-pachanoi",
+      "generatedAssetId": "asset-procedural-cactus-304",
+      "sourceIds": [],
+      "status": "generated",
+      "visibility": "public"
+    }
+  ]
+}

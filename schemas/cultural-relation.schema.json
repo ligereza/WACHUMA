@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/cultural-relation.schema.json",
+  "title": "WACHUMA Cultural Relations",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "relations"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "relations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/relation" }
+    }
+  },
+  "$defs": {
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publicId",
+        "subjectPublicId",
+        "relationType",
+        "description",
+        "sourcePublicId",
+        "evidenceLevel",
+        "assertionType",
+        "authorPerspective",
+        "documentedByAgentPublicId",
+        "sensitivity",
+        "accessLevel",
+        "license",
+        "reviewStatus"
+      ],
+      "properties": {
+        "publicId": { "type": "string", "minLength": 1 },
+        "subjectPublicId": { "type": "string", "minLength": 1 },
+        "relationType": {
+          "enum": [
+            "vernacular_name",
+            "food",
+            "medicine",
+            "ritual",
+            "symbolism",
+            "material",
+            "cultivation",
+            "trade",
+            "mythology",
+            "art",
+            "archaeology",
+            "ecological_management",
+            "historical_account"
+          ]
+        },
+        "valueText": { "type": "string" },
+        "description": { "type": "string", "minLength": 1 },
+        "culturePublicId": { "type": "string", "minLength": 1 },
+        "communityPublicId": { "type": "string", "minLength": 1 },
+        "placePublicId": { "type": "string", "minLength": 1 },
+        "historicalPeriodPublicId": { "type": "string", "minLength": 1 },
+        "historicalPeriod": { "type": "string" },
+        "documentedByAgentPublicId": { "type": "string", "minLength": 1 },
+        "documentedByName": { "type": "string", "minLength": 1 },
+        "recordedOn": { "type": "string", "format": "date" },
+        "sourcePublicId": { "type": "string", "minLength": 1 },
+        "evidenceLevel": { "type": "string", "minLength": 1 },
+        "assertionType": {
+          "enum": [
+            "taxonomic_fact",
+            "contemporary_observation",
+            "historical_source",
+            "archaeological_evidence",
+            "academic_publication",
+            "community_knowledge",
+            "editorial_interpretation"
+          ]
+        },
+        "authorPerspective": { "type": "string", "minLength": 1 },
+        "sensitivity": { "enum": ["normal", "sensitive", "sacred"] },
+        "accessLevel": {
+          "enum": ["public", "restricted", "sensitive", "community-controlled"]
+        },
+        "license": { "type": "string", "minLength": 1 },
+        "reviewNote": { "type": "string", "minLength": 1 },
+        "reviewStatus": {
+          "enum": ["draft", "under-review", "accepted", "rejected"]
+        }
+      },
+      "anyOf": [
+        { "required": ["culturePublicId"] },
+        { "required": ["communityPublicId"] }
+      ]
+    }
+  }
+}

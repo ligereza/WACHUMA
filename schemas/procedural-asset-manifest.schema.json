@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/procedural-asset-manifest.schema.json",
+  "title": "WACHUMA Procedural Asset Manifest",
+  "description": "Attribution and reproducibility metadata that travels with a generated 3D asset.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "asset",
+    "format",
+    "contentHash",
+    "origin",
+    "generator",
+    "adapterBoundary",
+    "seed",
+    "license",
+    "attribution",
+    "representationType",
+    "taxonomicClaim"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "asset": { "type": "string", "minLength": 1 },
+    "format": {
+      "enum": ["glb", "gltf", "obj", "blend", "texture", "thumbnail"]
+    },
+    "contentHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "origin": { "const": "procedural" },
+    "generator": { "$ref": "#/$defs/generator" },
+    "adapterBoundary": { "enum": ["in-process", "external-process"] },
+    "seed": { "type": "integer" },
+    "license": { "type": "string", "minLength": 1 },
+    "attribution": { "type": "string", "minLength": 1 },
+    "representationType": {
+      "enum": [
+        "scientific-reference",
+        "specimen-capture",
+        "cultivar-reference",
+        "procedural-interpretation",
+        "artistic-representation"
+      ]
+    },
+    "taxonomicClaim": { "type": "boolean" },
+    "sourceUrl": { "type": "string", "format": "uri" }
+  },
+  "$defs": {
+    "generator": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "algorithmVersion",
+        "runtime",
+        "license",
+        "attribution"
+      ],
+      "properties": {
+        "algorithm": { "type": "string", "minLength": 1 },
+        "algorithmVersion": { "type": "string", "minLength": 1 },
+        "runtime": { "type": "string", "minLength": 1 },
+        "repositoryUrl": { "type": "string", "format": "uri" },
+        "license": { "type": "string", "minLength": 1 },
+        "attribution": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

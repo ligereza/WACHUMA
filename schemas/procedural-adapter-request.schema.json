@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/procedural-adapter-request.schema.json",
+  "title": "WACHUMA Procedural Adapter Request",
+  "description": "Portable request sent to an in-process or external procedural generator.",
+  "type": "object",
+  "required": ["schemaVersion", "recipe", "output", "generator"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "recipe": { "$ref": "#/$defs/recipe" },
+    "output": { "$ref": "#/$defs/output" },
+    "generator": { "$ref": "#/$defs/generator" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "recipe": {
+      "type": "object",
+      "required": [
+        "publicId",
+        "algorithm",
+        "algorithmVersion",
+        "seed",
+        "parameters",
+        "constraints",
+        "sourceIds"
+      ],
+      "properties": {
+        "publicId": { "$ref": "#/$defs/id" },
+        "algorithm": { "type": "string", "minLength": 1 },
+        "algorithmVersion": { "type": "string", "minLength": 1 },
+        "seed": { "type": "integer" },
+        "parameters": { "type": "object" },
+        "constraints": { "type": "object" },
+        "targetBiologicalEntityId": { "$ref": "#/$defs/id" },
+        "targetSpecimenId": { "$ref": "#/$defs/id" },
+        "sourceIds": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        { "required": ["targetBiologicalEntityId"] },
+        { "required": ["targetSpecimenId"] }
+      ]
+    },
+    "output": {
+      "type": "object",
+      "required": ["format", "assetPath", "manifestPath"],
+      "properties": {
+        "format": { "const": "glb" },
+        "assetPath": { "type": "string", "minLength": 1 },
+        "manifestPath": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "generator": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "algorithmVersion",
+        "runtime",
+        "license",
+        "attribution"
+      ],
+      "properties": {
+        "algorithm": { "type": "string", "minLength": 1 },
+        "algorithmVersion": { "type": "string", "minLength": 1 },
+        "runtime": { "type": "string", "minLength": 1 },
+        "repositoryUrl": { "type": "string", "format": "uri" },
+        "license": { "type": "string", "minLength": 1 },
+        "attribution": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

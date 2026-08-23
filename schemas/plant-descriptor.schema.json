@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/plant-descriptor.schema.json",
+  "title": "WACHUMA Plant Descriptor",
+  "description": "Versioned, provenance-aware parameterization for procedural plant representations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "publicId",
+    "organismRef",
+    "architecture",
+    "growthStage",
+    "parameters",
+    "variationSeed",
+    "interpretation"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schemaVersion": { "const": "1.0" },
+    "publicId": { "type": "string", "minLength": 1 },
+    "organismRef": { "type": "string", "minLength": 1 },
+    "architecture": {
+      "type": "object",
+      "required": ["growthForm", "organs", "axes"],
+      "properties": {
+        "growthForm": { "type": "string", "minLength": 1 },
+        "organs": { "type": "array", "items": { "type": "string" } },
+        "axes": { "type": "string", "minLength": 1 },
+        "phyllotaxis": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "growthStage": { "type": "string", "minLength": 1 },
+    "parameters": { "type": "object" },
+    "variationSeed": { "type": "integer" },
+    "sources": { "type": "array", "items": { "type": "string" } },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "interpretation": {
+      "type": "object",
+      "required": ["label", "scientificReconstruction"],
+      "properties": {
+        "label": { "const": "procedural-interpretation" },
+        "scientificReconstruction": { "const": false },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "generator": {
+      "type": "object",
+      "required": ["algorithm", "version"],
+      "properties": {
+        "algorithm": { "type": "string" },
+        "version": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

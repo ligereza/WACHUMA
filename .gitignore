@@ -1,0 +1,16 @@
+node_modules/
+__pycache__/
+.next/
+dist/
+coverage/
+.turbo/
+.env
+.env.*
+!.env.example
+*.log
+*.tsbuildinfo
+postgres-data/
+uploads/
+secrets/
+.local/gbif-snapshots/
+.local/blender-run/
