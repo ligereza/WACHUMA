@@ -77,7 +77,7 @@ CREATE TABLE derivation_event_materials (
   quantity numeric,
   unit text,
   notes text,
-  CHECK (num_nonnulls(biological_entity_id, specimen_id, culture_id, label) = 1)
+  CHECK (num_nonnulls(biological_entity_id, specimen_id, culture_id) = 1)
 );
 
 CREATE TABLE protocols (

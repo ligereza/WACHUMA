@@ -9,14 +9,15 @@ const files = (await readdir(migrationDirectory))
   .filter((file) => /^\d{4}_[a-z0-9_-]+\.sql$/.test(file))
   .sort();
 
-assert.deepEqual(files, [
+const baselineMigrations = [
   "0001_initial.sql",
   "0002_scene_3d.sql",
   "0003_domain_hardening.sql",
   "0004_cultural_context_identifiers.sql",
   "0005_location_updated_at.sql",
   "0006_evidence_materials_traits_protocols.sql",
-]);
+];
+assert.deepEqual(files.slice(0, baselineMigrations.length), baselineMigrations);
 assert.equal(new Set(files).size, files.length);
 
 const runner = await readFile(
