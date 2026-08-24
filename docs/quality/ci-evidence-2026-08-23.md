@@ -103,6 +103,13 @@ commit `ad5e55d`, confirmó la corrección completa en Ubuntu/PostGIS; la única
 anotación fue la advertencia de deprecación de Node 20 en las actions de
 GitHub, sin impacto en el gate.
 
+El commit `d829098` añadió el ledger protegido del jardín. La corrida remota
+`32682656294` volvió a pasar en Ubuntu/PostGIS: 19 workspaces, 33 typechecks,
+38 tareas de tests, 19 builds, 20 artefactos SBOM y la compuerta DB-backed
+completa. El importador `@wachuma/importer-garden` aportó seis pruebas, y el
+manifiesto de ejemplo se mantuvo vacío. La única anotación siguió siendo la
+deprecación de Node 20 en las actions de GitHub.
+
 El nuevo `quality:corpus` consulta la base persistida después del seed y
 verifica 22 invariantes de salud, incluida una decisión de revisión aceptada
 con confirmaciones de derechos para cada proyección externa pública: la corrida local reportó cero violaciones y
