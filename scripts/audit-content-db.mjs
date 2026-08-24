@@ -21,8 +21,20 @@ async function readJson(relativePath) {
 
 const editorialContent = await readEditorialContent(root);
 const speciesDocuments = editorialContent.species;
-const guideDocuments = editorialContent.guides;
-const cultureDocuments = editorialContent.cultures;
+// Archived guides and draft cultural relations are editorial fixtures, not
+// members of the public corpus. They may be loaded by the verification seed,
+// but the public seed deliberately omits them.
+const guideDocuments = editorialContent.guides.filter(
+  (document) => document.status === "published",
+);
+const cultureDocuments = editorialContent.cultures
+  .map((document) => ({
+    ...document,
+    relations: document.relations.filter(
+      (relation) => relation.reviewStatus !== "draft",
+    ),
+  }))
+  .filter((document) => document.relations.length > 0);
 
 const sql = postgres(databaseUrl, { max: 1 });
 const failures = [];
@@ -69,9 +81,10 @@ try {
     );
     if (!entity) continue;
 
+    const isPublicSpecies = (document.visibility ?? "public") === "public";
     check(
-      entity.visibility === "public",
-      `species ${document.publicId} is not public in PostgreSQL`,
+      entity.visibility === (document.visibility ?? "public"),
+      `species ${document.publicId} visibility differs between content and PostgreSQL`,
     );
     check(
       entity.scientific_name === document.scientificName,
@@ -257,7 +270,14 @@ try {
     const actualObservationIds = new Set(
       publicObservations.map((item) => item.public_id),
     );
+    if (!isPublicSpecies) {
+      check(
+        publicObservations.length === 0,
+        `species ${document.publicId} is restricted but has public observations`,
+      );
+    }
     for (const observationId of expectedObservationIds) {
+      if (!isPublicSpecies) continue;
       check(
         actualObservationIds.has(observationId),
         `species ${document.publicId} distribution observation ${observationId} is not a public persisted observation`,
@@ -289,7 +309,14 @@ try {
       (document.media ?? []).map((item) => item.uri),
     );
     const actualMediaUris = new Set(publicMedia.map((item) => item.uri));
+    if (!isPublicSpecies) {
+      check(
+        publicMedia.length === 0,
+        `species ${document.publicId} is restricted but has public media`,
+      );
+    }
     for (const mediaUri of expectedMediaUris) {
+      if (!isPublicSpecies) continue;
       check(
         actualMediaUris.has(mediaUri),
         `species ${document.publicId} media ${mediaUri} is not publicly persisted`,

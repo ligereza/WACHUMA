@@ -6,8 +6,8 @@
   "rank": "species",
   "taxonomicStatus": "accepted",
   "entityType": "species",
-  "authorityNote": "Primera entidad fúngica del corpus; cuenta con una guía experimental de cultivo atribuida, mientras sus traits y relaciones culturales requieren fuentes y revisión propias.",
-  "visibility": "public",
+  "authorityNote": "Registro fúngico conservado para una futura investigación sobre organismos asociados al cultivo de Echinopsis pachanoi; no forma parte del catálogo monográfico público actual.",
+  "visibility": "restricted",
   "description": "Ficha pública inicial de un hongo basidiomiceto anclada a GBIF Backbone. El corpus incorpora una guía experimental de cultivo con fuente abierta, condiciones situadas y límites explícitos; la ecología funcional y las relaciones culturales permanecen pendientes de fuentes específicas.",
   "claims": [
     {

@@ -63,3 +63,29 @@ perspectiva, fecha, revisión y visibilidad. `TraitMeasurement` y los protocolos
 permiten conservar rasgos ecológicos, mediciones del jardín y fenología sin
 confundirlos con la identidad taxonómica. Las tablas nuevas están en la
 migración `0006_evidence_materials_traits_protocols.sql`.
+
+## Organismo como estudio material
+
+La nueva capa `MaterialFixture` se apoya en tres líneas de research que deben
+permanecer separadas:
+
+- **Arquitectura y crecimiento:** L-Py/OpenAlea modelan sistemas-L, estructuras
+  multiescala y desarrollo de arquitectura vegetal. Se usarán como referencia o
+  workers externos, no como dependencia del navegador; sus licencias CeCILL y
+  CeCILL-C requieren conservar la frontera de distribución.
+- **Óptica y materialidad:** PROSPECT y los modelos de transferencia radiativa
+  relacionan reflectancia/transmitancia con estructura mesofílica, pigmentos y
+  agua. WACHUMA puede representar esas variables solo cuando existen mediciones
+  o claims trazados; un color PBR o un brillo artístico nunca sustituye una
+  reflectancia espectral.
+- **Química visualizable:** RDKit y 3Dmol.js son candidatos BSD para normalizar
+  estructuras y mostrar moléculas pequeñas; Mol* es una alternativa futura para
+  estructuras biomoleculares mayores. Ninguno debe convertir la presencia de un
+  compuesto en una afirmación de efecto, toxicidad o potencia.
+
+La decisión resultante es mantener el núcleo web en Three.js/React Three Fiber,
+producir geometría mediante recetas versionadas y cargar la vista molecular como
+una superficie opcional. Las relaciones entre organismo, cultivo, traits,
+ensayos y química se guardan como claims/mediciones con fuente, método, unidad,
+fecha e incertidumbre. La investigación y las licencias se vuelven parte del
+contrato de implementación, no solo bibliografía externa.

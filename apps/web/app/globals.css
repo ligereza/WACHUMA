@@ -609,6 +609,172 @@ body {
   max-width: 900px;
   padding: 5rem 0 4rem;
 }
+.material-fixture-card {
+  border: 1px solid rgba(73, 107, 80, 0.3);
+  border-top: 2px solid var(--sun);
+  background: rgba(244, 240, 231, 0.76);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  margin-bottom: 1rem;
+}
+.material-fixture-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 2rem;
+  align-items: center;
+}
+.material-fixture-heading h2 {
+  max-width: 620px;
+  margin: 0.45rem 0 0.75rem;
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+.material-fixture-heading p:not(.card-kicker),
+.material-fixture-note {
+  max-width: 700px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.material-fixture-orb {
+  width: 160px;
+  height: 160px;
+  justify-self: end;
+  border-radius: 52% 48% 45% 55%;
+  background:
+    radial-gradient(
+      circle at 32% 25%,
+      color-mix(in srgb, var(--fixture-emission) 42%, white),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 65% 70%,
+      color-mix(in srgb, var(--fixture-color) 72%, black),
+      var(--fixture-color) 58%,
+      color-mix(in srgb, var(--fixture-color) 54%, white)
+    );
+  box-shadow:
+    0 0 calc(18px + 48px * var(--fixture-emissive-strength))
+      color-mix(in srgb, var(--fixture-emission) 40%, transparent),
+    inset -18px -20px 32px
+      rgba(20, 35, 23, calc(0.12 + var(--fixture-roughness) * 0.2)),
+    inset 14px 12px 22px
+      rgba(255, 255, 255, calc(0.16 + var(--fixture-transmission) * 0.25));
+  transform: rotate(-7deg);
+}
+.material-luminaria {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+.material-luminaria-controls {
+  display: grid;
+  gap: 0.7rem;
+  min-width: 0;
+}
+.material-luminaria-controls label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font:
+    600 0.68rem system-ui,
+    sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.material-luminaria-controls input[type="range"] {
+  width: 100%;
+  accent-color: var(--leaf);
+}
+.material-layer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.material-layer-tabs button {
+  border: 1px solid rgba(73, 107, 80, 0.3);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--leaf);
+  cursor: pointer;
+  padding: 0.35rem 0.55rem;
+  font:
+    600 0.68rem system-ui,
+    sans-serif;
+}
+.material-layer-tabs button.is-active,
+.material-layer-tabs button:hover,
+.material-layer-tabs button:focus-visible {
+  background: var(--leaf);
+  color: var(--paper);
+}
+.material-luminaria-layer {
+  border-left: 2px solid var(--moss);
+  padding-left: 0.7rem;
+}
+.material-luminaria-layer p {
+  margin: 0;
+  font-size: 0.82rem;
+}
+.material-luminaria-controls > small {
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+.material-fixture-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1.5rem 0;
+}
+.material-fixture-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+}
+.material-fixture-facts div,
+.material-layer-grid article {
+  border-top: 1px solid rgba(73, 107, 80, 0.22);
+  padding-top: 0.75rem;
+}
+.material-fixture-facts dt {
+  color: var(--muted);
+  font:
+    600 0.7rem system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.material-fixture-facts dd {
+  margin: 0.3rem 0 0;
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+.material-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.material-layer-grid article p:not(.card-kicker) {
+  color: var(--muted);
+  line-height: 1.45;
+}
+.material-layer-grid strong {
+  color: var(--ink);
+}
+.material-layer-grid small {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.7rem;
+}
+.material-fixture-note {
+  border-left: 2px solid var(--sun);
+  margin: 1.5rem 0 0;
+  padding-left: 0.8rem;
+  font-size: 0.9rem;
+}
 .detail-layout {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -952,6 +1118,21 @@ footer {
   .claim-list {
     grid-template-columns: 1fr;
   }
+  .material-fixture-heading {
+    grid-template-columns: 1fr;
+  }
+  .material-fixture-orb {
+    width: 120px;
+    height: 120px;
+    justify-self: start;
+  }
+  .material-luminaria {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+  .material-fixture-facts,
+  .material-layer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .guide-section-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -976,5 +1157,261 @@ footer {
 @media (max-width: 520px) {
   .guide-section-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+.experience-shell {
+  min-height: 100vh;
+  padding: 1.5rem 4vw 6rem;
+}
+.experience-intro {
+  max-width: 720px;
+  padding: 10vh 0 8vh;
+}
+.experience-intro h1 {
+  margin: 0.25em 0 0.18em;
+}
+.experience-intro > p:not(.eyebrow) {
+  max-width: 650px;
+  color: var(--muted);
+  font-size: clamp(1.2rem, 2.1vw, 1.8rem);
+  line-height: 1.3;
+}
+.experience-intro-actions,
+.experience-after-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  color: var(--leaf);
+  font:
+    600 0.74rem/1.4 system-ui,
+    sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.experience-intro-actions a,
+.experience-after-links a {
+  color: var(--leaf);
+  text-decoration: none;
+}
+.experience-intro-actions a:hover,
+.experience-after-links a:hover {
+  text-decoration: underline;
+}
+.scroll-experience {
+  position: relative;
+  isolation: isolate;
+  margin-inline: -4vw;
+  background: #e8e1d3;
+}
+.scroll-experience-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100svh;
+  margin-bottom: -100svh;
+  overflow: hidden;
+}
+.scroll-experience-canvas,
+.scroll-experience-canvas canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+.scroll-experience-canvas {
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(255, 255, 255, 0.72),
+      transparent 38%
+    ),
+    linear-gradient(145deg, #f2eee4, #d8cdb7);
+}
+.scroll-experience-hint {
+  position: absolute;
+  right: 5vw;
+  bottom: 2rem;
+  display: grid;
+  gap: 0.25rem;
+  justify-items: center;
+  color: var(--leaf);
+  font:
+    700 0.65rem/1.4 system-ui,
+    sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.scroll-experience-hint span:last-child {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+.scroll-experience-progress {
+  position: absolute;
+  top: 15vh;
+  right: 1.5rem;
+  width: 2px;
+  height: 40vh;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(73, 107, 80, 0.18);
+}
+.scroll-experience-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: top;
+  background: var(--leaf);
+  transition: transform 120ms linear;
+}
+.scroll-experience-chapters {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+.scroll-chapter {
+  display: flex;
+  min-height: 100svh;
+  width: min(39rem, 75vw);
+  margin-left: auto;
+  padding: 22vh 7vw 18vh 3rem;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0.34;
+  transform: translateY(1.4rem);
+  transition:
+    opacity 360ms ease,
+    transform 360ms ease;
+}
+.scroll-chapter.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.scroll-chapter::before {
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  margin-bottom: 1.2rem;
+  background: var(--chapter-accent, var(--leaf));
+  content: "";
+}
+.scroll-chapter[data-layer="cultivation"] {
+  --chapter-accent: #b8a26d;
+}
+.scroll-chapter[data-layer="ecology"] {
+  --chapter-accent: #8aa18b;
+}
+.scroll-chapter[data-layer="chemistry"] {
+  --chapter-accent: #d4935a;
+}
+.scroll-chapter[data-layer="culture"] {
+  --chapter-accent: #a76e5a;
+}
+.scroll-chapter[data-layer="related-taxa"] {
+  --chapter-accent: #718b9c;
+}
+.scroll-chapter h2 {
+  max-width: 10ch;
+  margin: 0.45rem 0 1rem;
+  color: var(--ink);
+  font-size: clamp(2.6rem, 6vw, 5.6rem);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 0.94;
+}
+.scroll-chapter > p:not(.eyebrow) {
+  max-width: 32rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
+}
+.scroll-chapter-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.3rem;
+  color: var(--leaf);
+  font:
+    700 0.66rem/1.4 system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.scroll-chapter-meta span {
+  border: 1px solid rgba(73, 107, 80, 0.3);
+  border-radius: 999px;
+  padding: 0.4rem 0.55rem;
+}
+.scroll-experience-fallback {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.experience-after {
+  max-width: 700px;
+  margin: 8rem auto 0;
+  padding: 0 1rem;
+}
+.experience-after h2 {
+  margin: 0.7rem 0 1rem;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+.experience-after > p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-chapter,
+  .scroll-experience-progress span {
+    transition: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .experience-shell {
+    padding: 1.25rem 1.25rem 4rem;
+  }
+  .experience-intro {
+    padding: 7vh 0 5vh;
+  }
+  .scroll-experience {
+    margin-inline: -1.25rem;
+  }
+  .scroll-experience-hint {
+    right: 1.25rem;
+    bottom: 1.25rem;
+  }
+  .scroll-experience-progress {
+    top: 12vh;
+    right: 0.9rem;
+    height: 30vh;
+  }
+  .scroll-chapter {
+    width: 100%;
+    min-height: 100svh;
+    padding: 18vh 3.25rem 16vh 1.25rem;
+  }
+  .scroll-chapter h2 {
+    max-width: 9ch;
+  }
+  .scroll-chapter > p:not(.eyebrow),
+  .scroll-chapter-meta {
+    max-width: 29rem;
+  }
+  .experience-after {
+    margin-top: 5rem;
+    padding-inline: 0;
   }
 }

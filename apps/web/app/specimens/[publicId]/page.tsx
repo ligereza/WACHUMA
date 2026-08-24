@@ -8,10 +8,6 @@ import { isDemoMode, loadApi, loadApiOrNull } from "../../lib/api";
 
 export const dynamic = "force-dynamic";
 
-export function generateStaticParams() {
-  return [{ publicId: demoPublicSpecimen.publicId }];
-}
-
 export default async function SpecimenDetailPage({
   params,
 }: {

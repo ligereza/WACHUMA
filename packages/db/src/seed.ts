@@ -146,6 +146,7 @@ const ids = {
   sourceRecordGbifOpuntiaOccurrence: "00000000-0000-4000-8000-000000000201",
   sourceRecordGbifOpuntiaMedia: "00000000-0000-4000-8000-000000000202",
   sourceRecordLineageDemo: "00000000-0000-4000-8000-000000000205",
+  sourceMaterialFixture: "00000000-0000-4000-8000-000000000206",
   observationGbifOpuntia: "00000000-0000-4000-8000-000000000203",
   mediaGbifOpuntia: "00000000-0000-4000-8000-000000000204",
   communityDemo: "00000000-0000-4000-8000-000000000123",
@@ -278,6 +279,10 @@ const editorialTaxonIdBySpeciesPublicId = new Map([
 const editorialClaimIdByPublicId = new Map([
   ["claim-powo-echinopsis-pachanoi-accepted", ids.claimPowo],
   ["claim-gbif-echinopsis-pachanoi-name-match", ids.claimGbif],
+  [
+    "claim-echinopsis-pachanoi-historical-combination",
+    ids.claimEchinopsisHistory,
+  ],
   ["claim-powo-echinopsis-pachanoi-native-range", ids.claimPowoRange],
   ["claim-powo-echinopsis-pachanoi-biome", ids.claimPowoBiome],
   ["claim-powo-opuntia-ficus-indica-accepted", ids.claimPowoOpuntiaStatus],
@@ -389,6 +394,112 @@ function deterministicUuid(namespace: string): string {
     .padStart(2, "0")}${hex.slice(18, 20)}-${hex.slice(20)}`;
 }
 
+const materialFixtureSourceId = ids.sourceMaterialFixture;
+const materialFixtureSeeds = [
+  {
+    publicId: "material-study-echinopsis-pachanoi",
+    biologicalEntityId: ids.biologicalEntity,
+    growthStage: "adulto · lectura editorial de forma y cultivo",
+    material: {
+      baseColor: "#86a77b",
+      roughness: 0.68,
+      metallic: 0,
+      transmission: 0.06,
+      ior: 1.38,
+      emissiveColor: "#d5e9c2",
+      emissiveStrength: 0.12,
+    },
+    notes:
+      "Estudio material procedural. Sus valores PBR son parámetros visuales y no representan composición química, reflectancia medida ni una reconstrucción científica.",
+    bindings: [
+      {
+        publicId: "material-binding-echinopsis-morphology",
+        layer: "morphology",
+        target: "geometry",
+        interpretation: "symbolic",
+        notes:
+          "La geometría puede evocar un cactus columnar; no sustituye una descripción morfológica ni una captura de ejemplar.",
+      },
+      {
+        publicId: "material-binding-echinopsis-cultivation",
+        layer: "cultivation",
+        target: "animation",
+        interpretation: "symbolic",
+        notes:
+          "La animación queda reservada para representar etapas del manual de cultivo cuando existan datos de ejemplares.",
+      },
+    ],
+  },
+  {
+    publicId: "material-study-opuntia-ficus-indica",
+    biologicalEntityId: ids.biologicalEntityOpuntia,
+    growthStage: "cladodio adulto · lectura editorial de forma y cultivo",
+    material: {
+      baseColor: "#91a965",
+      roughness: 0.74,
+      metallic: 0,
+      transmission: 0.03,
+      ior: 1.37,
+      emissiveColor: "#dce9b3",
+      emissiveStrength: 0.08,
+    },
+    notes:
+      "Estudio material procedural. El color y la rugosidad son decisiones de visualización, no propiedades químicas inferidas.",
+    bindings: [
+      {
+        publicId: "material-binding-opuntia-morphology",
+        layer: "morphology",
+        target: "geometry",
+        interpretation: "symbolic",
+        notes:
+          "La forma visual alude a cladodios; no es una medición morfológica ni una imagen de la ocurrencia GBIF.",
+      },
+      {
+        publicId: "material-binding-opuntia-cultivation",
+        layer: "cultivation",
+        target: "roughness",
+        interpretation: "symbolic",
+        notes:
+          "La rugosidad forma parte de la puesta en escena y no codifica humedad, cutícula o estado fisiológico medido.",
+      },
+    ],
+  },
+  {
+    publicId: "material-study-pleurotus-ostreatus",
+    biologicalEntityId: ids.biologicalEntityPleurotus,
+    growthStage: "cuerpo fructífero · lectura editorial de forma y cultivo",
+    material: {
+      baseColor: "#c5bcae",
+      roughness: 0.56,
+      metallic: 0,
+      transmission: 0.12,
+      ior: 1.34,
+      emissiveColor: "#f0dfbd",
+      emissiveStrength: 0.1,
+    },
+    notes:
+      "Estudio material procedural. No contiene una afirmación sobre metabolitos ni usa la luz como sustituto de un ensayo.",
+    bindings: [
+      {
+        publicId: "material-binding-pleurotus-morphology",
+        layer: "morphology",
+        target: "geometry",
+        interpretation: "symbolic",
+        notes:
+          "La forma visual evoca un cuerpo fructífero lamelado; no presenta una identificación de muestra.",
+      },
+      {
+        publicId: "material-binding-pleurotus-cultivation",
+        layer: "cultivation",
+        target: "transmission",
+        interpretation: "symbolic",
+        notes:
+          "La transmisión es una decisión de iluminación para sugerir humedad ambiental, no una medición del cultivo.",
+      },
+    ],
+  },
+] as const;
+
 // This is one deliberately selected, record-level GBIF occurrence. The
 // complete provider payload is reduced only to the fields used by the public
 // projection; the exact coordinates and individual media rights remain in the
@@ -443,6 +554,10 @@ const gbifPublicMediaPayload = {
   media: gbifPublicOccurrencePayload.media[0],
 } as const;
 const databaseUrl = process.env.DATABASE_URL;
+const includeSyntheticDemoData =
+  process.env.WACHUMA_SEED_PROFILE === "verification" ||
+  process.env.WACHUMA_INCLUDE_DEMO_DATA === "true";
+const demoVisibility = includeSyntheticDemoData ? "public" : "restricted";
 
 if (!databaseUrl) {
   throw new Error("DATABASE_URL is required to seed WACHUMA.");
@@ -611,6 +726,9 @@ try {
       [ids.specimenPublicChildOne, "specimen-public-child-01", "public"],
       [ids.specimenPublicChildTwo, "specimen-public-child-02", "public"],
     ] as const) {
+      const seededVisibility = includeSyntheticDemoData
+        ? visibility
+        : "restricted";
       await transaction`
         INSERT INTO specimens (
           id, public_id, specimen_type, biological_entity_id, status, visibility, notes
@@ -620,7 +738,7 @@ try {
           'plant-live',
           ${ids.biologicalEntity},
           'alive',
-          ${visibility},
+          ${seededVisibility},
           'Ejemplar sintético para pruebas; no representa una ubicación real.'
         )
         ON CONFLICT (id) DO UPDATE SET
@@ -655,7 +773,7 @@ try {
         ${asset.title ?? null},
         ${asset.license},
         ${asset.attribution},
-        'public'
+        ${demoVisibility}
       )
       ON CONFLICT (id) DO UPDATE SET
         media_type = EXCLUDED.media_type,
@@ -680,6 +798,32 @@ try {
         'WACHUMA-GARDEN-PRIVATE',
         'WACHUMA; los nombres de custodios y ubicaciones exactas no se publican por defecto.',
         '2026-08-23T00:00:00Z'
+      )
+      ON CONFLICT (id) DO UPDATE SET
+        public_id = EXCLUDED.public_id,
+        source_type = EXCLUDED.source_type,
+        title = EXCLUDED.title,
+        citation = EXCLUDED.citation,
+        url = EXCLUDED.url,
+        license_uri = EXCLUDED.license_uri,
+        attribution = EXCLUDED.attribution,
+        accessed_at = EXCLUDED.accessed_at
+    `;
+
+    await transaction`
+      INSERT INTO sources (
+        id, public_id, source_type, title, citation, url, license_uri,
+        attribution, accessed_at
+      ) VALUES (
+        ${materialFixtureSourceId},
+        'source-wachuma-material-fixture',
+        'editorial',
+        'WACHUMA · estudios materiales procedurales',
+        'Registro editorial de decisiones visuales para representar organismos como estudios materiales. No contiene mediciones químicas ni pretende reconstruir científicamente un organismo.',
+        'https://github.com/ligereza/WACHUMA',
+        'WACHUMA-PROJECT',
+        'WACHUMA; estudio visual procedural con parámetros y límites declarados.',
+        '2026-08-24T00:00:00Z'
       )
       ON CONFLICT (id) DO UPDATE SET
         public_id = EXCLUDED.public_id,
@@ -1802,6 +1946,10 @@ try {
             updated_at = now()
         `;
         await transaction`
+          DELETE FROM claim_sources
+          WHERE claim_id = ${claimId}
+        `;
+        await transaction`
           INSERT INTO claim_sources (claim_id, source_id, source_record_id, role)
           VALUES (${claimId}, ${sourceId}, ${sourceRecordId}, 'primary')
           ON CONFLICT (claim_id, source_id) DO UPDATE SET
@@ -1858,7 +2006,7 @@ try {
         'Protocolo sintético para separar una observación fechada de una recomendación de cultivo.',
         ${ids.source},
         'WACHUMA-PROJECT',
-        'public',
+        ${demoVisibility},
         'published'
       )
       ON CONFLICT (id) DO UPDATE SET
@@ -1936,30 +2084,74 @@ try {
         source_id = EXCLUDED.source_id
     `;
 
-    await transaction`
-      INSERT INTO cultures (
-        id, public_id, specimen_id, culture_type, generation_label,
-        medium, status
-      ) VALUES (
-        ${ids.cultureDemo},
-        'culture-demo-public-agar',
-        ${ids.specimenPublic},
-        'agar',
-        'G1',
-        'medio sintético de demostración',
-        'active'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        public_id = EXCLUDED.public_id,
-        specimen_id = EXCLUDED.specimen_id,
-        culture_type = EXCLUDED.culture_type,
-        generation_label = EXCLUDED.generation_label,
-        medium = EXCLUDED.medium,
-        status = EXCLUDED.status
-    `;
+    if (includeSyntheticDemoData) {
+      await transaction`
+        INSERT INTO cultures (
+          id, public_id, specimen_id, culture_type, generation_label,
+          medium, status
+        ) VALUES (
+          ${ids.cultureDemo},
+          'culture-demo-public-agar',
+          ${ids.specimenPublic},
+          'agar',
+          'G1',
+          'medio sintético de demostración',
+          'active'
+        )
+        ON CONFLICT (id) DO UPDATE SET
+          public_id = EXCLUDED.public_id,
+          specimen_id = EXCLUDED.specimen_id,
+          culture_type = EXCLUDED.culture_type,
+          generation_label = EXCLUDED.generation_label,
+          medium = EXCLUDED.medium,
+          status = EXCLUDED.status
+      `;
+    }
 
-    const demoGuide = editorialGuide("guide-echinopsis-pachanoi-demo-v1");
-    await transaction`
+    if (!includeSyntheticDemoData) {
+      await transaction`
+        DELETE FROM record_provenance
+        WHERE growing_guide_id = (
+          SELECT id FROM growing_guides
+          WHERE public_id = 'guide-echinopsis-pachanoi-demo-v1'
+        )
+      `;
+      await transaction`
+        DELETE FROM growing_guide_claims
+        WHERE growing_guide_id = (
+          SELECT id FROM growing_guides
+          WHERE public_id = 'guide-echinopsis-pachanoi-demo-v1'
+        )
+      `;
+      await transaction`
+        DELETE FROM growing_guides
+        WHERE public_id = 'guide-echinopsis-pachanoi-demo-v1'
+      `;
+      await transaction`
+        DELETE FROM record_provenance
+        WHERE cultural_relation_id IN (
+          SELECT cultural.id
+          FROM cultural_relations AS cultural
+          JOIN cultures AS culture ON culture.id = cultural.culture_id
+          WHERE culture.public_id = 'culture-demo-public-agar'
+        )
+      `;
+      await transaction`
+        DELETE FROM cultural_relations
+        WHERE culture_id = (
+          SELECT id FROM cultures
+          WHERE public_id = 'culture-demo-public-agar'
+        )
+      `;
+      await transaction`
+        DELETE FROM cultures
+        WHERE public_id = 'culture-demo-public-agar'
+      `;
+    }
+
+    if (includeSyntheticDemoData) {
+      const demoGuide = editorialGuide("guide-echinopsis-pachanoi-demo-v1");
+      await transaction`
       INSERT INTO growing_guides (
         id, public_id, guide_key, version, title, biological_entity_id,
         climate_context, technique_context, region_context, status, summary
@@ -1987,17 +2179,17 @@ try {
         region_context = EXCLUDED.region_context,
         status = EXCLUDED.status,
         summary = EXCLUDED.summary
-    `;
+      `;
 
-    for (const [
-      id,
-      sectionKey,
-      statement,
-      evidenceLevel,
-      assertionType,
-      sourceId,
-    ] of editorialGuideClaims("guide-echinopsis-pachanoi-demo-v1")) {
-      await transaction`
+      for (const [
+        id,
+        sectionKey,
+        statement,
+        evidenceLevel,
+        assertionType,
+        sourceId,
+      ] of editorialGuideClaims("guide-echinopsis-pachanoi-demo-v1")) {
+        await transaction`
         INSERT INTO growing_guide_claims (
           id, growing_guide_id, section_key, statement, evidence_level,
           source_id, assertion_type
@@ -2012,7 +2204,8 @@ try {
           evidence_level = EXCLUDED.evidence_level,
           source_id = EXCLUDED.source_id,
           assertion_type = EXCLUDED.assertion_type
-      `;
+        `;
+      }
     }
 
     const echinopsisGuide = editorialGuide(
@@ -2273,6 +2466,20 @@ try {
     for (const relation of editorialContent.cultures.flatMap(
       (document) => document.relations,
     )) {
+      if (!includeSyntheticDemoData && relation.reviewStatus === "draft") {
+        await transaction`
+          DELETE FROM record_provenance
+          WHERE cultural_relation_id = (
+            SELECT id FROM cultural_relations
+            WHERE public_id = ${relation.publicId}
+          )
+        `;
+        await transaction`
+          DELETE FROM cultural_relations
+          WHERE public_id = ${relation.publicId}
+        `;
+        continue;
+      }
       const [subject] = await transaction<
         { entity_id: string | null; taxon_id: string | null }[]
       >`
@@ -2442,7 +2649,7 @@ try {
         'garden',
         ST_SetSRID(ST_GeomFromText('POINT(-70.65 -33.45)'), 4326),
         ST_SetSRID(ST_GeomFromText('POINT(-70.650123 -33.450456)'), 4326),
-        'public',
+        ${demoVisibility},
         'Coordenada sintética y aproximada; no representa una ubicación privada real.'
       )
       ON CONFLICT (id) DO UPDATE SET
@@ -2473,7 +2680,7 @@ try {
         'CL',
         ST_SetSRID(ST_GeomFromText('POINT(-70.65 -33.45)'), 4326),
         ST_SetSRID(ST_GeomFromText('POINT(-70.650123 -33.450456)'), 4326),
-        'public',
+        ${demoVisibility},
         'Lugar sintético para validar el mapa público y la redacción geográfica.',
         ${ids.source}
       )
@@ -2504,7 +2711,7 @@ try {
         ST_SetSRID(ST_GeomFromText('POINT(-70.650123 -33.450456)'), 4326),
         ${json({ synthetic: true, context: "fixture-demo" })},
         'Observación sintética para probar distribución y procedencia; no es una observación de campo.',
-        'public',
+        ${demoVisibility},
         ${ids.protocolDemo},
         ${json({ synthetic: true, coordinate: "rounded" })}
       )
@@ -2550,7 +2757,7 @@ try {
           scientificName: "Opuntia ficus-indica (L.) Mill.",
         })},
         'Ocurrencia GBIF seleccionada y revisada. La geometría pública se redondea a dos decimales; la coordenada exacta permanece en el payload de procedencia.',
-        'public',
+        'restricted',
         ${json({
           coordinateUncertaintyInMeters: 8,
           publicPrecision: "0.01 degrees",
@@ -2582,7 +2789,7 @@ try {
         'https://creativecommons.org/licenses/by/4.0/',
         'Andy Jordan; iNaturalist; GBIF occurrence 6130799370. La licencia y la atribución se revisaron individualmente para este medio.',
         ${gbifOccurrenceSourceId},
-        'public'
+        'restricted'
       )
       ON CONFLICT (id) DO UPDATE SET
         media_type = EXCLUDED.media_type,
@@ -2644,7 +2851,7 @@ try {
         ${ids.source},
         'WACHUMA demo editorial record',
         '2026-08-21',
-        'public',
+        ${demoVisibility},
         'WACHUMA-PROJECT',
         'draft'
       )
@@ -2682,15 +2889,15 @@ try {
         'taxon',
         ${ids.taxon},
         'historicalContext',
-        'La combinación histórica Trichocereus pachanoi aparece asociada a Echinopsis pachanoi; WACHUMA conserva ambos identificadores sin resolver automáticamente los nombres culturales relacionados.',
+        'WACHUMA conserva Trichocereus pachanoi como combinación taxonómica histórica relacionada con la ficha de Echinopsis pachanoi; no la utiliza para resolver nombres culturales ni como equivalencia taxonómica absoluta.',
         'editorial_interpretation',
         'documented',
         ${ids.agentDemo},
-        ${ids.source},
-        'WACHUMA · lectura editorial de la nomenclatura taxonómica; no es una afirmación cultural.',
+        ${ids.sourceGbif},
+        'Interpretación editorial de WACHUMA basada en la coincidencia taxonómica de GBIF Backbone; la perspectiva se conserva separada del proveedor.',
         '2026-08-23',
         'public',
-        'WACHUMA-PROJECT',
+        'CC BY 4.0',
         'accepted'
       )
       ON CONFLICT (id) DO UPDATE SET
@@ -2712,7 +2919,7 @@ try {
 
     await transaction`
       INSERT INTO claim_sources (claim_id, source_id, role)
-      VALUES (${ids.claimEchinopsisHistory}, ${ids.source}, 'primary')
+      VALUES (${ids.claimEchinopsisHistory}, ${ids.sourceGbif}, 'primary')
       ON CONFLICT (claim_id, source_id) DO UPDATE SET role = EXCLUDED.role
     `;
 
@@ -2733,7 +2940,7 @@ try {
         ${json({ synthetic: true })},
         ${ids.protocolDemo},
         ${ids.source},
-        'public'
+        ${demoVisibility}
       )
       ON CONFLICT (id) DO UPDATE SET
         trait_definition_id = EXCLUDED.trait_definition_id,
@@ -2804,7 +3011,7 @@ try {
         '2026-01-20T12:00:00Z',
         ${ids.source},
         'Fixture sintético; no representa material real.',
-        'public'
+        ${demoVisibility}
       )
       ON CONFLICT (id) DO UPDATE SET
         public_id = EXCLUDED.public_id,
@@ -2906,7 +3113,7 @@ try {
         ${fixture.scene.description ?? null},
         ${fixture.scene.coordinateSystem},
         ${fixture.scene.units},
-        'public',
+        ${demoVisibility},
         ${fixture.scene.version},
         ${fixture.scene.defaultSeed ?? null}
       )
@@ -2936,7 +3143,7 @@ try {
         ${asset.title ?? null},
         ${ids.source},
         ${ids.generatorVersion},
-        'public',
+        ${demoVisibility},
         ${json(asset.metadata)}
       )
       ON CONFLICT (id) DO UPDATE SET
@@ -2978,7 +3185,7 @@ try {
 
     await transaction`
       INSERT INTO garden_scene_assets (scene_id, scene_asset_id, visibility)
-      VALUES (${ids.scene}, ${ids.asset}, 'public')
+      VALUES (${ids.scene}, ${ids.asset}, ${demoVisibility})
       ON CONFLICT (scene_id, scene_asset_id) DO UPDATE SET
         visibility = EXCLUDED.visibility
     `;
@@ -2998,7 +3205,7 @@ try {
         ${ids.biologicalEntity},
         ${ids.asset},
         ${recipe.status},
-        ${recipe.visibility}
+        ${includeSyntheticDemoData ? recipe.visibility : "restricted"}
       )
       ON CONFLICT (id) DO UPDATE SET
         public_id = EXCLUDED.public_id,
@@ -3068,6 +3275,148 @@ try {
       ON CONFLICT (scene_id, version) DO UPDATE SET
         content_hash = EXCLUDED.content_hash,
         scene_payload = EXCLUDED.scene_payload
+    `;
+
+    for (const fixtureSeed of materialFixtureSeeds) {
+      const materialFixtureId = deterministicUuid(
+        `material-fixture:${fixtureSeed.publicId}`,
+      );
+      const [fixtureEntity] = await transaction<{ visibility: string }[]>`
+        SELECT visibility
+        FROM biological_entities
+        WHERE id = ${fixtureSeed.biologicalEntityId}
+        LIMIT 1
+      `;
+      const materialVisibility =
+        fixtureEntity?.visibility === "public" ? "public" : "restricted";
+      await transaction`
+        INSERT INTO material_fixtures (
+          id, public_id, biological_entity_id, representation_type,
+          growth_stage, material, interpretation, visibility
+        ) VALUES (
+          ${materialFixtureId},
+          ${fixtureSeed.publicId},
+          ${fixtureSeed.biologicalEntityId},
+          'procedural-interpretation',
+          ${fixtureSeed.growthStage},
+          ${json(fixtureSeed.material)},
+          ${json({
+            label: "material-interpretation",
+            scientificReconstruction: false,
+            notes: fixtureSeed.notes,
+          })},
+          ${materialVisibility}
+        )
+        ON CONFLICT (id) DO UPDATE SET
+          public_id = EXCLUDED.public_id,
+          biological_entity_id = EXCLUDED.biological_entity_id,
+          representation_type = EXCLUDED.representation_type,
+          growth_stage = EXCLUDED.growth_stage,
+          material = EXCLUDED.material,
+          interpretation = EXCLUDED.interpretation,
+          visibility = EXCLUDED.visibility,
+          updated_at = now()
+      `;
+
+      await transaction`
+        DELETE FROM material_fixture_binding_claims
+        WHERE binding_id IN (
+          SELECT id FROM material_fixture_bindings
+          WHERE material_fixture_id = ${materialFixtureId}
+        )
+      `;
+      await transaction`
+        DELETE FROM material_fixture_binding_sources
+        WHERE binding_id IN (
+          SELECT id FROM material_fixture_bindings
+          WHERE material_fixture_id = ${materialFixtureId}
+        )
+      `;
+      await transaction`
+        DELETE FROM material_fixture_bindings
+        WHERE material_fixture_id = ${materialFixtureId}
+      `;
+
+      for (const bindingSeed of fixtureSeed.bindings) {
+        const bindingId = deterministicUuid(
+          `material-binding:${bindingSeed.publicId}`,
+        );
+        await transaction`
+          INSERT INTO material_fixture_bindings (
+            id, public_id, material_fixture_id, layer, target,
+            interpretation, notes
+          ) VALUES (
+            ${bindingId},
+            ${bindingSeed.publicId},
+            ${materialFixtureId},
+            ${bindingSeed.layer},
+            ${bindingSeed.target},
+            ${bindingSeed.interpretation},
+            ${bindingSeed.notes}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            public_id = EXCLUDED.public_id,
+            material_fixture_id = EXCLUDED.material_fixture_id,
+            layer = EXCLUDED.layer,
+            target = EXCLUDED.target,
+            interpretation = EXCLUDED.interpretation,
+            notes = EXCLUDED.notes
+        `;
+        await transaction`
+          INSERT INTO material_fixture_binding_sources (binding_id, source_id)
+          VALUES (${bindingId}, ${materialFixtureSourceId})
+          ON CONFLICT (binding_id, source_id) DO NOTHING
+        `;
+      }
+    }
+
+    // A restricted taxon is not part of the public projection, even when an
+    // imported observation or media row was previously accepted on its own.
+    // Keep those source records for provenance, but demote their public
+    // projection whenever the editorial entity is outside the monograph.
+    await transaction`
+      UPDATE observations AS observation
+      SET visibility = 'restricted'
+      WHERE observation.biological_entity_id IN (
+        SELECT entity.id
+        FROM biological_entities AS entity
+        WHERE entity.visibility <> 'public'
+      )
+      OR observation.taxon_id IN (
+        SELECT entity.taxon_id
+        FROM biological_entities AS entity
+        WHERE entity.visibility <> 'public'
+      )
+    `;
+    await transaction`
+      UPDATE media AS media
+      SET visibility = 'restricted'
+      WHERE media.id IN (
+        SELECT attachment.media_id
+        FROM media_attachments AS attachment
+        LEFT JOIN observations AS observation
+          ON observation.id = attachment.observation_id
+        LEFT JOIN biological_entities AS entity
+          ON entity.id = attachment.biological_entity_id
+        LEFT JOIN taxa AS taxon
+          ON taxon.id = attachment.taxon_id
+        WHERE entity.visibility <> 'public'
+           OR taxon.id IN (
+             SELECT restricted_entity.taxon_id
+             FROM biological_entities AS restricted_entity
+             WHERE restricted_entity.visibility <> 'public'
+           )
+           OR observation.biological_entity_id IN (
+             SELECT restricted_entity.id
+             FROM biological_entities AS restricted_entity
+             WHERE restricted_entity.visibility <> 'public'
+           )
+           OR observation.taxon_id IN (
+             SELECT restricted_entity.taxon_id
+             FROM biological_entities AS restricted_entity
+             WHERE restricted_entity.visibility <> 'public'
+           )
+      )
     `;
   });
 

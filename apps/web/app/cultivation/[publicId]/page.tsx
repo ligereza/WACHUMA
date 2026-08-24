@@ -36,10 +36,6 @@ const statusLabels: Record<GrowingGuideSectionStatus, string> = {
   not_applicable: "no aplica",
 };
 
-export function generateStaticParams() {
-  return [{ publicId: demoGrowingGuide.publicId }];
-}
-
 export default async function GrowingGuideDetailPage({
   params,
 }: {

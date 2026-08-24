@@ -21,6 +21,7 @@ import {
   createLineageRepository,
   createLineageAdminRepository,
   createMapsRepository,
+  createMaterialFixtureRepository,
   createObservationRepository,
   createSceneRepository,
   createSourceRepository,
@@ -60,6 +61,8 @@ import {
   type DerivationEvent,
   type PublicSearchResult,
   type TraitMeasurement,
+  demoMaterialFixture,
+  type MaterialFixture,
 } from "@wachuma/shared";
 import { z } from "zod";
 
@@ -199,6 +202,9 @@ export function buildApi(options: ApiOptions = {}) {
   const demoMode = options.demoMode ?? true;
   const sceneRepository = options.sql
     ? createSceneRepository(options.sql)
+    : undefined;
+  const materialFixtureRepository = options.sql
+    ? createMaterialFixtureRepository(options.sql)
     : undefined;
   const taxonomyRepository = options.sql
     ? createTaxonomyRepository(options.sql)
@@ -411,6 +417,30 @@ export function buildApi(options: ApiOptions = {}) {
       }
 
       return species;
+    },
+  );
+
+  app.get<{ Params: { publicId: string } }>(
+    "/api/v1/material-fixtures/:publicId",
+    async (request, reply) => {
+      const params = parsePublicIdParams(request.params);
+      const fixture = materialFixtureRepository
+        ? await materialFixtureRepository.getPublicMaterialFixture(
+            params.publicId,
+          )
+        : demoMode &&
+            params.publicId === demoMaterialFixture.subject.biologicalEntityId
+          ? demoMaterialFixture
+          : null;
+
+      if (!fixture) {
+        return reply.code(404).send({
+          error: "not_found",
+          message: "Material fixture not found",
+        });
+      }
+
+      return fixture;
     },
   );
 

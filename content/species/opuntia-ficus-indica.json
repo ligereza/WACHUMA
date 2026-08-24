@@ -6,8 +6,8 @@
   "rank": "species",
   "taxonomicStatus": "accepted",
   "entityType": "species",
-  "authorityNote": "Entidad editorial independiente del primer cactus; sus claims y fuentes no heredan datos de Echinopsis pachanoi.",
-  "visibility": "public",
+  "authorityNote": "Registro conservado como corpus histórico del repositorio, fuera del catálogo monográfico público de Echinopsis pachanoi; sus claims y fuentes no heredan datos de Echinopsis pachanoi.",
+  "visibility": "restricted",
   "description": "Ficha pública inicial anclada a POWO/Kew y GBIF. El registro distingue el rango nativo indicado por una fuente taxonómica de una ocurrencia contemporánea externa revisada; una observación no se presenta como distribución nativa.",
   "claims": [
     {

@@ -34,8 +34,8 @@ disponible, `pnpm verify:release` debe fallar y la release no se considera
 cerrada.
 
 `verify:public-web` levanta la API y Next contra el PostgreSQL ya verificado y
-comprueba que el explorador, la ficha de _Opuntia ficus-indica_ y los manuales
-rendericen filas sembradas desde la base; también confirma que la relación
+comprueba que el explorador, la ficha monográfica de _Echinopsis pachanoi_ y el
+manual público rendericen filas sembradas desde la base; también confirma que la relación
 cultural Saraguro restringida no se filtra a `/culture`. Las páginas públicas que consultan
 la API son dinámicas en producción para no congelar el fallback de desarrollo
 durante un build sin conexión a la base.

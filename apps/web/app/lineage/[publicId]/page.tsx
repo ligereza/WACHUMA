@@ -11,10 +11,6 @@ export const dynamic = "force-dynamic";
 
 const subjects = [String(demoSpeciesDocument.publicId), ...demoLineageSubjects];
 
-export function generateStaticParams() {
-  return subjects.map((publicId) => ({ publicId }));
-}
-
 export default async function LineagePage({
   params,
 }: {

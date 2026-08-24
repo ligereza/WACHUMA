@@ -31,6 +31,39 @@ test(
         "biological-entity-echinopsis-pachanoi",
       );
 
+      for (const publicId of ["biological-entity-echinopsis-pachanoi"]) {
+        const materialFixture = await app.inject({
+          method: "GET",
+          url: `/api/v1/material-fixtures/${publicId}`,
+        });
+        assert.equal(materialFixture.statusCode, 200);
+        const fixtureBody = materialFixture.json() as {
+          representationType: string;
+          interpretation: { scientificReconstruction: boolean };
+          bindings: Array<{
+            layer: string;
+            sourcePublicIds?: string[];
+          }>;
+        };
+        assert.equal(
+          fixtureBody.representationType,
+          "procedural-interpretation",
+        );
+        assert.equal(
+          fixtureBody.interpretation.scientificReconstruction,
+          false,
+        );
+        assert.equal(
+          fixtureBody.bindings.some((binding) => binding.layer === "chemistry"),
+          false,
+        );
+        assert.ok(
+          fixtureBody.bindings.every(
+            (binding) => (binding.sourcePublicIds?.length ?? 0) > 0,
+          ),
+        );
+      }
+
       const search = await app.inject({
         method: "GET",
         url: "/api/v1/search?q=pachanoi&limit=20",
@@ -243,99 +276,20 @@ test(
       assert.equal(catalog.statusCode, 200);
       assert.deepEqual(
         catalog.json().map((item: { publicId: string }) => item.publicId),
-        [
-          "biological-entity-echinopsis-pachanoi",
-          "biological-entity-opuntia-ficus-indica",
-          "biological-entity-pleurotus-ostreatus",
-        ],
+        ["biological-entity-echinopsis-pachanoi"],
       );
 
-      const pleurotus = await app.inject({
+      const archivedPleurotus = await app.inject({
         method: "GET",
         url: "/api/v1/species/biological-entity-pleurotus-ostreatus",
       });
-      assert.equal(pleurotus.statusCode, 200);
-      const pleurotusIdentifiers = pleurotus
-        .json()
-        .externalIdentifiers.map(
-          (item: { namespace: string; identifier: string }) =>
-            `${item.namespace}:${item.identifier}`,
-        );
-      assert.ok(pleurotusIdentifiers.includes("gbif:2526530"));
-      assert.ok(
-        pleurotusIdentifiers.every(
-          (identifier: string) =>
-            identifier === "gbif:2526530" ||
-            identifier === "inaturalist:1196165",
-        ),
-      );
+      assert.equal(archivedPleurotus.statusCode, 404);
 
-      const pleurotusClaims = await app.inject({
-        method: "GET",
-        url: "/api/v1/claims?subjectPublicId=biological-entity-pleurotus-ostreatus",
-      });
-      assert.equal(pleurotusClaims.statusCode, 200);
-      assert.equal(pleurotusClaims.json().length, 2);
-
-      const opuntia = await app.inject({
+      const archivedOpuntia = await app.inject({
         method: "GET",
         url: "/api/v1/species/biological-entity-opuntia-ficus-indica",
       });
-      assert.equal(opuntia.statusCode, 200);
-      assert.deepEqual(
-        opuntia
-          .json()
-          .externalIdentifiers.map(
-            (item: { namespace: string; identifier: string }) =>
-              `${item.namespace}:${item.identifier}`,
-          ),
-        ["gbif:5384064", "ipni:1151735-2"],
-      );
-      assert.ok(
-        opuntia
-          .json()
-          .distribution.some(
-            (item: { observationPublicId?: string; sourcePublicId?: string }) =>
-              item.observationPublicId === "observation-gbif-6130799370" &&
-              item.sourcePublicId === "source-gbif",
-          ),
-      );
-      assert.ok(
-        opuntia
-          .json()
-          .media.some(
-            (item: { uri?: string; license?: string }) =>
-              item.uri?.includes("609573877") &&
-              item.license === "https://creativecommons.org/licenses/by/4.0/",
-          ),
-      );
-
-      const opuntiaObservations = await app.inject({
-        method: "GET",
-        url: "/api/v1/observations?subjectPublicId=biological-entity-opuntia-ficus-indica",
-      });
-      assert.equal(opuntiaObservations.statusCode, 200);
-      assert.ok(
-        opuntiaObservations
-          .json()
-          .some(
-            (item: { publicId?: string; sourcePublicId?: string }) =>
-              item.publicId === "observation-gbif-6130799370" &&
-              item.sourcePublicId === "source-gbif",
-          ),
-      );
-
-      const opuntiaClaims = await app.inject({
-        method: "GET",
-        url: "/api/v1/claims?subjectPublicId=biological-entity-opuntia-ficus-indica",
-      });
-      assert.equal(opuntiaClaims.statusCode, 200);
-      assert.equal(opuntiaClaims.json().length, 4);
-      assert.ok(
-        opuntiaClaims
-          .json()
-          .every((claim: { sourcePublicId?: string }) => claim.sourcePublicId),
-      );
+      assert.equal(archivedOpuntia.statusCode, 404);
 
       const echinopsisTraits = await app.inject({
         method: "GET",
@@ -416,6 +370,24 @@ test(
       assert.equal(promotionAudit?.review_kind, "taxonomic_promotion");
       assert.equal(promotionAudit?.taxonomy_confirmed, true);
 
+      // The endpoint promotion is tested independently, but the monographic
+      // public profile must remain deterministic for the rest of the suite.
+      await sql`
+        UPDATE biological_entities
+        SET visibility = 'restricted'
+        WHERE public_id = 'biological-entity-opuntia-ficus-indica'
+      `;
+      await sql`
+        UPDATE observations
+        SET visibility = 'restricted'
+        WHERE public_id = 'observation-gbif-6130799370'
+      `;
+      await sql`
+        UPDATE media
+        SET visibility = 'restricted'
+        WHERE id = '00000000-0000-4000-8000-000000000166'
+      `;
+
       const publicSpecimen = await app.inject({
         method: "GET",
         url: "/api/v1/specimens/specimen-public-demo-01",
@@ -471,25 +443,17 @@ test(
         )?.status,
         "not_documented",
       );
-      const opuntiaGuide = guides
-        .json()
-        .find(
-          (guide: { subjectPublicId?: string }) =>
-            guide.subjectPublicId === "biological-entity-opuntia-ficus-indica",
-        );
-      assert.equal(opuntiaGuide?.publicId, "guide-opuntia-ficus-indica-rhs-v1");
-      assert.equal(opuntiaGuide?.claims.length, 7);
-      const pleurotusGuide = guides
-        .json()
-        .find(
-          (guide: { subjectPublicId?: string }) =>
-            guide.subjectPublicId === "biological-entity-pleurotus-ostreatus",
-        );
       assert.equal(
-        pleurotusGuide?.publicId,
-        "guide-pleurotus-ostreatus-debonis-2026-v1",
+        guides
+          .json()
+          .some(
+            (guide: { subjectPublicId?: string }) =>
+              guide.subjectPublicId ===
+                "biological-entity-opuntia-ficus-indica" ||
+              guide.subjectPublicId === "biological-entity-pleurotus-ostreatus",
+          ),
+        false,
       );
-      assert.equal(pleurotusGuide?.claims.length, 6);
 
       const lineage = await app.inject({
         method: "GET",

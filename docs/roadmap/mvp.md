@@ -8,18 +8,18 @@
 
 ## Estado real al iniciar esta fase
 
-| Área                                          | Estado                                                                                                                              |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Esquema PostgreSQL/PostGIS, migraciones y API | funcional                                                                                                                           |
-| Tests, validadores y CI                       | funcional                                                                                                                           |
-| Fixtures de Echinopsis pachanoi               | demo estructural                                                                                                                    |
-| Taxonomía externa persistida y publicada      | E. pachanoi + O. ficus-indica + P. ostreatus, con GBIF atribuido                                                                    |
-| Manuales con bibliografía real                | 4 guías publicadas, 20 claims respaldados y cobertura explícita de 15 secciones; fixture demo archivado                             |
-| Medios externos licenciados                   | importados en staging; publicación condicionada por licencia                                                                        |
-| Relaciones culturales públicas                | flujo editorial protegido en `/admin/culture`; publicación pendiente de revisión comunitaria                                        |
-| Arquitectura de información y lenguaje visual | definidos en `docs/product/ia-and-editorial-v0.1.md` y `docs/product/visual-language-v0.1.md`; aplicados a las superficies públicas |
-| Flujo editorial completo                      | revisión de snapshots, promoción taxonómica, bandeja cultural y metadatos de decisión protegidos                                    |
-| Web contra PostgreSQL sembrado                | smoke test reproducible con explorador, ficha de Opuntia y manuales                                                                 |
+| Área                                          | Estado                                                                                                                                           |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Esquema PostgreSQL/PostGIS, migraciones y API | funcional                                                                                                                                        |
+| Tests, validadores y CI                       | funcional                                                                                                                                        |
+| Fixtures de Echinopsis pachanoi               | demo estructural                                                                                                                                 |
+| Taxonomía externa persistida y publicada      | _Echinopsis pachanoi_ en la superficie pública; _Opuntia_ y _Pleurotus_ conservados como registros restringidos, con GBIF atribuido              |
+| Manuales con bibliografía real                | 1 guía pública de _Echinopsis_, 20 claims respaldados en el corpus editorial y cobertura explícita de 15 secciones; guías secundarias archivadas |
+| Medios externos licenciados                   | importados en staging; publicación condicionada por licencia                                                                                     |
+| Relaciones culturales públicas                | flujo editorial protegido en `/admin/culture`; publicación pendiente de revisión comunitaria                                                     |
+| Arquitectura de información y lenguaje visual | definidos en `docs/product/ia-and-editorial-v0.1.md` y `docs/product/visual-language-v0.1.md`; aplicados a las superficies públicas              |
+| Flujo editorial completo                      | revisión de snapshots, promoción taxonómica, bandeja cultural y metadatos de decisión protegidos                                                 |
+| Web contra PostgreSQL sembrado                | smoke test reproducible con explorador, ficha monográfica de _Echinopsis_ y manual público                                                       |
 
 La próxima entrega se llama **MVP de contenido real v0.1**. No se considera
 terminada por tener más rutas: debe cumplir el contrato de

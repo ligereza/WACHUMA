@@ -55,24 +55,6 @@ export const demoSpeciesDocument = {
   ],
   vernacularNames: [
     {
-      term: "wachuma",
-      relationType: "vernacular_name",
-      context:
-        "Nombre cultural pendiente de una fuente y contexto comunitario específico; no se trata como equivalencia taxonómica automática.",
-      sourcePublicId: "source-wachuma-demo-editorial",
-      accessLevel: "restricted",
-      reviewStatus: "draft",
-    },
-    {
-      term: "huachuma",
-      relationType: "vernacular_name",
-      context:
-        "Variante ortográfica pendiente de una fuente y contexto comunitario específico; no se trata como equivalencia taxonómica automática.",
-      sourcePublicId: "source-wachuma-demo-editorial",
-      accessLevel: "restricted",
-      reviewStatus: "draft",
-    },
-    {
       term: "San Pedro",
       relationType: "vernacular_name",
       context:
@@ -140,14 +122,6 @@ export const demoSpeciesDocument = {
     },
   ],
   relatedSpecies: [],
-  media: [
-    {
-      uri: "/models/echinopsis-pachanoi-demo.glb",
-      title: "Representación procedural 3D · no taxonómica",
-      license: "WACHUMA-PROJECT",
-      attribution: "Generador parametric-cactus propio de WACHUMA",
-    },
-  ],
 } as unknown as SpeciesDocument;
 
 export type { SpeciesDocument } from "@wachuma/shared";

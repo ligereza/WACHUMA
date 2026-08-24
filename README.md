@@ -4,20 +4,24 @@ Jardín digital, atlas biológico y base de conocimiento biocultural abierta.
 
 WACHUMA representa organismos, ejemplares vivos, material biológico, linajes,
 ecología, cultivo, historia y relaciones culturales con procedencia explícita.
-La primera especie de demostración es _Echinopsis pachanoi_ / _Trichocereus
-pachanoi_, y el corpus ya incluye _Opuntia ficus-indica_ y el primer hongo
-_Pleurotus ostreatus_. Los nombres “wachuma”, “huachuma” y “San Pedro” se
-tratarán como nombres o conceptos culturales contextualizados, no como
-equivalencias taxonómicas automáticas.
+La experiencia pública actual es monográfica: gira alrededor de _Echinopsis
+pachanoi_ / _Trichocereus pachanoi_. _Opuntia ficus-indica_ y _Pleurotus
+ostreatus_ se conservan como registros históricos restringidos: el primero
+queda fuera del catálogo principal y el segundo reserva su lugar para la
+futura investigación sobre organismos asociados al cultivo del cactus. Los
+nombres “wachuma”, “huachuma” y “San Pedro” se tratarán como nombres o
+conceptos culturales contextualizados, no como equivalencias taxonómicas
+automáticas.
 
 ## Estado
 
 El repositorio ya contiene una primera vertical funcional de web/API/worker/db,
-pero la experiencia sigue en evolución. La semilla ahora incluye un corte
-pequeño de contenido real para dos especies vegetales y un hongo: 11 fuentes
-atribuidas, identificadores IPNI/GBIF, claims que conservan la diferencia entre
-proveedores y cuatro manuales versionados con alcance explícito. Los
-ejemplares, la escena 3D, el linaje y la relación
+pero la experiencia sigue en evolución. La semilla pública incluye un corte
+pequeño de contenido real para _Echinopsis pachanoi_: fuentes atribuidas,
+identificadores GBIF/IPNI, claims que conservan la diferencia entre
+proveedores y un manual versionado con alcance explícito. Los registros
+históricos de otras especies permanecen restringidos y los ejemplares, la
+escena 3D, el linaje y la relación
 cultural del jardín siguen siendo sintéticos o restringidos hasta incorporar
 registros reales revisados.
 
@@ -31,6 +35,7 @@ registros reales revisados.
 - [Objetivo completo](docs/roadmap/full-objective.md)
 - [Arquitectura de información y contrato editorial](docs/product/ia-and-editorial-v0.1.md)
 - [Contrato del corpus público](docs/data/content-seeding-v0.1.md)
+- [Corpus público reproducible v0.2](docs/data/public-corpus-v0.2.md)
 - [Calidad algorítmica y regresiones](docs/quality/algorithmic-quality.md)
 - [Checklist de release reproducible](docs/quality/release-checklist.md)
 - [Auditoría del objetivo completo](docs/quality/objective-audit-v0.1.md)
@@ -41,8 +46,11 @@ registros reales revisados.
 - [Licencia de contenido](LICENSE-CONTENT.md)
 - [Tipos de dominio iniciales](packages/shared/src/types.ts)
 - [ADR de escenas 3D](docs/architecture/ADR-0002-3d-garden-studio.md)
+- [ADR de estudios materiales de organismos](docs/architecture/ADR-0006-organism-material-fixtures.md)
+- [ADR de experiencia móvil por scroll](docs/architecture/ADR-0007-mobile-scroll-experience.md)
 - [Límites de generadores procedurales](docs/architecture/procedural-generators.md)
 - [Esquema de escenas 3D](schemas/garden-scene.schema.json)
+- [Esquema de estudios materiales](schemas/material-fixture.schema.json)
 - [Escena demo procedural](content/scenes/echinopsis-pachanoi-demo.json)
 
 Para ejecutar la persistencia local, copia `.env.example` a `.env`, inicia
@@ -76,6 +84,11 @@ artefacto. La política de release mantiene separadas las verificaciones
 automáticas de la aprobación jurídica y comunitaria.
 
 Los avisos de terceros se mantienen en [THIRD_PARTY.md](THIRD_PARTY.md).
+
+El seed normal usa `WACHUMA_SEED_PROFILE=public` y no incorpora fixtures
+sintéticos a las rutas públicas. El perfil `verification` se reserva para
+`pnpm db:verify`; la compuerta `pnpm quality:public-corpus` comprueba esta
+separación antes del smoke test web.
 
 ## Principios
 

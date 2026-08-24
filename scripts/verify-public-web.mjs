@@ -89,12 +89,10 @@ try {
   await waitFor(`${webBaseUrl}/`, "web");
 
   const explorer = await (await fetch(`${webBaseUrl}/species`)).text();
-  assert.match(explorer, /Opuntia ficus-indica/i);
-  assert.match(explorer, /biological-entity-opuntia-ficus-indica/);
-  assert.match(explorer, /Pleurotus ostreatus/i);
-  assert.match(explorer, /biological-entity-pleurotus-ostreatus/);
   assert.match(explorer, /Echinopsis pachanoi/i);
   assert.match(explorer, /biological-entity-echinopsis-pachanoi/);
+  assert.doesNotMatch(explorer, /Opuntia ficus-indica/i);
+  assert.doesNotMatch(explorer, /Pleurotus ostreatus/i);
 
   const echinopsis = await (
     await fetch(`${webBaseUrl}/species/biological-entity-echinopsis-pachanoi`)
@@ -102,28 +100,23 @@ try {
   assert.match(echinopsis, /Echinopsis pachanoi/i);
   assert.match(echinopsis, /Trichocereus pachanoi/i);
   assert.match(echinopsis, /editorial/i);
+  assert.match(echinopsis, /Estudio material/i);
+  assert.match(echinopsis, /No hay claims químicos publicables/i);
+  assert.match(echinopsis, /source-wachuma-material-fixture/i);
 
-  const species = await (
-    await fetch(`${webBaseUrl}/species/biological-entity-opuntia-ficus-indica`)
-  ).text();
-  assert.match(species, /Opuntia ficus-indica/i);
-  assert.match(species, /Plants of the World Online/i);
-  assert.match(species, /guía\(s\) de cultivo publicadas/i);
-  assert.match(species, /Observaciones públicas/i);
-  assert.match(species, /observation-gbif-6130799370/i);
-  assert.match(species, /source-gbif/i);
+  const archivedOpuntia = await fetch(
+    `${webBaseUrl}/species/biological-entity-opuntia-ficus-indica`,
+  );
+  assert.equal(archivedOpuntia.status, 404);
 
-  const fungus = await (
-    await fetch(`${webBaseUrl}/species/biological-entity-pleurotus-ostreatus`)
-  ).text();
-  assert.match(fungus, /Pleurotus ostreatus/i);
-  assert.match(fungus, /GBIF Backbone Taxonomy/i);
-  assert.match(fungus, /1 guía\(s\) de cultivo publicadas/i);
-  assert.match(fungus, /source-debonis-pleurotus-light-substrate-2026/i);
+  const archivedPleurotus = await fetch(
+    `${webBaseUrl}/species/biological-entity-pleurotus-ostreatus`,
+  );
+  assert.equal(archivedPleurotus.status, 404);
 
   const cultivation = await (await fetch(`${webBaseUrl}/cultivation`)).text();
-  assert.match(cultivation, /Opuntia ficus-indica/i);
-  assert.match(cultivation, /Pleurotus ostreatus/i);
+  assert.doesNotMatch(cultivation, /Opuntia ficus-indica/i);
+  assert.doesNotMatch(cultivation, /Pleurotus ostreatus/i);
 
   const cultivationDetail = await (
     await fetch(
@@ -157,16 +150,10 @@ try {
   console.log(
     JSON.stringify({
       databaseBacked: true,
-      species: [
-        "biological-entity-echinopsis-pachanoi",
-        "biological-entity-opuntia-ficus-indica",
-        "biological-entity-pleurotus-ostreatus",
-      ],
+      species: ["biological-entity-echinopsis-pachanoi"],
       routes: [
         "/species/biological-entity-echinopsis-pachanoi",
         "/species",
-        "/species/biological-entity-opuntia-ficus-indica",
-        "/species/biological-entity-pleurotus-ostreatus",
         "/cultivation",
         "/cultivation/guide-echinopsis-pachanoi-general-cacti-v1",
         "/search?q=pachanoi",

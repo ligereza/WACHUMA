@@ -55,7 +55,7 @@ test("species detail keeps cultural names contextualized and sourced", async () 
   };
   assert.deepEqual(
     body.vernacularNames.map((name) => name.term),
-    ["wachuma", "huachuma", "San Pedro"],
+    ["San Pedro"],
   );
   assert.ok(body.vernacularNames.every((name) => name.sourcePublicId));
   assert.ok(
@@ -92,6 +92,36 @@ test("species explorer searches the historical taxonomic variant", async () => {
 
   assert.equal(response.statusCode, 200);
   assert.equal(response.json()[0]?.scientificName, "Echinopsis pachanoi");
+  await app.close();
+});
+
+test("material fixture keeps visual parameters separate from chemistry claims", async () => {
+  const app = buildApi();
+
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/material-fixtures/biological-entity-echinopsis-pachanoi",
+  });
+
+  assert.equal(response.statusCode, 200);
+  const body = response.json() as {
+    representationType: string;
+    material: { roughness: number };
+    interpretation: { scientificReconstruction: boolean; notes?: string };
+    bindings: Array<{ layer: string; sourceIds: string[] }>;
+  };
+  assert.equal(body.representationType, "procedural-interpretation");
+  assert.equal(body.material.roughness, 0.68);
+  assert.equal(body.interpretation.scientificReconstruction, false);
+  assert.match(
+    body.interpretation.notes ?? "",
+    /no representan composición química/i,
+  );
+  assert.equal(
+    body.bindings.some((binding) => binding.layer === "chemistry"),
+    false,
+  );
+  assert.ok(body.bindings.every((binding) => binding.sourceIds.length > 0));
   await app.close();
 });
 

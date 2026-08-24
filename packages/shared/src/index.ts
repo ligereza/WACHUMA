@@ -8,3 +8,7 @@ export * from "./admin.js";
 export * from "./external-import.js";
 export * from "./knowledge-validation.js";
 export * from "./search.js";
+export * from "./material-fixture.js";
+export { demoMaterialFixture } from "./material-fixture-demo.js";
+export * from "./scroll-experience.js";
+export { echinopsisScrollExperience } from "./scroll-experience-demo.js";

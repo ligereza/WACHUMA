@@ -81,6 +81,25 @@ paths:
                 $ref: "#/components/schemas/SpeciesDocument"
         "404":
           description: No encontrada
+  /material-fixtures/{publicId}:
+    get:
+      operationId: getMaterialFixture
+      summary: Obtener el estudio material público de un organismo
+      description: Devuelve una interpretación visual con parámetros PBR separados de las afirmaciones biológicas. Una capa química sólo aparece si sus bindings tienen claims y fuentes.
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Estudio material público
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaterialFixture"
+        "404":
+          description: No hay estudio material publicable
   /scenes:
     get:
       operationId: listScenes
@@ -1221,6 +1240,86 @@ components:
                 items: { $ref: "#/components/schemas/SpeciesSummary" },
               }
             media: { type: array, items: { type: object } }
+    MaterialFixture:
+      type: object
+      required:
+        [
+          $schema,
+          schemaVersion,
+          publicId,
+          subject,
+          representationType,
+          material,
+          bindings,
+          interpretation,
+          visibility,
+        ]
+      properties:
+        $schema: { type: string, format: uri }
+        schemaVersion: { type: string, enum: ["1.0"] }
+        publicId: { type: string }
+        subject:
+          type: object
+          minProperties: 1
+          properties:
+            biologicalEntityId: { type: string }
+            specimenId: { type: string }
+        representationType:
+          type: string
+          enum: [material-study, specimen-capture, procedural-interpretation]
+        growthStage: { type: string }
+        sceneAssetId: { type: string }
+        recipeId: { type: string }
+        material:
+          type: object
+          properties:
+            baseColor: { type: string }
+            roughness: { type: number, minimum: 0, maximum: 1 }
+            metallic: { type: number, minimum: 0, maximum: 1 }
+            transmission: { type: number, minimum: 0, maximum: 1 }
+            ior: { type: number, minimum: 1 }
+            emissiveColor: { type: string }
+            emissiveStrength: { type: number, minimum: 0 }
+        bindings:
+          type: array
+          items:
+            type: object
+            required: [id, layer, target, interpretation, claimIds, sourceIds]
+            properties:
+              id: { type: string }
+              layer:
+                {
+                  type: string,
+                  enum: [morphology, cultivation, chemistry, ecology],
+                }
+              target:
+                {
+                  type: string,
+                  enum:
+                    [
+                      geometry,
+                      baseColor,
+                      roughness,
+                      transmission,
+                      emission,
+                      animation,
+                    ],
+                }
+              interpretation:
+                { type: string, enum: [observed, measured, derived, symbolic] }
+              claimIds: { type: array, items: { type: string } }
+              claimPublicIds: { type: array, items: { type: string } }
+              sourceIds: { type: array, items: { type: string } }
+              sourcePublicIds: { type: array, items: { type: string } }
+              notes: { type: string }
+        interpretation:
+          type: object
+          required: [label, scientificReconstruction]
+          properties:
+            label: { type: string, enum: [material-interpretation] }
+            scientificReconstruction: { type: boolean, enum: [false] }
+            notes: { type: string }
+        visibility: { type: string, enum: [public] }
     SceneSummary:
       type: object
       required: [publicId, name, visibility, version, objectCount]

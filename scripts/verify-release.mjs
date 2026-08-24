@@ -20,6 +20,7 @@ const commands = [
   ["db:verify"],
   ["quality:corpus"],
   ["quality:content-db"],
+  ["quality:public-corpus"],
   ["verify:public-web"],
 ];
 

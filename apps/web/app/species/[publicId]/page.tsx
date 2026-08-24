@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { demoSpeciesDocument } from "@wachuma/taxonomy";
+import { demoMaterialFixture } from "@wachuma/shared";
 import type { SpeciesDocument } from "@wachuma/shared";
 import type { PublicLineageDocument } from "@wachuma/lineage";
 import type {
@@ -10,15 +11,13 @@ import type {
   PublicObservation,
   SpecimenRecord,
   TraitMeasurement,
+  MaterialFixture,
 } from "@wachuma/shared";
 import { SiteNav } from "../../components/SiteNav";
+import { MaterialFixtureLuminaria } from "../../components/MaterialFixtureLuminaria";
 import { isDemoMode, loadApi, loadApiOrNull } from "../../lib/api";
 
 export const dynamic = "force-dynamic";
-
-export function generateStaticParams() {
-  return [{ publicId: demoSpeciesDocument.publicId }];
-}
 
 export default async function SpeciesDetailPage({
   params,
@@ -36,6 +35,7 @@ export default async function SpeciesDetailPage({
       : null);
   if (!species) notFound();
   const [
+    materialFixtureResponse,
     specimens,
     guides,
     culturalRelations,
@@ -44,6 +44,9 @@ export default async function SpeciesDetailPage({
     traits,
     observations,
   ] = await Promise.all([
+    loadApiOrNull<MaterialFixture>(
+      `/api/v1/material-fixtures/${encodeURIComponent(publicId)}`,
+    ),
     loadApi<SpecimenRecord[]>("/api/v1/garden/specimens?limit=100", []),
     loadApi<GrowingGuide[]>("/api/v1/guides?limit=100", []),
     loadApi<PublicCulturalRelation[]>(
@@ -68,6 +71,11 @@ export default async function SpeciesDetailPage({
       [],
     ),
   ]);
+  const materialFixture =
+    materialFixtureResponse ??
+    (demoFallback && publicId === demoSpeciesDocument.publicId
+      ? demoMaterialFixture
+      : null);
   const speciesSpecimens = specimens.filter(
     (specimen) => specimen.biologicalEntityPublicId === publicId,
   );
@@ -84,6 +92,13 @@ export default async function SpeciesDetailPage({
   const cultivationClaims = speciesGuides.flatMap((guide) =>
     guide.claims.map((claim) => ({ guide, claim })),
   );
+  const media = species.media ?? [];
+  const materialLayers = [
+    ["morphology", "Morfología"],
+    ["cultivation", "Cultivo"],
+    ["ecology", "Ecología"],
+    ["chemistry", "Química"],
+  ] as const;
   return (
     <main className="content-shell">
       <SiteNav />
@@ -102,6 +117,95 @@ export default async function SpeciesDetailPage({
           <span className="tag">visibilidad · {species.visibility}</span>
         </div>
       </header>
+
+      <section className="material-fixture-card">
+        <div className="material-fixture-heading">
+          <div>
+            <p className="card-kicker">Estudio material · luminaria</p>
+            <h2>La especie como forma, cultivo y materia</h2>
+            <p>
+              Esta lectura visual conecta parámetros de escena con capas de
+              conocimiento. El color, la rugosidad y la transmisión son
+              decisiones PBR, no mediciones químicas.
+            </p>
+          </div>
+          {materialFixture ? (
+            <MaterialFixtureLuminaria fixture={materialFixture} />
+          ) : null}
+        </div>
+        {materialFixture ? (
+          <>
+            <div className="material-fixture-meta">
+              <span className="tag">{materialFixture.representationType}</span>
+              {materialFixture.growthStage ? (
+                <span className="tag">{materialFixture.growthStage}</span>
+              ) : null}
+              <span className="tag">no es reconstrucción científica</span>
+            </div>
+            <dl className="material-fixture-facts">
+              <div>
+                <dt>Base visual</dt>
+                <dd>{materialFixture.material.baseColor ?? "no definida"}</dd>
+              </div>
+              <div>
+                <dt>Rugosidad</dt>
+                <dd>{materialFixture.material.roughness ?? "no definida"}</dd>
+              </div>
+              <div>
+                <dt>Transmisión</dt>
+                <dd>
+                  {materialFixture.material.transmission ?? "no definida"}
+                </dd>
+              </div>
+              <div>
+                <dt>Bindings</dt>
+                <dd>{materialFixture.bindings.length}</dd>
+              </div>
+            </dl>
+            <div className="material-layer-grid">
+              {materialLayers.map(([layer, label]) => {
+                const bindings = materialFixture.bindings.filter(
+                  (binding) => binding.layer === layer,
+                );
+                return (
+                  <article key={layer}>
+                    <p className="card-kicker">{label}</p>
+                    {bindings.length ? (
+                      bindings.map((binding) => (
+                        <p key={binding.id}>
+                          <strong>{binding.target}</strong> · {binding.notes}
+                          <br />
+                          <small>
+                            {binding.interpretation} · fuentes:{" "}
+                            {binding.sourcePublicIds?.join(", ") ??
+                              binding.sourceIds.join(", ")}
+                          </small>
+                        </p>
+                      ))
+                    ) : layer === "chemistry" ? (
+                      <p className="empty-note">
+                        No hay claims químicos publicables enlazados a este
+                        estudio. La interfaz no infiere química desde la luz.
+                      </p>
+                    ) : (
+                      <p className="empty-note">
+                        Sin vínculo publicable en esta versión.
+                      </p>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+            <p className="material-fixture-note">
+              {materialFixture.interpretation.notes}
+            </p>
+          </>
+        ) : (
+          <p className="empty-note">
+            Todavía no hay un estudio material publicable para esta entidad.
+          </p>
+        )}
+      </section>
 
       <div className="detail-layout">
         <section className="detail-card">
@@ -384,8 +488,8 @@ export default async function SpeciesDetailPage({
 
         <section className="detail-card">
           <p className="card-kicker">Galería y medios</p>
-          {species.media.length ? (
-            species.media.map((media) => (
+          {media.length ? (
+            media.map((media) => (
               <article className="source-row" key={media.uri}>
                 <h2>{media.title ?? "Medio asociado"}</h2>
                 {media.mediaType === "image" ? (

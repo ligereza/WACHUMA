@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wachuma.org/schemas/material-fixture.schema.json",
+  "title": "WACHUMA Organism Material Fixture",
+  "description": "A provenance-aware visual material study connecting an organism to morphology, cultivation and sourced chemical claims without presenting a procedural rendering as scientific reconstruction.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "publicId",
+    "subject",
+    "representationType",
+    "material",
+    "bindings",
+    "interpretation",
+    "visibility"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schemaVersion": { "const": "1.0" },
+    "publicId": { "type": "string", "minLength": 1 },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "biologicalEntityId": { "type": "string", "minLength": 1 },
+        "specimenId": { "type": "string", "minLength": 1 }
+      },
+      "anyOf": [
+        { "required": ["biologicalEntityId"] },
+        { "required": ["specimenId"] }
+      ]
+    },
+    "representationType": {
+      "enum": [
+        "material-study",
+        "specimen-capture",
+        "procedural-interpretation"
+      ]
+    },
+    "growthStage": { "type": "string", "minLength": 1 },
+    "sceneAssetId": { "type": "string", "minLength": 1 },
+    "recipeId": { "type": "string", "minLength": 1 },
+    "material": { "$ref": "#/$defs/material" },
+    "bindings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/binding" }
+    },
+    "interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "scientificReconstruction"],
+      "properties": {
+        "label": { "const": "material-interpretation" },
+        "scientificReconstruction": { "const": false },
+        "notes": { "type": "string" }
+      }
+    },
+    "visibility": {
+      "enum": ["public", "restricted", "sensitive", "community-controlled"]
+    }
+  },
+  "$defs": {
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "baseColor": { "$ref": "#/$defs/hexColor" },
+        "roughness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "metallic": { "type": "number", "minimum": 0, "maximum": 1 },
+        "transmission": { "type": "number", "minimum": 0, "maximum": 1 },
+        "ior": { "type": "number", "minimum": 1 },
+        "emissiveColor": { "$ref": "#/$defs/hexColor" },
+        "emissiveStrength": { "type": "number", "minimum": 0 }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "layer",
+        "target",
+        "interpretation",
+        "claimIds",
+        "sourceIds"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "layer": {
+          "enum": ["morphology", "cultivation", "chemistry", "ecology"]
+        },
+        "target": {
+          "enum": [
+            "geometry",
+            "baseColor",
+            "roughness",
+            "transmission",
+            "emission",
+            "animation"
+          ]
+        },
+        "interpretation": {
+          "enum": ["observed", "measured", "derived", "symbolic"]
+        },
+        "claimIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "claimPublicIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "sourcePublicIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "layer": { "const": "chemistry" } } },
+          "then": {
+            "properties": {
+              "claimIds": { "minItems": 1 },
+              "sourceIds": { "minItems": 1 }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

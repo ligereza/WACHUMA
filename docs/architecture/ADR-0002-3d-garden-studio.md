@@ -11,6 +11,10 @@ ejemplares y representar organismos mediante escenas 3D reproducibles, sin
 mezclar una interpretación geométrica con un hecho taxonómico, una observación
 ni una fotografía de un ejemplar real.
 
+La unidad visual de una ficha será además un `MaterialFixture`: una luminaria o
+estudio de materia que puede relacionar forma, cultivo y química mediante
+bindings explícitos, sin presentar una propiedad PBR como medición científica.
+
 ## Alcance de esta decisión
 
 La primera entrega incluye:

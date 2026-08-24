@@ -42,6 +42,8 @@ apps consumen los paquetes.
 ├── schemas/
 │   ├── openapi.yaml           # Contrato REST público
 │   ├── provenance-record.schema.json
+│   ├── material-fixture.schema.json
+│   ├── scroll-experience.schema.json
 │   ├── plant-descriptor.schema.json
 │   ├── procedural-adapter-request.schema.json
 │   ├── procedural-asset-manifest.schema.json

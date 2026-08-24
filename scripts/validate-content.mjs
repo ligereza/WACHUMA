@@ -154,10 +154,8 @@ for (const guide of guideDocuments) {
   assert.equal(guide.schemaVersion, "1.0");
   assert.ok(guide.version >= 1, "Growing guides need a positive version");
   assert.ok(
-    guide.status === "published" ||
-      (guide.publicId === "guide-echinopsis-pachanoi-demo-v1" &&
-        guide.status === "archived"),
-    `${guide.publicId} must be published or the explicit archived demo guide`,
+    guide.status === "published" || guide.status === "archived",
+    `${guide.publicId} must be published or archived`,
   );
   assert.ok(
     guide.coverage && Array.isArray(guide.coverage.sections),

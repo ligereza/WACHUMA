@@ -51,6 +51,12 @@ La representación 3D usa recetas deterministas, semillas, hashes, manifiestos,
 licencias y el rótulo `procedural-interpretation`. Blender/Geometry Nodes es un
 adaptador externo aislado; no forma parte de las dependencias del núcleo.
 
+Cada organismo también podrá exponerse como `MaterialFixture`: un estudio
+material interactivo que conecta morfología, estado de cultivo y claims químicos
+con una representación PBR/procedural. Esta capa es una traducción visual con
+procedencia, no una reconstrucción científica ni una inferencia de química a
+partir del brillo, color o forma.
+
 ## Criterio de término
 
 El objetivo se considera alcanzado cuando `pnpm verify:release` pasa en un

@@ -42,28 +42,23 @@ anterior.
 ## Primer corpus operativo
 
 El estado actual de este corte es parcial pero persistido: la taxonomía, los
-identificadores, los claims de rango/bioma y una guía RHS para cada uno de los
-dos taxones iniciales ya están en PostgreSQL. Las ocurrencias y medios de GBIF
-se proyectan primero como registros restringidos y quedan pendientes de
-licencia, atribución y revisión geográfica; una excepción seleccionada es la
-ocurrencia `6130799370` de _Opuntia ficus-indica_, aceptada individualmente y
-publicada con geometría redondeada, junto con su media CC BY 4.0. La observación
-se presenta como presencia contemporánea, no como rango nativo. Las demás filas
-no se cuentan como distribución pública hasta pasar por el endpoint protegido
-de revisión.
+identificadores, los claims de rango/bioma y la guía versionada de _Echinopsis
+pachanoi_ ya están en PostgreSQL. La release pública deliberadamente contiene
+un solo taxón para que la experiencia 3D, el cultivo, la historia, la química y
+la cultura compartan un mismo eje editorial.
 
-La primera release de contenido comienza con tres taxones de prueba, con datos
-reales y honestamente incompletos:
+_Opuntia ficus-indica_ y _Pleurotus ostreatus_ no se borran: permanecen como
+registros históricos restringidos para conservar trazabilidad de decisiones
+anteriores. _Opuntia_ queda fuera del catálogo monográfico y _Pleurotus_ se
+reserva para la futura categoría de organismos que afectan o acompañan el
+cultivo de _Echinopsis_. Sus ocurrencias, medios y manuales no se proyectan
+como contenido público en esta release.
 
-- _Echinopsis pachanoi_, cuyo nombre GBIF puede aparecer como sinónimo frente a
-  una aceptación taxonómica distinta;
-- _Opuntia ficus-indica_, como segundo caso para comprobar que el modelo no está
-  acoplado a un cactus ni a una única ficha editorial.
-- _Pleurotus ostreatus_, como primer hongo del catálogo, con taxonomía GBIF
-  publicada y una guía experimental versionada de fuente abierta. La guía
-  conserva seis claims situados sobre sustrato, inoculación, temperatura, luz,
-  cosecha y límites de extrapolación; todavía no publica traits funcionales ni
-  relaciones culturales.
+La primera release monográfica comienza con _Echinopsis pachanoi_, cuyo nombre
+GBIF puede aparecer como sinónimo frente a una aceptación taxonómica distinta.
+Las variantes cercanas y los nombres que suelen confundirse con ella se
+modelarán después como relaciones taxonómicas o culturales contextualizadas,
+no como especies equivalentes por defecto.
 
 El corpus también conserva una relación cultural real pero no publicable por
 defecto: el artículo de Armijos, Cota y González (2014) registra el nombre
@@ -163,7 +158,7 @@ romper referencias históricas, pero proyecta el valor editorial desde esos
 documentos.
 
 Durante `pnpm db:seed`, ese catálogo proyecta de forma idempotente las fuentes,
-los campos editoriales de los tres taxones, sus identificadores externos y las
+los campos editoriales del taxón monográfico, sus identificadores externos y las
 relaciones culturales. Los registros de procedencia y ocurrencia importados
 siguen siendo snapshots con revisión separada. `pnpm quality:content-db`
 compara los valores declarativos contra PostgreSQL, incluyendo sensibilidad,

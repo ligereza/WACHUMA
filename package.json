@@ -27,6 +27,7 @@
     "quality:content-manifest": "node --test scripts/editorial-content.test.mjs",
     "content:manifest": "node scripts/print-content-manifest.mjs",
     "quality:corpus": "node scripts/audit-corpus.mjs",
+    "quality:public-corpus": "node scripts/audit-public-corpus.mjs",
     "quality:content-db": "node scripts/audit-content-db.mjs",
     "quality:licenses": "node scripts/validate-licenses.mjs",
     "quality:sbom": "node scripts/validate-sbom.mjs",

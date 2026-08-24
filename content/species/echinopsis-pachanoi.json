@@ -37,6 +37,19 @@
       "reviewStatus": "accepted"
     },
     {
+      "publicId": "claim-echinopsis-pachanoi-historical-combination",
+      "predicate": "historicalContext",
+      "statement": "WACHUMA conserva Trichocereus pachanoi como combinación taxonómica histórica relacionada con la ficha de Echinopsis pachanoi; no la utiliza para resolver nombres culturales ni como equivalencia taxonómica absoluta.",
+      "assertionType": "editorial_interpretation",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-gbif-echinopsis-pachanoi",
+      "sourceRecordId": "species:5622352",
+      "authorPerspective": "Interpretación editorial de WACHUMA basada en la coincidencia taxonómica de GBIF Backbone; la perspectiva se conserva separada del proveedor.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
       "publicId": "claim-powo-echinopsis-pachanoi-native-range",
       "predicate": "nativeRange",
       "statement": "Plants of the World Online indica un rango nativo desde el sur de Ecuador hasta Perú.",
@@ -102,14 +115,6 @@
   ],
   "relatedSpecies": [],
   "culturalRelations": [],
-  "media": [
-    {
-      "uri": "/models/echinopsis-pachanoi-demo.glb",
-      "title": "Representación procedural 3D · no taxonómica",
-      "license": "WACHUMA-PROJECT",
-      "attribution": "Generador parametric-cactus propio de WACHUMA"
-    }
-  ],
   "taxonomicVariants": [
     {
       "name": "Trichocereus pachanoi",
@@ -121,20 +126,6 @@
   ],
   "vernacularNames": [
     {
-      "term": "wachuma",
-      "context": "Nombre cultural pendiente de una fuente y contexto comunitario específico; no se trata como equivalencia taxonómica automática.",
-      "sourcePublicId": "source-wachuma-demo-editorial",
-      "accessLevel": "restricted",
-      "reviewStatus": "draft"
-    },
-    {
-      "term": "huachuma",
-      "context": "Variante ortográfica pendiente de una fuente y contexto comunitario específico; no se trata como equivalencia taxonómica automática.",
-      "sourcePublicId": "source-wachuma-demo-editorial",
-      "accessLevel": "restricted",
-      "reviewStatus": "draft"
-    },
-    {
       "term": "San Pedro",
       "context": "El estudio de Armijos, Cota y González registra este nombre para Echinopsis pachanoi en entrevistas con yachakkuna Saraguro; se conserva como relación situada y no como equivalencia taxonómica absoluta.",
       "sourcePublicId": "source-armijos-saraguro-yachakkuna-2014",
@@ -145,12 +136,12 @@
   "sources": [
     {
       "publicId": "source-wachuma-demo-editorial",
-      "title": "WACHUMA · ficha de demostración",
-      "citation": "Contenido editorial de demostración del repositorio WACHUMA",
+      "title": "WACHUMA · fixture de verificación",
+      "citation": "Fixture interno de verificación del repositorio WACHUMA; no forma parte del corpus público.",
       "url": "https://github.com/ligereza/WACHUMA",
       "sourceType": "editorial",
       "license": "WACHUMA-PROJECT",
-      "attribution": "WACHUMA",
+      "attribution": "WACHUMA; fixture no publicable",
       "accessedAt": "2026-08-23T00:00:00Z",
       "assertionType": "editorial_interpretation"
     },

@@ -1,4 +1,5 @@
 export { createSceneRepository } from "./scene-repository.js";
+export { createMaterialFixtureRepository } from "./material-fixture-repository.js";
 export { createTaxonomyRepository } from "./taxonomy-repository.js";
 export { createGardenRepository } from "./garden-repository.js";
 export { createGardenAdminRepository } from "./garden-admin-repository.js";
@@ -41,4 +42,5 @@ export type {
   PublicSceneDocument,
   PublicSceneSummary,
 } from "./scene-repository.js";
+export type { MaterialFixture } from "@wachuma/shared";
 export type { SpeciesDocument, SpeciesSummary } from "@wachuma/shared";

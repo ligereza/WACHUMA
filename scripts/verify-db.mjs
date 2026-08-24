@@ -35,7 +35,7 @@ let verificationError;
 let seedWasApplied = false;
 try {
   run(["db:migrate"]);
-  run(["db:seed"]);
+  run(["db:seed"], { WACHUMA_SEED_PROFILE: "verification" });
   seedWasApplied = true;
   // API integration tests resolve workspace packages through their built
   // exports. Rebuild the database package so the verification command never
@@ -50,7 +50,7 @@ try {
       // Integration tests intentionally exercise mutations such as takedown
       // and publication. Restore the canonical editorial projection so later
       // release gates and the local smoke test see a clean, reproducible DB.
-      run(["db:seed"]);
+      run(["db:seed"], { WACHUMA_SEED_PROFILE: "public" });
     } catch (error) {
       if (!verificationError) verificationError = error;
       else
