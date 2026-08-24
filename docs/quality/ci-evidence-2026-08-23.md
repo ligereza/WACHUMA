@@ -92,9 +92,13 @@ con checksum.
 Los dos primeros CI remotos posteriores a ese cambio revelaron el mismo patrón
 durante `db:verify`: el seed insertaba dos veces cada relación cultural, una vez
 desde `content/cultures` y otra desde fixtures SQL hardcodeados. Se eliminaron
-ambas inserciones duplicadas; la corrida local posterior reprodujo seed, 37
-tests de API con PostgreSQL y el seed de restauración sin violar
-`cultural_relations_public_id_idx`. El siguiente push debe confirmar la
+ambas inserciones duplicadas. El tercer CI mostró una consecuencia distinta:
+la relación Saraguro debía conservar el UUID editorial histórico usado por la
+regresión de procedencia. El único seed editorial conserva ahora los UUID
+estables de las dos relaciones y la procedencia sigue resolviendo por
+`publicId`. La corrida local posterior reproduce seed, 37 tests de API con
+PostgreSQL y el seed de restauración sin violar
+`cultural_relations_public_id_idx`; el siguiente push debe confirmar la
 corrección completa en Ubuntu.
 
 El nuevo `quality:corpus` consulta la base persistida después del seed y

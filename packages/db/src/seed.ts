@@ -234,6 +234,14 @@ const guideClaimIdsByPublicId = new Map<string, readonly string[]>([
   ],
 ]);
 
+const editorialCulturalRelationIdByPublicId = new Map([
+  ["cultural-relation-wachuma-demo", "00000000-0000-4000-8000-000000000128"],
+  [
+    "cultural-relation-san-pedro-saraguro-2014",
+    "00000000-0000-4000-8000-000000000187",
+  ],
+]);
+
 const sourceIdByPublicId = new Map([
   ["source-wachuma-demo-editorial", ids.source],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
@@ -2249,7 +2257,7 @@ try {
           evidence_level, assertion_type, author_perspective, sensitivity,
           access_level, license_uri, review_notes, review_status, recorded_on
         ) VALUES (
-          ${deterministicUuid(`editorial-cultural-relation:${relation.publicId}`)},
+          ${editorialCulturalRelationIdByPublicId.get(relation.publicId) ?? deterministicUuid(`editorial-cultural-relation:${relation.publicId}`)},
           ${relation.publicId},
           ${relation.relationType},
           ${subject.taxon_id},

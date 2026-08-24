@@ -70,6 +70,7 @@ que exista autorización cultural o jurídica para distribuirlo ampliamente.
 | La bandeja editorial mostraba el resumen pero no el payload que debía aprobarse | `AdminSourceRecord` expone `rawPayload` desde PostgreSQL y la interfaz lo presenta en un bloque estructurado colapsable                                   | La integración API comprueba el payload en la respuesta administrativa y el contrato OpenAPI lo declara.                                                             |
 | El snapshot real de FungalTraits tenía valores vacíos y `obj_id` repetidos      | El parser conserva ausencias explícitas y la identidad incorpora `rowNumber` además del identificador de estudio                                          | La corrida real insertó 51.555/51.555 filas; tests cubren valores vacíos y filas repetidas sin colisión.                                                             |
 | El seed limpio duplicaba relaciones culturales editoriales                      | Se eliminaron las inserciones hardcodeadas duplicadas; `content/cultures` es la única fuente de ambas relaciones y la procedencia resuelve por `publicId` | `db:verify` reproduce seed → integración → seed en PostgreSQL sin violar `cultural_relations_public_id_idx`.                                                         |
+| La eliminación de fixtures cambió un UUID editorial esperado por la regresión   | El único seed editorial conserva los UUID legacy `...0128` y `...0187`; la procedencia continúa buscando por `publicId`                                   | La integración API verifica la arista Saraguro con `...0187`; `db:verify` pasa en una base local sembrada.                                                           |
 
 ## Lo que falta para pasar al siguiente umbral
 
@@ -82,7 +83,8 @@ que exista autorización cultural o jurídica para distribuirlo ampliamente.
    la relación cultural restringida; si no existe autorización, dejarla como
    registro no publicable.
 4. Ejecutar CI nuevamente después de commit/push de los cambios actuales y
-   conservar ese artefacto SBOM.
+   conservar ese artefacto SBOM; la corrida remota aún debe confirmar el último
+   ajuste de UUID estable.
 5. Obtener asesoría jurídica sobre las combinaciones de licencias antes de una
    release pública amplia.
 6. Diseñar una edición de contenido mantenible para crecer el atlas sin
