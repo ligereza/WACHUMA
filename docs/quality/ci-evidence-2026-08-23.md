@@ -89,13 +89,13 @@ del dataset agregado sigue sin resolver, por lo que no se crearon traits
 públicos. `quality:corpus` verifica que esos registros continúen pendientes y
 con checksum.
 
-El primer CI remoto posterior a ese cambio falló durante `db:verify` porque el
-seed insertaba dos veces `cultural-relation-wachuma-demo`: una vez desde el
-documento editorial y otra desde un fixture SQL hardcodeado. Se eliminó la
-segunda inserción; la corrida local posterior reprodujo seed, 37 tests de API
-con PostgreSQL y el seed de restauración sin violar
-`cultural_relations_public_id_idx`. El siguiente push debe confirmar la misma
-corrección en Ubuntu.
+Los dos primeros CI remotos posteriores a ese cambio revelaron el mismo patrón
+durante `db:verify`: el seed insertaba dos veces cada relación cultural, una vez
+desde `content/cultures` y otra desde fixtures SQL hardcodeados. Se eliminaron
+ambas inserciones duplicadas; la corrida local posterior reprodujo seed, 37
+tests de API con PostgreSQL y el seed de restauración sin violar
+`cultural_relations_public_id_idx`. El siguiente push debe confirmar la
+corrección completa en Ubuntu.
 
 El nuevo `quality:corpus` consulta la base persistida después del seed y
 verifica 22 invariantes de salud, incluida una decisión de revisión aceptada

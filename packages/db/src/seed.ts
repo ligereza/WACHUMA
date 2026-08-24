@@ -130,7 +130,6 @@ const ids = {
   historicalPeriodSaraguro: "00000000-0000-4000-8000-000000000184",
   placeSaraguro: "00000000-0000-4000-8000-000000000185",
   agentSaraguroStudy: "00000000-0000-4000-8000-000000000186",
-  culturalRelationSaraguro: "00000000-0000-4000-8000-000000000187",
   dataSourceFrontiers: "00000000-0000-4000-8000-000000000188",
   sourceRecordPleurotusCultivation: "00000000-0000-4000-8000-000000000189",
   sourcePleurotusCultivation: "00000000-0000-4000-8000-000000000190",
@@ -2297,57 +2296,6 @@ try {
       `;
     }
 
-    await transaction`
-      INSERT INTO cultural_relations (
-        id, public_id, relation_type, biological_entity_id, community_id,
-        place_id, historical_period_id, documented_by_agent_id, source_id,
-        value_text, description, evidence_level, assertion_type,
-        author_perspective, sensitivity, access_level, license_uri,
-        review_notes, review_status, recorded_on
-      ) VALUES (
-        ${ids.culturalRelationSaraguro},
-        'cultural-relation-san-pedro-saraguro-2014',
-        'vernacular_name',
-        ${ids.biologicalEntity},
-        ${ids.communitySaraguro},
-        ${ids.placeSaraguro},
-        ${ids.historicalPeriodSaraguro},
-        ${ids.agentSaraguroStudy},
-        ${ids.sourceSaraguro},
-        'San Pedro',
-        'En el alcance situado del estudio de Armijos, Cota y González, Echinopsis pachanoi aparece registrada como cactus San Pedro en entrevistas con yachakkuna Saraguro. WACHUMA conserva esta relación como un reporte documentado de una fuente y contexto concretos, no como equivalencia taxonómica universal ni como autorización para reproducir conocimiento ritual.',
-        'documented',
-        'academic_publication',
-        'Perspectiva de los autores del estudio; la publicación documenta entrevistas con yachakkuna, pero este registro no habla en nombre de la comunidad ni sustituye una revisión comunitaria.',
-        'sensitive',
-        'restricted',
-        'CC BY 2.0',
-        'No publicar automáticamente: requiere revisión comunitaria, evaluación de sensibilidad y confirmación de atribución/contexto.',
-        'under-review',
-        '2014-02-24'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        public_id = EXCLUDED.public_id,
-        relation_type = EXCLUDED.relation_type,
-        biological_entity_id = EXCLUDED.biological_entity_id,
-        community_id = EXCLUDED.community_id,
-        place_id = EXCLUDED.place_id,
-        historical_period_id = EXCLUDED.historical_period_id,
-        documented_by_agent_id = EXCLUDED.documented_by_agent_id,
-        source_id = EXCLUDED.source_id,
-        value_text = EXCLUDED.value_text,
-        description = EXCLUDED.description,
-        evidence_level = EXCLUDED.evidence_level,
-        assertion_type = EXCLUDED.assertion_type,
-        author_perspective = EXCLUDED.author_perspective,
-        sensitivity = EXCLUDED.sensitivity,
-        access_level = EXCLUDED.access_level,
-        license_uri = EXCLUDED.license_uri,
-        review_notes = EXCLUDED.review_notes,
-        review_status = EXCLUDED.review_status,
-        recorded_on = EXCLUDED.recorded_on
-    `;
-
     for (const relation of editorialContent.cultures.flatMap(
       (document) => document.relations,
     )) {
@@ -2374,7 +2322,11 @@ try {
         source_record_id, cultural_relation_id, assertion_type
       ) VALUES (
         ${ids.sourceRecordSaraguro},
-        ${ids.culturalRelationSaraguro},
+        (
+          SELECT id
+          FROM cultural_relations
+          WHERE public_id = 'cultural-relation-san-pedro-saraguro-2014'
+        ),
         'academic_publication'
       )
       ON CONFLICT DO NOTHING
