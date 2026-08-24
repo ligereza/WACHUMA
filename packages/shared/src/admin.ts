@@ -89,6 +89,63 @@ export const AdminSpecimenLocationSchema = z.object({
   startsAt: z.iso.datetime().optional(),
 });
 
+const GardenRecordProvenanceSchema = z.object({
+  sourceRecordId: z.string().trim().min(1).max(512),
+  sourceUrl: z.url().optional(),
+  retrievedAt: z.iso.datetime(),
+  license: z.string().trim().min(1).max(500),
+  attribution: z.string().trim().min(1).max(2000),
+  rawPayload: z.record(z.string(), z.unknown()),
+  importerVersion: z.string().trim().min(1).max(160),
+  assertionType: z.enum([
+    "contemporary_observation",
+    "editorial_interpretation",
+  ]),
+  sourcePublicId: z.string().trim().min(1).max(160),
+});
+
+export const AdminGardenSpecimenIntakeSchema = AdminSpecimenCreateSchema.extend(
+  {
+    visibility: z.enum(["restricted", "sensitive", "community-controlled"]),
+    provenance: GardenRecordProvenanceSchema,
+  },
+);
+
+const LineageSubjectSchema = z.object({
+  kind: z.enum(["biological_entity", "specimen"]),
+  publicId: z.string().trim().min(1).max(160),
+});
+
+export const AdminLineageRelationshipCreateSchema = z
+  .object({
+    relationshipType: z.enum([
+      "parent_of",
+      "cutting_of",
+      "clone_of",
+      "seed_from",
+      "culture_from",
+      "isolate_from",
+      "cross_of",
+    ]),
+    parent: LineageSubjectSchema,
+    child: LineageSubjectSchema,
+    generationLabel: z.string().trim().max(160).optional(),
+    occurredAt: z.iso.datetime().optional(),
+    notes: z.string().max(4000).optional(),
+    provenance: GardenRecordProvenanceSchema,
+  })
+  .refine(
+    (value) =>
+      !(
+        value.parent.kind === value.child.kind &&
+        value.parent.publicId === value.child.publicId
+      ),
+    {
+      message: "A lineage relationship cannot connect a subject to itself",
+      path: ["child", "publicId"],
+    },
+  );
+
 export const AdminCultivationEventCreateSchema = z.object({
   specimenPublicId: z.string().min(1).max(160),
   locationPublicId: z.string().min(1).max(160).optional(),
@@ -203,6 +260,9 @@ export const AdminCulturalRelationCreateSchema = acceptedRelationGuard(
 export const AdminCulturalRelationUpdateSchema = acceptedRelationGuard(
   CulturalRelationFieldsSchema.omit({ publicId: true, subjectPublicId: true })
     .partial()
+    .extend({
+      reviewer: z.string().trim().min(1).max(160).optional(),
+    })
     .refine(
       (value) => Object.keys(value).length > 0,
       "At least one cultural relation field is required",
@@ -210,7 +270,52 @@ export const AdminCulturalRelationUpdateSchema = acceptedRelationGuard(
 );
 export const AdminCulturalTakedownSchema = z.object({
   reason: z.string().trim().min(1).max(4000),
+  reviewer: z.string().trim().min(1).max(160).optional(),
 });
+
+export const AdminSourceRecordReviewSchema = z
+  .object({
+    reviewer: z.string().trim().min(1).max(160),
+    decision: z.enum(["accepted", "rejected"]),
+    note: z.string().trim().min(1).max(4000),
+    licenseConfirmed: z.boolean(),
+    attributionConfirmed: z.boolean(),
+    privacyConfirmed: z.boolean(),
+  })
+  .refine(
+    (value) =>
+      value.decision !== "accepted" ||
+      (value.licenseConfirmed &&
+        value.attributionConfirmed &&
+        value.privacyConfirmed),
+    {
+      message:
+        "Accepted source records require license, attribution and privacy confirmation",
+      path: ["decision"],
+    },
+  );
+
+export const AdminTaxonPromotionSchema = z
+  .object({
+    reviewer: z.string().trim().min(1).max(160),
+    note: z.string().trim().min(1).max(4000),
+    taxonomyConfirmed: z.boolean(),
+    licenseConfirmed: z.boolean(),
+    attributionConfirmed: z.boolean(),
+    privacyConfirmed: z.boolean(),
+  })
+  .refine(
+    (value) =>
+      value.taxonomyConfirmed &&
+      value.licenseConfirmed &&
+      value.attributionConfirmed &&
+      value.privacyConfirmed,
+    {
+      message:
+        "Taxon promotion requires taxonomy, license, attribution and privacy confirmation",
+      path: ["taxonomyConfirmed"],
+    },
+  );
 
 export type AdminLocationCreateInput = z.infer<
   typeof AdminLocationCreateSchema
@@ -227,6 +332,12 @@ export type AdminSpecimenUpdateInput = z.infer<
 export type AdminSpecimenLocationInput = z.infer<
   typeof AdminSpecimenLocationSchema
 >;
+export type AdminGardenSpecimenIntakeInput = z.infer<
+  typeof AdminGardenSpecimenIntakeSchema
+>;
+export type AdminLineageRelationshipCreateInput = z.infer<
+  typeof AdminLineageRelationshipCreateSchema
+>;
 export type AdminCultivationEventCreateInput = z.infer<
   typeof AdminCultivationEventCreateSchema
 >;
@@ -239,6 +350,59 @@ export type AdminCulturalRelationUpdateInput = z.infer<
 export type AdminCulturalTakedownInput = z.infer<
   typeof AdminCulturalTakedownSchema
 >;
+export type AdminSourceRecordReviewInput = z.infer<
+  typeof AdminSourceRecordReviewSchema
+>;
+export type AdminTaxonPromotionInput = z.infer<
+  typeof AdminTaxonPromotionSchema
+>;
+
+export interface AdminSourceRecordTarget {
+  kind:
+    | "taxon"
+    | "biological_entity"
+    | "observation"
+    | "media"
+    | "specimen"
+    | "lineage_relationship"
+    | "external_identifier";
+  publicId?: PublicId;
+  id?: string;
+  visibility?: Visibility;
+  uri?: string;
+  title?: string;
+  mediaType?: string;
+  license?: string;
+  namespace?: string;
+  identifier?: string;
+  canonicalUrl?: string;
+}
+
+export interface AdminSourceRecord {
+  id: string;
+  providerKey: string;
+  sourceRecordId: string;
+  sourceUrl?: string;
+  retrievedAt: string;
+  license: string;
+  attribution: string;
+  assertionType: string;
+  rawPayload: Record<string, unknown>;
+  status: "pending" | "accepted" | "rejected" | "superseded";
+  reviewNotes?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
+  targets: AdminSourceRecordTarget[];
+}
+
+export interface AdminTaxonPromotion {
+  sourceRecordId: string;
+  taxonPublicId: PublicId;
+  biologicalEntityPublicId: PublicId;
+  visibility: Visibility;
+  reviewer: string;
+  promotedAt: string;
+}
 
 export interface AdminLocationRecord {
   publicId: PublicId;
@@ -259,6 +423,29 @@ export interface AdminSpecimenRecord {
   acquiredAt?: string;
   notes?: string;
   currentLocationPublicId?: PublicId;
+}
+
+export interface AdminGardenSpecimenIntakeResult {
+  specimen: AdminSpecimenRecord;
+  sourceRecordId: string;
+  sourceRecordKey: string;
+  sourceRecordStatus: AdminSourceRecord["status"];
+  created: boolean;
+}
+
+export interface AdminLineageRelationshipRecord {
+  id: string;
+  relationshipType: string;
+  parent: { kind: "biological_entity" | "specimen"; publicId: string };
+  child: { kind: "biological_entity" | "specimen"; publicId: string };
+  generationLabel?: string;
+  occurredAt?: string;
+  notes?: string;
+  sourcePublicId: string;
+  sourceRecordId: string;
+  sourceRecordKey: string;
+  sourceRecordStatus: AdminSourceRecord["status"];
+  created: boolean;
 }
 
 export type AdminCultivationEventRecord = PublicCultivationEvent;
@@ -284,5 +471,7 @@ export interface AdminCulturalRelationRecord {
   license: string;
   reviewNote?: string;
   reviewStatus: "draft" | "under-review" | "accepted" | "rejected";
+  reviewedBy?: string;
+  reviewedAt?: string;
   recordedOn?: string;
 }

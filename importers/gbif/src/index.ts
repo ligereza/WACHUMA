@@ -12,8 +12,10 @@ export interface GbifSpeciesMatch {
   canonicalName?: string;
   rank?: string;
   status?: string;
+  taxonomicStatus?: string;
   acceptedKey?: number;
   acceptedScientificName?: string;
+  accepted?: string;
   kingdom?: string;
   phylum?: string;
   order?: string;
@@ -112,6 +114,10 @@ export interface GbifImporterOptions {
   importerVersion?: string;
   defaultLicense?: string;
   occurrenceLimit?: number;
+  /** Optional GBIF occurrence license filter, e.g. CC_BY_4_0. */
+  occurrenceLicense?: string;
+  /** Optional GBIF media type filter, e.g. StillImage. */
+  occurrenceMediaType?: string;
 }
 
 export class GbifImportError extends Error {
@@ -255,9 +261,9 @@ export function projectTaxon(
     scientificName: record.scientificName,
     ...(record.canonicalName ? { canonicalName: record.canonicalName } : {}),
     rank: normalizeRank(record.rank),
-    taxonomicStatus: normalizeStatus(record.status),
-    ...(record.acceptedScientificName
-      ? { acceptedName: record.acceptedScientificName }
+    taxonomicStatus: normalizeStatus(record.status ?? record.taxonomicStatus),
+    ...((record.acceptedScientificName ?? record.accepted)
+      ? { acceptedName: record.acceptedScientificName ?? record.accepted }
       : {}),
     externalIdentifier: {
       namespace: "gbif",
@@ -277,6 +283,8 @@ export function createGbifImporter(options: GbifImporterOptions = {}) {
     Math.max(options.occurrenceLimit ?? 20, 0),
     300,
   );
+  const occurrenceLicense = options.occurrenceLicense?.trim();
+  const occurrenceMediaType = options.occurrenceMediaType?.trim();
 
   async function getJson(
     path: string,
@@ -346,6 +354,8 @@ export function createGbifImporter(options: GbifImporterOptions = {}) {
       await getJson("/occurrence/search", {
         taxon_key: speciesRecord.key,
         limit: occurrenceLimit,
+        ...(occurrenceLicense ? { license: occurrenceLicense } : {}),
+        ...(occurrenceMediaType ? { media_type: occurrenceMediaType } : {}),
       }),
     );
     const occurrenceRecords = (occurrenceSearch.results ?? []).flatMap(

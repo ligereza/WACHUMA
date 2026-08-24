@@ -1,0 +1,84 @@
+{
+  "$schema": "https://wachuma.org/schemas/growing-guide.schema.json",
+  "schemaVersion": "1.0",
+  "publicId": "guide-opuntia-ficus-indica-rhs-v1",
+  "guideKey": "opuntia-ficus-indica-rhs",
+  "version": 1,
+  "title": "Orientación de cultivo · Opuntia ficus-indica · RHS",
+  "biologicalEntityPublicId": "biological-entity-opuntia-ficus-indica",
+  "climateContext": "Cultivo bajo vidrio y contenedor; ajustar a clima local",
+  "techniqueContext": "Ficha horticultural institucional",
+  "regionContext": "RHS y condiciones británicas; no sustituye un protocolo regional",
+  "status": "published",
+  "summary": "Guía estructurada a partir del perfil horticultural de RHS para Opuntia ficus-indica. Conserva el alcance de la fuente y separa sus condiciones británicas de cualquier adaptación regional.",
+  "coverage": {
+    "sections": [
+      { "sectionKey": "propagation", "status": "documented" },
+      { "sectionKey": "substrate", "status": "documented" },
+      { "sectionKey": "watering", "status": "documented" },
+      { "sectionKey": "light", "status": "documented" },
+      { "sectionKey": "temperature", "status": "not_documented" },
+      { "sectionKey": "humidity", "status": "not_documented" },
+      { "sectionKey": "nutrition", "status": "documented" },
+      { "sectionKey": "calendar", "status": "not_documented" },
+      { "sectionKey": "pests", "status": "documented" },
+      { "sectionKey": "diseases", "status": "documented" },
+      { "sectionKey": "transplant", "status": "not_documented" },
+      { "sectionKey": "fruiting", "status": "not_documented" },
+      { "sectionKey": "harvest", "status": "not_documented" },
+      { "sectionKey": "observations", "status": "not_documented" },
+      { "sectionKey": "bibliography", "status": "documented" }
+    ]
+  },
+  "claims": [
+    {
+      "sectionKey": "light",
+      "statement": "RHS sitúa Opuntia ficus-indica a pleno sol y describe condiciones de luz plena en cultivo bajo vidrio; la respuesta concreta depende del clima y de la aclimatación del ejemplar.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-opuntia-ficus-indica",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "substrate",
+      "statement": "RHS recomienda, para cultivo bajo vidrio, un compost sin turba y de drenaje rápido, de base franca con arena gruesa añadida, o un compost comercial para cactus sin turba.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-opuntia-ficus-indica",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "watering",
+      "statement": "RHS indica dejar secar el compost antes de regar durante el crecimiento en primavera, verano y comienzos de otoño, y suspender el riego durante el reposo invernal.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-opuntia-ficus-indica",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "nutrition",
+      "statement": "En el contexto de cultivo descrito por RHS, puede aplicarse un fertilizante líquido equilibrado tres o cuatro veces durante el periodo de crecimiento y suspenderse en invierno.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-opuntia-ficus-indica",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "propagation",
+      "statement": "RHS describe propagación por semilla en primavera después de un remojo previo y enraizamiento de segmentos de tallo en verano; recomienda evitar el contacto directo con las espinas.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-opuntia-ficus-indica",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "pests",
+      "statement": "El perfil RHS señala susceptibilidad a cochinillas escama y cochinillas algodonosas.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-opuntia-ficus-indica",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "diseases",
+      "statement": "RHS indica que, aunque suele presentar pocas enfermedades, Opuntia ficus-indica puede sufrir pudrición de raíces en suelo húmedo o con drenaje deficiente.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-opuntia-ficus-indica",
+      "assertionType": "horticultural_guidance"
+    }
+  ]
+}

@@ -29,7 +29,15 @@ test("executable species fixture preserves canonical content guardrails", async 
   assert.deepEqual(demoSpeciesDocument.history, content.history);
   assert.ok(
     demoSpeciesDocument.vernacularNames.every(
-      (item) => item.sourcePublicId && item.reviewStatus === "draft",
+      (item) =>
+        item.sourcePublicId &&
+        ["draft", "under-review"].includes(item.reviewStatus),
     ),
+  );
+  assert.equal(
+    demoSpeciesDocument.vernacularNames.find(
+      (item) => item.term === "San Pedro",
+    )?.reviewStatus,
+    "under-review",
   );
 });

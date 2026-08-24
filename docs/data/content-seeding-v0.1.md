@@ -1,0 +1,176 @@
+# WACHUMA · contrato de una base pública real v0.1
+
+Este contrato distingue los datos de demostración del primer corpus
+publicable. El objetivo no es llenar la interfaz con texto: es poder explicar
+de dónde sale cada dato y por qué está visible.
+
+## Unidad mínima publicable
+
+Una especie o entidad biológica entra al catálogo público solo cuando tiene:
+
+- nombre científico y rango;
+- estado taxonómico y al menos un identificador externo o fuente primaria;
+- fuente con URL, licencia, atribución y fecha de recuperación;
+- descripción editorial separada de los hechos importados;
+- distribución solo en resolución permitida por la fuente y la política de
+  privacidad;
+- estado de revisión explícito.
+
+Los campos que no cumplen esta lista permanecen vacíos o en revisión. No se
+fabrican descripciones ecológicas, recomendaciones de cultivo ni equivalencias
+culturales para completar tarjetas.
+
+## Fuentes iniciales por capa
+
+| Capa                 | Fuente inicial                                         | Uso                                   | Publicación                                 |
+| -------------------- | ------------------------------------------------------ | ------------------------------------- | ------------------------------------------- |
+| Taxonomía            | GBIF Backbone / proveedor taxonómico revisado          | Identidad, rango, IDs y estado        | Después de validar la coincidencia          |
+| Ocurrencias          | GBIF                                                   | Distribución y observaciones externas | Geometría agregada y revisión de privacidad |
+| Nombres y literatura | Bibliografía identificada por editor                   | Contexto, historia y variantes        | Solo con cita y licencia verificadas        |
+| Cultivo              | Publicación, manual institucional o autor identificado | Claims versionados por sección        | Claim por claim, no por documento completo  |
+| Cultura              | Comunidad, archivo o fuente nominada                   | Relación contextualizada              | Revisión humana y restricciones explícitas  |
+| Medios               | Registro original o proveedor con licencia individual  | Imagen, audio, modelo o enlace        | No heredar licencia entre registros         |
+
+## Estados del pipeline
+
+`retrieved` → `staged` → `license-review` → `editorial-review` → `published`
+
+También existen `rejected` y `superseded`. Los payloads externos son
+inmutables; una corrección crea una nueva versión o proyección y conserva la
+anterior.
+
+## Primer corpus operativo
+
+El estado actual de este corte es parcial pero persistido: la taxonomía, los
+identificadores, los claims de rango/bioma y una guía RHS para cada uno de los
+dos taxones iniciales ya están en PostgreSQL. Las ocurrencias y medios de GBIF
+se proyectan primero como registros restringidos y quedan pendientes de
+licencia, atribución y revisión geográfica; una excepción seleccionada es la
+ocurrencia `6130799370` de _Opuntia ficus-indica_, aceptada individualmente y
+publicada con geometría redondeada, junto con su media CC BY 4.0. La observación
+se presenta como presencia contemporánea, no como rango nativo. Las demás filas
+no se cuentan como distribución pública hasta pasar por el endpoint protegido
+de revisión.
+
+La primera release de contenido comienza con tres taxones de prueba, con datos
+reales y honestamente incompletos:
+
+- _Echinopsis pachanoi_, cuyo nombre GBIF puede aparecer como sinónimo frente a
+  una aceptación taxonómica distinta;
+- _Opuntia ficus-indica_, como segundo caso para comprobar que el modelo no está
+  acoplado a un cactus ni a una única ficha editorial.
+- _Pleurotus ostreatus_, como primer hongo del catálogo, con taxonomía GBIF
+  publicada y una guía experimental versionada de fuente abierta. La guía
+  conserva seis claims situados sobre sustrato, inoculación, temperatura, luz,
+  cosecha y límites de extrapolación; todavía no publica traits funcionales ni
+  relaciones culturales.
+
+El corpus también conserva una relación cultural real pero no publicable por
+defecto: el artículo de Armijos, Cota y González (2014) registra el nombre
+“San Pedro” para _Echinopsis pachanoi_ en el contexto de entrevistas con
+yachakkuna Saraguro. WACHUMA la guarda como `under-review`, `restricted` y
+`sensitive`, con comunidad y lugar acotados a la fuente, sin coordenadas y sin
+presentarla como equivalencia taxonómica universal. La fuente es CC BY 2.0 y
+su relación tiene `record_provenance` propio.
+
+Los casos comparten:
+
+- una coincidencia taxonómica documentada;
+- identificadores externos persistidos;
+- claims de distribución/ecología con fuente visible;
+- ocurrencias agregadas con atribución y geometría pública protegida cuando la
+  revisión de licencia lo permite;
+- una ficha que distingue `Trichocereus pachanoi` como nombre histórico o
+  combinación documentada cuando una fuente lo sostenga;
+- un manual versionado que declare las 15 secciones de cultivo, incluyendo
+  estados `not_documented`, `in_review` o `not_applicable` cuando no haya una
+  fuente suficiente;
+- nombres culturales separados de taxonomía y sin publicación automática de
+  afirmaciones no revisadas;
+- ejemplares privados ficticios claramente marcados como datos de jardín demo.
+
+El dataset de FungalTraits no se importa en este corte: el repositorio publica
+su código bajo MIT, pero sus datos agregados y estudios fuente requieren una
+revisión de derechos y atribución por versión antes de proyectar traits como
+claims públicos.
+
+Los registros GBIF incompatibles con la política pública —por ejemplo, CC
+BY-NC o licencias desconocidas— pueden conservarse para trazabilidad, pero sus
+observaciones y medios permanecen restringidos. La revisión registra quién
+decidió, qué confirmó y cuándo, en `source_record_reviews`.
+
+Luego se incorporan más taxones mediante el mismo contrato, no copiando los
+fixtures de las primeras especies.
+
+La ficha DB proyecta como capas separadas los claims ecológicos aceptados, el
+historial taxonómico editorial y los resúmenes de guías publicadas. La
+aparición de una guía no convierte sus recomendaciones en hechos taxonómicos:
+el detalle conserva los claims de cultivo con sus fuentes y versión.
+
+## Incorporación de ejemplares reales del jardín
+
+Los ejemplares del jardín tienen un camino separado del seed demo:
+`POST /api/v1/admin/garden/intake/specimens`. La entrada exige una fuente de
+registro, `sourceRecordId`, fecha de recuperación, licencia, atribución, versión
+del importador y payload original. La API la crea inicialmente como
+`restricted`, `sensitive` o `community-controlled`; nunca acepta `public` en
+este paso.
+
+La operación escribe en una única transacción:
+
+1. `source_records` con proveedor `wachuma-garden`;
+2. `specimens` enlazado a la entidad biológica;
+3. `record_provenance` enlazando el source record, la fuente bibliográfica y el
+   ejemplar.
+
+El registro se puede repetir de forma idempotente usando el mismo
+`sourceRecordId` y `retrievedAt`. La revisión protegida de source records es la
+única que puede cambiar la proyección del ejemplar a pública cuando la licencia
+es compatible y se confirman atribución y privacidad. Los ejemplares
+introducidos por los tests son fixtures identificados como tales y no cuentan
+como corpus real.
+
+## Criterio de datos reales
+
+El corpus deja de ser una demo cuando una ejecución limpia puede reconstruirlo
+desde migraciones, snapshots y seed editorial; la interfaz consulta esas filas
+persistidas; las fuentes y licencias son visibles; y eliminar la API o el seed
+de fallback produce estados vacíos honestos en lugar de contenido ficticio.
+La auditoría `quality:content-db` es deliberadamente direccional: garantiza que
+cada manifiesto editorial versionado esté persistido, mientras que las
+proyecciones externas adicionales pueden conservarse en PostgreSQL sin tener
+que duplicarse en los JSON editoriales.
+
+El catálogo de archivos se descubre desde `content/species/`,
+`content/cultivation-guides/` y `content/cultures/` mediante
+`pnpm content:manifest`. Los manuales versionados alimentan directamente el
+seed en sus metadatos, cobertura de 15 secciones y claims. Los UUID locales
+siguen siendo explícitos para mantener fixtures idempotentes; un manual nuevo
+debe recibir una decisión de persistencia antes de poder entrar al seed.
+
+## Proyección editorial reproducible
+
+El loader de `packages/db/src/editorial-content.ts` descubre todos los JSON sin
+listas codificadas a mano y construye un catálogo único de fuentes a partir de
+las especies. Cada fuente exige `publicId`, título, cita, `sourceType`, licencia,
+atribución, `accessedAt` y una clasificación de la afirmación. DOI y fechas de
+publicación son opcionales, pero se conservan cuando existen.
+
+Durante `pnpm db:seed`, ese catálogo proyecta de forma idempotente las fuentes,
+los campos editoriales de los tres taxones, sus identificadores externos y las
+relaciones culturales. Los registros de procedencia y ocurrencia importados
+siguen siendo snapshots con revisión separada. `pnpm quality:content-db`
+compara los valores declarativos contra PostgreSQL, incluyendo sensibilidad,
+acceso, estado de revisión, agentes, comunidad, lugar, periodo y fuente de
+cada relación cultural.
+
+El orden reproducible es:
+
+1. `pnpm quality:content`
+2. `pnpm content:manifest`
+3. `pnpm db:migrate`
+4. `pnpm db:seed`
+5. `pnpm quality:content-db`
+
+No se debe ejecutar el seed y la auditoría en paralelo: la auditoría debe leer
+la transacción de seed ya confirmada.

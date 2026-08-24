@@ -44,3 +44,11 @@ jobs:
         env:
           DATABASE_URL: postgres://wachuma:wachuma-ci@localhost:5432/wachuma
         run: pnpm verify:release
+
+      - name: Upload dependency SBOMs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wachuma-sbom
+          path: .local/release/*.cdx.json
+          if-no-files-found: warn

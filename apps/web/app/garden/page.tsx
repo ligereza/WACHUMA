@@ -5,6 +5,8 @@ import { demoPublicSpecimen } from "@wachuma/garden";
 import type { SpecimenRecord } from "@wachuma/shared";
 import { loadApi } from "../lib/api";
 
+export const dynamic = "force-dynamic";
+
 export default async function GardenPage() {
   const specimens = await loadApi<SpecimenRecord[]>(
     "/api/v1/garden/specimens?limit=100",
@@ -50,6 +52,11 @@ export default async function GardenPage() {
           <p>
             Los identificadores públicos y relaciones de linaje se mostrarán
             cuando exista autorización para publicar el material concreto.
+          </p>
+          <p className="detail-actions">
+            <Link href="/admin/garden">
+              Incorporar un ejemplar con procedencia →
+            </Link>
           </p>
         </article>
       </section>

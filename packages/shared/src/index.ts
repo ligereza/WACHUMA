@@ -7,3 +7,4 @@ export * from "./domain.js";
 export * from "./admin.js";
 export * from "./external-import.js";
 export * from "./knowledge-validation.js";
+export * from "./search.js";

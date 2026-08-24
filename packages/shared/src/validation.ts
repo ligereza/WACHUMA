@@ -19,6 +19,11 @@ export const SpeciesListQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(24),
 });
 
+export const SearchQuerySchema = z.object({
+  q: z.string().trim().min(1).max(160).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(30),
+});
+
 export const VisibilitySchema = z.enum([
   "public",
   "restricted",
@@ -32,6 +37,7 @@ export const AssertionTypeSchema = z.enum([
   "historical_source",
   "archaeological_evidence",
   "academic_publication",
+  "horticultural_guidance",
   "community_knowledge",
   "editorial_interpretation",
 ]);
@@ -157,6 +163,7 @@ export const ExternalIdentifierInputSchema = z.object({
 
 export type PublicIdParams = z.infer<typeof PublicIdParamsSchema>;
 export type SpeciesListQuery = z.infer<typeof SpeciesListQuerySchema>;
+export type SearchQuery = z.infer<typeof SearchQuerySchema>;
 export type ProvenanceInput = z.infer<typeof ProvenanceInputSchema>;
 export type ExternalIdentifierInput = z.infer<
   typeof ExternalIdentifierInputSchema
@@ -173,10 +180,30 @@ export function parsePublicIdParams(input: unknown): PublicIdParams {
   return result.data;
 }
 
+export function parseUuidParam(input: unknown): string {
+  const result = z.uuid().safeParse(input);
+  if (!result.success) {
+    throw new ValidationError("Invalid UUID parameter", {
+      issues: result.error.issues,
+    });
+  }
+  return result.data;
+}
+
 export function parseSpeciesListQuery(input: unknown): SpeciesListQuery {
   const result = SpeciesListQuerySchema.safeParse(input);
   if (!result.success) {
     throw new ValidationError("Invalid species query", {
+      issues: result.error.issues,
+    });
+  }
+  return result.data;
+}
+
+export function parseSearchQuery(input: unknown): SearchQuery {
+  const result = SearchQuerySchema.safeParse(input);
+  if (!result.success) {
+    throw new ValidationError("Invalid search query", {
       issues: result.error.issues,
     });
   }

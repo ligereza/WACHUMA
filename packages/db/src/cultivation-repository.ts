@@ -1,5 +1,11 @@
 import type { Sql } from "postgres";
-import type { GrowingGuide, Id, PublicId } from "@wachuma/shared";
+import {
+  buildGrowingGuideSections,
+  type GrowingGuide,
+  type GrowingGuideSectionDeclaration,
+  type Id,
+  type PublicId,
+} from "@wachuma/shared";
 
 type GuideRow = {
   id: string;
@@ -15,6 +21,7 @@ type GuideRow = {
   region_context: string | null;
   status: GrowingGuide["status"];
   summary: string | null;
+  coverage: GrowingGuideSectionDeclaration[] | null;
 };
 
 type ClaimRow = {
@@ -23,10 +30,19 @@ type ClaimRow = {
   statement: string;
   evidence_level: string;
   source_id: string | null;
+  source_public_id: string | null;
   assertion_type: GrowingGuide["claims"][number]["assertionType"];
 };
 
 function toGuide(row: GuideRow, claims: ClaimRow[]): GrowingGuide {
+  const sections = buildGrowingGuideSections(
+    claims.map((claim) => ({
+      sectionKey: claim.section_key,
+      evidenceLevel: claim.evidence_level,
+      sourcePublicId: claim.source_public_id as PublicId | null,
+    })),
+    row.coverage ?? undefined,
+  );
   return {
     id: row.id as GrowingGuide["id"],
     publicId: row.public_id as GrowingGuide["publicId"],
@@ -49,6 +65,7 @@ function toGuide(row: GuideRow, claims: ClaimRow[]): GrowingGuide {
     ...(row.region_context ? { regionContext: row.region_context } : {}),
     status: row.status,
     ...(row.summary ? { summary: row.summary } : {}),
+    sections,
     claims: claims.map((claim) => ({
       id: claim.id as GrowingGuide["claims"][number]["id"],
       sectionKey: claim.section_key,
@@ -58,6 +75,9 @@ function toGuide(row: GuideRow, claims: ClaimRow[]): GrowingGuide {
         ? {
             sourceId: claim.source_id as Id,
           }
+        : {}),
+      ...(claim.source_public_id
+        ? { sourcePublicId: claim.source_public_id as PublicId }
         : {}),
       assertionType: claim.assertion_type,
     })),
@@ -80,7 +100,8 @@ export function createCultivationRepository(sql: Sql) {
         gg.technique_context,
         gg.region_context,
         gg.status,
-        gg.summary
+        gg.summary,
+        gg.coverage
       FROM growing_guides AS gg
       LEFT JOIN taxa AS t ON t.id = gg.taxon_id
       LEFT JOIN biological_entities AS be ON be.id = gg.biological_entity_id
@@ -95,15 +116,17 @@ export function createCultivationRepository(sql: Sql) {
   async function findClaims(guideId: string): Promise<ClaimRow[]> {
     return sql<ClaimRow[]>`
       SELECT
-        id,
-        section_key,
-        statement,
-        evidence_level,
-        source_id,
-        assertion_type
-      FROM growing_guide_claims
-      WHERE growing_guide_id = ${guideId}
-      ORDER BY created_at ASC, id ASC
+        guide_claim.id,
+        guide_claim.section_key,
+        guide_claim.statement,
+        guide_claim.evidence_level,
+        guide_claim.source_id,
+        source.public_id AS source_public_id,
+        guide_claim.assertion_type
+      FROM growing_guide_claims AS guide_claim
+      LEFT JOIN sources AS source ON source.id = guide_claim.source_id
+      WHERE guide_claim.growing_guide_id = ${guideId}
+      ORDER BY guide_claim.created_at ASC, guide_claim.id ASC
     `;
   }
 
@@ -124,7 +147,8 @@ export function createCultivationRepository(sql: Sql) {
           gg.technique_context,
           gg.region_context,
           gg.status,
-          gg.summary
+          gg.summary,
+          gg.coverage
         FROM growing_guides AS gg
         LEFT JOIN taxa AS t ON t.id = gg.taxon_id
         LEFT JOIN biological_entities AS be ON be.id = gg.biological_entity_id

@@ -131,9 +131,18 @@ importers:
       "@wachuma/db":
         specifier: workspace:*
         version: link:../../packages/db
+      "@wachuma/importer-fungaltraits":
+        specifier: workspace:*
+        version: link:../../importers/fungaltraits
       "@wachuma/importer-gbif":
         specifier: workspace:*
         version: link:../../importers/gbif
+      "@wachuma/importer-inaturalist":
+        specifier: workspace:*
+        version: link:../../importers/inaturalist
+      "@wachuma/importer-wikidata":
+        specifier: workspace:*
+        version: link:../../importers/wikidata
       "@wachuma/shared":
         specifier: workspace:*
         version: link:../../packages/shared
@@ -144,7 +153,25 @@ importers:
         specifier: ^3.4.7
         version: 3.4.9
 
+  importers/fungaltraits:
+    dependencies:
+      "@wachuma/shared":
+        specifier: workspace:*
+        version: link:../../packages/shared
+
   importers/gbif:
+    dependencies:
+      "@wachuma/shared":
+        specifier: workspace:*
+        version: link:../../packages/shared
+
+  importers/inaturalist:
+    dependencies:
+      "@wachuma/shared":
+        specifier: workspace:*
+        version: link:../../packages/shared
+
+  importers/wikidata:
     dependencies:
       "@wachuma/shared":
         specifier: workspace:*

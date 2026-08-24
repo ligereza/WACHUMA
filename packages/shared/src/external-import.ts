@@ -24,6 +24,7 @@ export const ExternalProviderContractSchema = z.object({
     "historical_source",
     "archaeological_evidence",
     "academic_publication",
+    "horticultural_guidance",
     "community_knowledge",
     "editorial_interpretation",
   ]),

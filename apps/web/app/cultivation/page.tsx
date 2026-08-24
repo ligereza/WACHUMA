@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { demoGrowingGuide } from "@wachuma/cultivation";
 import type { GrowingGuide } from "@wachuma/shared";
 import { SiteNav } from "../components/SiteNav";
 import { loadApi } from "../lib/api";
+
+export const dynamic = "force-dynamic";
 
 export default async function CultivationPage() {
   const guides = await loadApi<GrowingGuide[]>("/api/v1/guides?limit=100", [
@@ -27,6 +30,11 @@ export default async function CultivationPage() {
             </p>
             <h2>{guide.title}</h2>
             <p>{guide.summary}</p>
+            <p className="detail-actions">
+              <Link href={`/cultivation/${guide.publicId}`}>
+                Abrir manual y claims →
+              </Link>
+            </p>
             <div className="tag-row">
               <span className="tag">{guide.climateContext}</span>
               <span className="tag">{guide.regionContext}</span>
@@ -50,7 +58,7 @@ export default async function CultivationPage() {
                 <h2>{claim.statement}</h2>
                 <p>
                   Evidencia: {claim.evidenceLevel} · {claim.assertionType} ·
-                  fuente: {claim.sourceId}
+                  fuente: {claim.sourcePublicId ?? claim.sourceId}
                 </p>
               </article>
             ))}

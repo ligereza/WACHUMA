@@ -1,0 +1,115 @@
+# Auditoría del objetivo completo — v0.1
+
+Esta auditoría distingue entre una base funcional, una base con corpus real y
+una publicación abierta aprobada. El sistema puede pasar el primer umbral sin
+declarar cumplidos los otros dos.
+
+## Matriz de cumplimiento
+
+| Área del objetivo                                          | Estado                         | Evidencia o límite actual                                                                                                                                                                                                                                                                                   |
+| ---------------------------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Monorepo web/API/worker/packages/importers/content/schemas | `complete`                     | Workspaces y contratos versionados presentes.                                                                                                                                                                                                                                                               |
+| Arquitectura de información y lenguaje visual              | `complete-v0.1`                | Navegación por tareas, orden editorial de ficha, estados de evidencia, tokens visuales, foco accesible y componentes base documentados en `docs/product/ia-and-editorial-v0.1.md` y `docs/product/visual-language-v0.1.md`; identidad de marca final todavía fuera de alcance.                              |
+| PostgreSQL + PostGIS + migraciones                         | `complete`                     | `pnpm db:verify` migra, siembra, ejecuta integración y restaura el seed editorial para que las mutaciones de prueba no contaminen los gates posteriores.                                                                                                                                                    |
+| Identidad taxonómica y enlaces externos                    | `functional-real-corpus`       | _Echinopsis pachanoi_, _Opuntia ficus-indica_ y _Pleurotus ostreatus_ con GBIF, POWO/Kew e identificadores conservados; variantes históricas separadas.                                                                                                                                                     |
+| Observaciones y distribución                               | `functional-reviewed-sample`   | Hay proyecciones GBIF y una muestra real aceptada y publicada (`6130799370`) con geometría pública protegida; el resto permanece sujeto a revisión de licencia y privacidad.                                                                                                                                |
+| Ejemplares, ubicaciones y QR                               | `functional-intake-ready`      | API y formulario editorial protegido exigen procedencia y visibilidad inicial no pública; los ejemplares persistentes del jardín siguen siendo ficticios hasta incorporar custodia real.                                                                                                                    |
+| Linajes de clones, semillas y cultivos                     | `functional-intake-and-review` | El árbol y tipos de relación están implementados; el endpoint protegido y `/admin/lineage` incorporan aristas con `record_provenance`, son idempotentes y sólo se publican tras revisión aceptada del source record. Los ejemplares actuales siguen siendo sintéticos.                                      |
+| Manuales versionados                                       | `functional-real-corpus`       | 4 guías publicadas y 20 claims con fuente, con ficha navegable por versión; cada guía declara cobertura de las 15 secciones y distingue documentado, en revisión, no documentado y no aplicable; _Pleurotus_ conserva alcance experimental.                                                                 |
+| Relaciones culturales                                      | `functional-editorial`         | 2 relaciones con procedencia explícita; la relación Saraguro–_Echinopsis_ está restringida y bajo revisión comunitaria. La API protegida y `/admin/culture` permiten conservar en revisión, publicar sólo contexto público explícito o retirar.                                                             |
+| Fuentes, atribución y licencias                            | `automated`                    | Validadores de contenido, licencia, SBOM y política de release pasan.                                                                                                                                                                                                                                       |
+| API REST y OpenAPI                                         | `functional`                   | Lecturas públicas, writes protegidos, OpenAPI servido por el proceso API.                                                                                                                                                                                                                                   |
+| Búsqueda pública transversal                               | `functional`                   | `/api/v1/search` y `/search` consultan especies, manuales, cultura aceptada, fuentes, lugares y ejemplares con filtros de visibilidad y procedencia; no indexan registros restringidos.                                                                                                                     |
+| Web basada en PostgreSQL                                   | `functional`                   | Smoke de web contra DB real confirma tres especies, fichas, manual detallado, historia editorial, cultivo, observaciones públicas atribuidas, bandejas editoriales y ausencia de fuga cultural. El proceso API sólo habilita fixtures con `WACHUMA_DEMO_MODE=true`; sin DB ni ese flag queda vacío/404.     |
+| Mapa y privacidad geoespacial                              | `functional-restricted`        | Geometría pública redondeada; exactitud sensible fuera de la proyección pública.                                                                                                                                                                                                                            |
+| Galería y medios externos                                  | `functional-reviewed-sample`   | La ficha de _Opuntia_ muestra una media CC BY 4.0 revisada a nivel de registro; la publicación depende de licencia y atribución individual, sin asumir licencia por dataset.                                                                                                                                |
+| Jardín 3D y generación procedural                          | `functional-demo`              | Escena GLB validada, receta determinista y adaptador Blender/Geometry Nodes aislado.                                                                                                                                                                                                                        |
+| Importador GBIF                                            | `functional-idempotent`        | Snapshot, checksum, source records, revisión y promoción separadas.                                                                                                                                                                                                                                         |
+| iNaturalist                                                | `functional-pending-review`    | Importador API y proyección PostgreSQL ejecutados con datos reales: 22 source records, 6 observaciones y 10 medios; todo queda `pending`/`restricted` hasta revisión por registro. Geoprivacidad y licencia de media se evalúan por separado en `docs/data/inaturalist-import-run-2026-08-23.md`.           |
+| Wikidata                                                   | `functional-pending-review`    | Se importó el ítem real `Q133426` para _Echinopsis pachanoi_: 1 source record pendiente, 5 identificadores enlazados y claims estructurados seleccionados; no se copian texto, nombres vernáculos ni multimedia. Ver `docs/data/wikidata-import-run-2026-08-23.md`.                                         |
+| FungalTraits/Ethnobotany                                   | `contract-only`                | FungalTraits conserva staging de snapshots; Ethnobotany conserva contrato manual. No se importan traits o conocimiento comunitario a publicación sin resolver licencia, procedencia y revisión correspondiente.                                                                                             |
+| CI remoto                                                  | `baseline-verified`            | `main` commit `903ed48` pasó; los cambios locales posteriores requieren nueva corrida.                                                                                                                                                                                                                      |
+| SBOM y detector de licencias                               | `automated`                    | El gate genera un SBOM CycloneDX 1.5 por workspace y comprueba que no queden expresiones de licencia sin resolver; el conteo se registra en la evidencia de cada corrida.                                                                                                                                   |
+| Salud del corpus persistido                                | `automated`                    | `quality:corpus` comprueba 20 invariantes de revisión aceptada, derechos, procedencia, fuentes, sensibilidad, auditoría cultural, cobertura de manuales y publicación segura de linajes directamente en PostgreSQL/PostGIS.                                                                                 |
+| Paridad contenido versionado → PostgreSQL                  | `automated`                    | `quality:content-db` compara especies, IDs externos, manuales, cobertura, claims, relaciones culturales, estados y fuentes versionados; `quality:content-manifest` prueba descubrimiento, incorporación y duplicados; las importaciones externas adicionales pueden existir fuera del manifiesto editorial. |
+| Aprobación legal y comunitaria                             | `pending-human-review`         | El gate lo exige y bloquea una release pública amplia.                                                                                                                                                                                                                                                      |
+
+## Criterio de estabilidad técnica
+
+El release gate local completo pasa con PostgreSQL/PostGIS real:
+
+```text
+pnpm verify:release
+```
+
+Incluye 32 tareas de typecheck, 36 tareas de tests, build de 18 workspaces,
+contenido, licencias, 19 SBOM CycloneDX, política de release, 20 migraciones,
+GLB, formato, seed idempotente, integración DB, auditoría de corpus, paridad
+contenido-DB y smoke web. Esto certifica la reproducibilidad del
+software en el checkout actual; no certifica que el corpus sea exhaustivo ni
+que exista autorización cultural o jurídica para distribuirlo ampliamente.
+
+## Errores convertidos en sustrato del sistema
+
+| Fallo observado                                                                 | Cambio durable                                                                                                                                   | Regresión que lo conserva                                                                                                                                            |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Seed repetido acumulaba procedencias de una guía                                | Migración `0013` con limpieza acotada e índice único parcial                                                                                     | `db:verify` comprueba guía, claims, source record y provenance únicos.                                                                                               |
+| La procedencia de un ejemplar contaba `source_id` como otra entidad             | Migración `0015` separa el sujeto documentado de su fuente                                                                                       | Intake DB prueba source record + specimen + provenance y publicación revisada.                                                                                       |
+| Relación cultural sensible podía confundirse con contenido público              | Filtro de visibilidad en API, web y mapa                                                                                                         | Tests de API y smoke web comprueban que no aparece en HTML público.                                                                                                  |
+| `pnpm.cmd` no podía lanzarse con `spawnSync` directo en Windows                 | Runner multiplataforma vía `ComSpec` para el gate de SBOM                                                                                        | `pnpm quality:sbom` se ejecuta en el entorno Windows de desarrollo.                                                                                                  |
+| El SBOM y la licencia dependían de revisión manual                              | Gate `quality:sbom` y artefacto CI                                                                                                               | Validación de CycloneDX, lockfile y `pnpm licenses list`.                                                                                                            |
+| El estado legal/comunitario podía quedar implícito                              | Política ejecutable con casillas manuales obligatorias                                                                                           | `quality:release-policy` bloquea si falta la política o sus gates.                                                                                                   |
+| Contenido JSON y seed podían divergir                                           | Loader editorial para manuales más auditorías `quality:content-db` y `quality:content-manifest`                                                  | El seed consume metadatos, cobertura y claims; la compuerta falla si una edición no está persistida o el catálogo tiene duplicados.                                  |
+| Un manual incompleto parecía completo por tener sólo algunos claims             | Cobertura explícita de 15 secciones en schema, seed, API y ficha web                                                                             | `quality:content` y `quality:content-db` exigen y comparan cada estado de cobertura.                                                                                 |
+| Un source record aceptado podía tener sólo una revisión rechazada               | `quality:corpus` exige decisión aceptada y confirmaciones de derechos                                                                            | La publicación externa queda bloqueada hasta una revisión válida.                                                                                                    |
+| El tipo de fuente se confundía con el tipo de afirmación                        | El contrato separa `sourceType` de `assertionType`                                                                                               | La integración DB y la ficha de especie comprueban que una publicación científica y una afirmación taxonómica conservan semánticas distintas.                        |
+| Una arista de linaje podía existir sin procedencia revisable                    | Migración `0019` agrega `lineage_relationship_id` a `record_provenance` y filtra el repositorio público                                          | La integración crea, repite, revisa y publica una relación sólo después de aceptar su source record; la bandeja muestra la arista como target.                       |
+| Un identificador externo podía quedar fuera de la bandeja de revisión           | Migración `0020` agrega `external_identifier_id` a `record_provenance`; Wikidata proyecta cada enlace como target auditable                      | La integración Wikidata comprueba 5 enlaces, no duplicación de taxón y segunda ejecución idempotente.                                                                |
+| Un identificador externo pendiente podía aparecer en una ficha pública          | El repositorio taxonómico exige procedencia enlazada, source record aceptado y revisión válida con licencia, atribución y privacidad confirmadas | La integración Wikidata comprueba que un identificador pendiente no aparece en detalle ni búsqueda; los identificadores editoriales conservan sus enlaces revisados. |
+| La bandeja editorial mostraba el resumen pero no el payload que debía aprobarse | `AdminSourceRecord` expone `rawPayload` desde PostgreSQL y la interfaz lo presenta en un bloque estructurado colapsable                          | La integración API comprueba el payload en la respuesta administrativa y el contrato OpenAPI lo declara.                                                             |
+
+## Lo que falta para pasar al siguiente umbral
+
+1. Usar el formulario protegido de intake para incorporar registros reales del
+   jardín con consentimiento y ubicación pública decidida por caso, manteniendo
+   ficticios los actuales hasta tener autorización.
+2. Revisar y promover individualmente más observaciones GBIF y cualquier medio,
+   sin convertir el snapshot en publicación automática.
+3. Usar `/admin/culture` para registrar la decisión de revisión comunitaria de
+   la relación cultural restringida; si no existe autorización, dejarla como
+   registro no publicable.
+4. Ejecutar CI nuevamente después de commit/push de los cambios actuales y
+   conservar ese artefacto SBOM.
+5. Obtener asesoría jurídica sobre las combinaciones de licencias antes de una
+   release pública amplia.
+6. Diseñar una edición de contenido mantenible para crecer el atlas sin
+   reintroducir fixtures presentados como hechos; la búsqueda pública ya tiene
+   un índice relacional inicial, pero requiere observar su rendimiento cuando
+   el corpus deje de ser pequeño.
+7. Revisar el source record Wikidata de `Q133426` y decidir si cada
+   identificador externo debe conservarse, corregirse o rechazarse; una licencia
+   CC0 no sustituye la revisión de exactitud taxonómica.
+
+La cobertura de cultivo ya no es un vacío silencioso: el campo `coverage` de
+`GrowingGuide` se persiste en PostgreSQL mediante la migración `0017`, y la
+ficha del manual muestra las 15 secciones aunque todavía no tengan claims. La
+ausencia queda marcada como `not_documented`; no se generan recomendaciones
+para completar la interfaz.
+
+Las decisiones de relaciones culturales también conservan `reviewed_by` y
+`reviewed_at` mediante la migración `0018`. Esto mantiene separado al agente que
+documentó el conocimiento del editor que decidió su alcance de publicación.
+
+La ficha de especie ya no deja ecología, historia ni cultivo en blanco cuando
+existen claims o guías publicadas: la proyección DB filtra claims públicos
+aceptados y guías publicadas, y la prueba de integración verifica esa regla.
+La ficha de _Opuntia ficus-indica_ también recorre una observación GBIF pública
+revisada y su media atribuida, sin confundir ese registro contemporáneo con el
+rango nativo de la especie.
+La historia de _Echinopsis pachanoi_ actualmente es una interpretación
+editorial sobre su combinación taxonómica histórica, no una relación cultural.
+
+La web ya no activa fixtures por ausencia accidental del API. Los fallbacks
+editoriales sólo se habilitan con `WACHUMA_DEMO_MODE=true`; la ejecución sin API
+y sin ese modo devuelve estados vacíos o `404`. El smoke público DB-backed usa
+`WACHUMA_DEMO_MODE=false` y por tanto prueba la ruta real de PostgreSQL.

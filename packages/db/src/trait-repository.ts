@@ -99,6 +99,8 @@ export function createTraitRepository(sql: Sql) {
         LEFT JOIN biological_entities AS entity
           ON entity.id = measurement.biological_entity_id
         LEFT JOIN specimens AS specimen ON specimen.id = measurement.specimen_id
+        LEFT JOIN biological_entities AS specimen_entity
+          ON specimen_entity.id = specimen.biological_entity_id
         LEFT JOIN observations AS observation
           ON observation.id = measurement.observation_id
         WHERE measurement.visibility = 'public'
@@ -106,6 +108,7 @@ export function createTraitRepository(sql: Sql) {
             ${subjectPublicId ?? null}::text IS NULL
             OR taxon.public_id = ${subjectPublicId ?? null}::text
             OR entity.public_id = ${subjectPublicId ?? null}::text
+            OR specimen_entity.public_id = ${subjectPublicId ?? null}::text
             OR specimen.public_id = ${subjectPublicId ?? null}::text
             OR observation.public_id = ${subjectPublicId ?? null}::text
           )

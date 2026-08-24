@@ -21,6 +21,27 @@
       "reviewNote": "No publicar: requiere revisión de procedencia, contexto y consentimiento.",
       "recordedOn": "2026-08-21",
       "reviewStatus": "draft"
+    },
+    {
+      "publicId": "cultural-relation-san-pedro-saraguro-2014",
+      "subjectPublicId": "biological-entity-echinopsis-pachanoi",
+      "relationType": "vernacular_name",
+      "valueText": "San Pedro",
+      "description": "El estudio de Armijos, Cota y González registra este nombre para Echinopsis pachanoi en entrevistas con yachakkuna Saraguro. Es una relación situada en una fuente y periodo concretos, no una equivalencia taxonómica universal.",
+      "communityPublicId": "community-saraguro-ecuador-source-scoped",
+      "placePublicId": "place-saraguro-southern-ecuador",
+      "historicalPeriodPublicId": "period-saraguro-interviews-2010-2011",
+      "documentedByAgentPublicId": "agent-armijos-cota-gonzalez-2014",
+      "sourcePublicId": "source-armijos-saraguro-yachakkuna-2014",
+      "evidenceLevel": "documented",
+      "assertionType": "academic_publication",
+      "authorPerspective": "Perspectiva de los autores del estudio; no habla en nombre de la comunidad ni sustituye revisión comunitaria.",
+      "sensitivity": "sensitive",
+      "accessLevel": "restricted",
+      "license": "CC BY 2.0",
+      "reviewNote": "No publicar automáticamente: requiere revisión comunitaria, evaluación de sensibilidad y confirmación de atribución/contexto.",
+      "recordedOn": "2014-02-24",
+      "reviewStatus": "under-review"
     }
   ]
 }

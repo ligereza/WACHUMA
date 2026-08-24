@@ -5,7 +5,9 @@ import { demoSpeciesDocument } from "@wachuma/taxonomy";
 import { demoLineageSubjects, demoPublicLineage } from "@wachuma/lineage";
 import { SiteNav } from "../../components/SiteNav";
 import type { PublicLineageDocument } from "@wachuma/lineage";
-import { loadApiOrNull } from "../../lib/api";
+import { isDemoMode, loadApiOrNull } from "../../lib/api";
+
+export const dynamic = "force-dynamic";
 
 const subjects = [String(demoSpeciesDocument.publicId), ...demoLineageSubjects];
 
@@ -19,10 +21,14 @@ export default async function LineagePage({
   params: Promise<{ publicId: string }>;
 }) {
   const { publicId } = await params;
+  const demoFallback = isDemoMode();
   const lineage =
     (await loadApiOrNull<PublicLineageDocument>(
       `/api/v1/lineage/${encodeURIComponent(publicId)}`,
-    )) ?? (subjects.includes(publicId) ? demoPublicLineage(publicId) : null);
+    )) ??
+    (demoFallback && subjects.includes(publicId)
+      ? demoPublicLineage(publicId)
+      : null);
   if (!lineage) notFound();
 
   const label =
@@ -56,7 +62,7 @@ export default async function LineagePage({
           <div className="lineage-node lineage-node-root">
             <span className="card-kicker">sujeto</span>
             <strong>{publicId}</strong>
-            <small>Sin relaciones publicables en el fixture.</small>
+            <small>Sin relaciones publicables para este registro.</small>
           </div>
         )}
       </section>

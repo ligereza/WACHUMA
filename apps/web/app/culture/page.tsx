@@ -6,11 +6,25 @@ import type { PublicCulturalRelation } from "@wachuma/shared";
 import { SiteNav } from "../components/SiteNav";
 import { loadApi } from "../lib/api";
 
-export default async function CulturePage() {
+export const dynamic = "force-dynamic";
+
+export default async function CulturePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ subjectPublicId?: string }>;
+}) {
+  const { subjectPublicId } = await searchParams;
+  const query = subjectPublicId
+    ? `?subjectPublicId=${encodeURIComponent(subjectPublicId)}`
+    : "";
   const relations = await loadApi<PublicCulturalRelation[]>(
-    "/api/v1/culture/relations",
+    `/api/v1/culture/relations${query}`,
     demoCulturalRelations
       .filter(isPubliclyPublishableRelation)
+      .filter(
+        (relation) =>
+          !subjectPublicId || relation.subjectPublicId === subjectPublicId,
+      )
       .map((relation) => ({
         ...relation,
         accessLevel: "public" as const,
@@ -79,9 +93,9 @@ export default async function CulturePage() {
         ))}
       </section>
       <p className="empty-note page-note">
-        El fixture no tiene relaciones culturales aceptadas y públicas. El
-        registro demo restringido existe para probar procedencia, pero no se
-        serializa en esta página, el mapa ni las fichas públicas.
+        {relations.length === 0
+          ? "No hay relaciones culturales aceptadas y públicas en esta release. Existen registros restringidos y bajo revisión que no se serializan en esta página, el mapa ni las fichas públicas."
+          : "Solo se muestran relaciones aceptadas, públicas y no sensibles. Los registros bajo revisión permanecen fuera de esta vista aunque tengan fuente y provenance."}
       </p>
     </main>
   );

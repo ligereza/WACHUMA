@@ -115,3 +115,8 @@ difíciles de mantener. Se reserva una proyección a JSON-LD/RDF.
 4. [x] Implementar el importador GBIF con un snapshot reproducible en staging.
 5. [x] Implementar autenticación protegida, moderación y takedown mínimos para
        el MVP; la identidad multiusuario queda para una fase posterior.
+6. [x] Implementar el importador iNaturalist con licencia por observación/media,
+       proyección restringida, geoprivacidad y revisión editorial separada.
+7. [x] Implementar el importador Wikidata de claims estructurados e
+       identificadores, con `external_identifier_id` como target de
+       procedencia revisable y sin copiar texto o multimedia.

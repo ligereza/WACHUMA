@@ -1,0 +1,76 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+const {
+  canPublishFungalTraitsSnapshot,
+  importFungalTraitsSnapshot,
+  parseFungalTraitsCsv,
+} = await import("../dist/index.js");
+
+const metadata = {
+  releaseVersion: "synthetic-release-0.1",
+  snapshotUrl: "https://example.org/fungaltraits/synthetic.csv",
+  doi: "https://doi.org/10.0000/example",
+  citation: "Synthetic fixture for importer contract testing",
+  license: "unknown",
+  attribution: "Synthetic fixture; no external dataset copied",
+  retrievedAt: "2026-08-23T00:00:00.000Z",
+  licenseReview: "unresolved",
+};
+
+test("parses the FungalTraits wide-row CSV shape without copying a dataset", () => {
+  const rows = parseFungalTraitsCsv(
+    "obj_id,species,speciesMatched,uuid,ifungorum_number,trait_name,value\n" +
+      "synthetic_1,Pleurotus_ostreatus,Pleurotus ostreatus,fixture,0,substrate,wood\n",
+  );
+  assert.deepEqual(rows[0], {
+    rowNumber: 2,
+    recordId: "synthetic_1",
+    species: "Pleurotus_ostreatus",
+    speciesMatched: "Pleurotus ostreatus",
+    uuid: "fixture",
+    ifungorumNumber: "0",
+    traitIdentifier: "substrate",
+    rawValue: "wood",
+  });
+});
+
+test("stages every measurement with provenance and blocks unresolved publication", () => {
+  const result = importFungalTraitsSnapshot({
+    metadata,
+    csv:
+      "obj_id,species,speciesMatched,trait_name,value\n" +
+      "synthetic_1,Pleurotus_ostreatus,Pleurotus ostreatus,substrate,wood\n" +
+      "synthetic_2,Pleurotus_ostreatus,Pleurotus ostreatus,temperature,18.5\n",
+  });
+
+  assert.equal(result.publishable, false);
+  assert.equal(result.sourceRecords.length, 2);
+  assert.equal(result.measurements.length, 2);
+  assert.equal(result.sourceRecords[0].status, "pending");
+  assert.match(result.sourceRecords[0].rawChecksum, /^sha256:/);
+  assert.equal(result.measurements[1].valueNumeric, 18.5);
+  assert.equal(result.measurements[0].publishable, false);
+});
+
+test("requires an explicit license evidence URL before publication can be considered", () => {
+  assert.equal(canPublishFungalTraitsSnapshot(metadata), false);
+  assert.equal(
+    canPublishFungalTraitsSnapshot({
+      ...metadata,
+      license: "CC BY 4.0",
+      licenseReview: "verified",
+      licenseEvidenceUrl: "https://example.org/license",
+    }),
+    true,
+  );
+  assert.equal(
+    canPublishFungalTraitsSnapshot({
+      ...metadata,
+      license: "CC BY 4.0",
+      licenseReview: "verified",
+      licenseEvidenceUrl: "not-a-url",
+    }),
+    false,
+  );
+});

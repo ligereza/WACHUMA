@@ -83,7 +83,31 @@ export function createSourceRepository(sql: Sql) {
           cr.id IS NOT NULL
           AND (cr.community_id IS NULL OR cr_community.id IS NOT NULL)
           AND (cr.place_id IS NULL OR cr_place.id IS NOT NULL)
-        ) OR m.id IS NOT NULL OR source_place.id IS NOT NULL OR guide.id IS NOT NULL
+        )
+        OR m.id IS NOT NULL
+        OR source_place.id IS NOT NULL
+        OR guide.id IS NOT NULL
+        OR EXISTS (
+          SELECT 1
+          FROM claims AS claim
+          WHERE claim.source_id = s.id
+            AND claim.visibility = 'public'
+            AND claim.review_status = 'accepted'
+        )
+        OR EXISTS (
+          SELECT 1
+          FROM observations AS observation
+          JOIN record_provenance AS provenance
+            ON provenance.observation_id = observation.id
+          WHERE provenance.source_id = s.id
+            AND observation.visibility = 'public'
+        )
+        OR EXISTS (
+          SELECT 1
+          FROM media AS medium
+          WHERE medium.source_id = s.id
+            AND medium.visibility = 'public'
+        )
         ORDER BY s.title ASC
         LIMIT ${safeLimit}
       `;

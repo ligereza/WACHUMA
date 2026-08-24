@@ -10,7 +10,7 @@ El worker coordina imports y snapshots; los importadores no escriben la base
 directamente. Para ejecutar una sincronización GBIF explícita:
 
 ```powershell
-$env:DATABASE_URL = "postgres://wachuma:wachuma-dev@localhost:5432/wachuma"
+$env:DATABASE_URL = "postgres://wachuma:wachuma-dev@localhost:55432/wachuma"
 $env:GBIF_IMPORT_NAME = "Echinopsis pachanoi"
 pnpm --filter @wachuma/worker dev
 ```
@@ -31,3 +31,42 @@ pnpm import:gbif:snapshot
 El archivo se guarda bajo `.local/gbif-snapshots/`, se marca
 `pending-license-review` y conserva cada payload y checksum. Las multimedia
 mantienen una auditoría de licencia separada de la licencia de la ocurrencia.
+
+Para importar una página de observaciones de iNaturalist:
+
+```powershell
+$env:INATURALIST_IMPORT_NAME = "Echinopsis pachanoi"
+$env:INATURALIST_QUALITY_GRADE = "research"
+$env:INATURALIST_OPEN_GEO_ONLY = "true"
+$env:INATURALIST_PHOTO_LICENSE = "cc0,cc-by"
+pnpm --filter @wachuma/worker dev
+```
+
+Se puede limitar el tamaño con `INATURALIST_PER_PAGE` y filtrar la licencia de
+la observación con `INATURALIST_OBSERVATION_LICENSE`. El adaptador conserva la
+licencia individual de cada foto/sonido, no descarga archivos y mantiene todo
+el resultado como `pending` hasta revisión editorial.
+
+Para importar un ítem Wikidata por QID o por nombre científico:
+
+```powershell
+$env:WIKIDATA_QID = "Q133426"
+# Alternativa: $env:WIKIDATA_IMPORT_NAME = "Echinopsis pachanoi"
+pnpm --filter @wachuma/worker dev
+```
+
+El adaptador persiste únicamente claims estructurados seleccionados e
+identificadores externos (Wikidata, GBIF, iNaturalist, IPNI y NCBI cuando
+existen). No copia texto descriptivo, nombres vernáculos ni multimedia; el
+ítem, sus identificadores y el taxón proyectado quedan `pending` hasta revisión
+editorial.
+
+Para dejar un snapshot FungalTraits en staging, apunta
+`FUNGALTRAITS_SNAPSHOT_PATH` a un archivo obtenido por fuera del repositorio y
+define también `FUNGALTRAITS_RELEASE_VERSION`, `FUNGALTRAITS_SNAPSHOT_URL`,
+`FUNGALTRAITS_DOI`, `FUNGALTRAITS_CITATION`, `FUNGALTRAITS_LICENSE`,
+`FUNGALTRAITS_ATTRIBUTION` y `FUNGALTRAITS_LICENSE_REVIEW` (`unresolved` o
+`verified`). `FUNGALTRAITS_LICENSE_EVIDENCE_URL` solo se acepta como evidencia
+adicional; una revisión `unresolved` siempre deja los registros pendientes.
+El worker persiste un `source_record` por medición y no crea claims o traits
+públicos automáticamente.

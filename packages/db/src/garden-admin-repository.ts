@@ -2,6 +2,8 @@ import type { Sql } from "postgres";
 import {
   DomainError,
   NotFoundError,
+  type AdminGardenSpecimenIntakeInput,
+  type AdminGardenSpecimenIntakeResult,
   type AdminCultivationEventCreateInput,
   type AdminCultivationEventRecord,
   type AdminLocationCreateInput,
@@ -12,6 +14,7 @@ import {
   type AdminSpecimenRecord,
   type AdminSpecimenUpdateInput,
   type Location,
+  type AdminSourceRecord,
   type PublicCultivationEvent,
   type Visibility,
 } from "@wachuma/shared";
@@ -442,6 +445,163 @@ export function createGardenAdminRepository(sql: Sql) {
       } catch (error) {
         rethrowDatabaseError(error);
       }
+    },
+
+    async intakeSpecimen(
+      input: AdminGardenSpecimenIntakeInput,
+    ): Promise<AdminGardenSpecimenIntakeResult> {
+      const biologicalEntityId = await entityId(input.biologicalEntityPublicId);
+      const intake = await sql.begin(async (transaction) => {
+        const [dataSource] = await transaction<{ id: string }[]>`
+          SELECT id
+          FROM data_sources
+          WHERE provider_key = 'wachuma-garden'
+          LIMIT 1
+        `;
+        if (!dataSource) {
+          throw new DomainError(
+            "not_found",
+            "The WACHUMA garden data source is not configured",
+            404,
+          );
+        }
+
+        const [source] = await transaction<{ id: string }[]>`
+          SELECT id
+          FROM sources
+          WHERE public_id = ${input.provenance.sourcePublicId}
+          LIMIT 1
+        `;
+        if (!source) {
+          throw new NotFoundError("Source", input.provenance.sourcePublicId);
+        }
+
+        const [sourceRecord] = await transaction<
+          Array<{ id: string; status: AdminSourceRecord["status"] }>
+        >`
+          INSERT INTO source_records (
+            data_source_id, source_record_id, source_url, retrieved_at,
+            license_uri, attribution, assertion_type, raw_payload,
+            importer_version, status
+          ) VALUES (
+            ${dataSource.id},
+            ${input.provenance.sourceRecordId},
+            ${input.provenance.sourceUrl ?? null},
+            ${input.provenance.retrievedAt},
+            ${input.provenance.license},
+            ${input.provenance.attribution},
+            ${input.provenance.assertionType},
+            ${JSON.stringify(input.provenance.rawPayload)}::jsonb,
+            ${input.provenance.importerVersion},
+            'pending'
+          )
+          ON CONFLICT (data_source_id, source_record_id, retrieved_at)
+          DO UPDATE SET
+            source_url = EXCLUDED.source_url,
+            license_uri = EXCLUDED.license_uri,
+            attribution = EXCLUDED.attribution,
+            assertion_type = EXCLUDED.assertion_type,
+            raw_payload = EXCLUDED.raw_payload,
+            importer_version = EXCLUDED.importer_version
+          RETURNING id, status
+        `;
+        if (!sourceRecord) {
+          throw new DomainError(
+            "internal_error",
+            "Garden source record was not created",
+            500,
+          );
+        }
+
+        const [existingSpecimen] = await transaction<{ id: string }[]>`
+          SELECT id
+          FROM specimens
+          WHERE public_id = ${input.publicId}
+          LIMIT 1
+        `;
+        if (existingSpecimen) {
+          const [existingProvenance] = await transaction<
+            Array<{ source_record_id: string }>
+          >`
+            SELECT source_record_id
+            FROM record_provenance
+            WHERE specimen_id = ${existingSpecimen.id}
+              AND source_record_id = ${sourceRecord.id}
+            LIMIT 1
+          `;
+          if (!existingProvenance) {
+            throw new DomainError(
+              "conflict",
+              "The specimen identifier already belongs to another source record",
+              409,
+            );
+          }
+          return {
+            specimenId: existingSpecimen.id,
+            sourceRecordId: sourceRecord.id,
+            sourceRecordStatus: sourceRecord.status,
+            created: false,
+          };
+        }
+
+        const [createdSpecimen] = await transaction<{ id: string }[]>`
+          INSERT INTO specimens (
+            public_id, specimen_type, biological_entity_id, status,
+            visibility, acquired_at, notes
+          ) VALUES (
+            ${input.publicId},
+            ${input.specimenType},
+            ${biologicalEntityId},
+            ${input.status},
+            ${input.visibility},
+            ${input.acquiredAt ?? null},
+            ${input.notes ?? null}
+          )
+          RETURNING id
+        `;
+        if (!createdSpecimen) {
+          throw new DomainError(
+            "internal_error",
+            "Garden specimen was not created",
+            500,
+          );
+        }
+
+        await transaction`
+          INSERT INTO record_provenance (
+            source_record_id, specimen_id, source_id, assertion_type
+          ) VALUES (
+            ${sourceRecord.id},
+            ${createdSpecimen.id},
+            ${source.id},
+            ${input.provenance.assertionType}
+          )
+          ON CONFLICT DO NOTHING
+        `;
+
+        return {
+          specimenId: createdSpecimen.id,
+          sourceRecordId: sourceRecord.id,
+          sourceRecordStatus: sourceRecord.status,
+          created: true,
+        };
+      });
+
+      const specimen = await getSpecimen(input.publicId);
+      if (!specimen) {
+        throw new DomainError(
+          "internal_error",
+          "Garden specimen was not readable after intake",
+          500,
+        );
+      }
+      return {
+        specimen,
+        sourceRecordId: intake.sourceRecordId,
+        sourceRecordKey: input.provenance.sourceRecordId,
+        sourceRecordStatus: intake.sourceRecordStatus,
+        created: intake.created,
+      };
     },
 
     async updateSpecimen(

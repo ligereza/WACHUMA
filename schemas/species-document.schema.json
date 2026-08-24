@@ -18,8 +18,28 @@
     "schemaVersion": { "const": "1.0" },
     "publicId": { "type": "string", "minLength": 1 },
     "scientificName": { "type": "string", "minLength": 1 },
+    "rank": { "type": "string", "minLength": 1 },
+    "taxonomicStatus": { "type": "string", "minLength": 1 },
+    "entityType": { "type": "string", "minLength": 1 },
+    "authorityNote": { "type": "string", "minLength": 1 },
+    "visibility": {
+      "enum": ["public", "restricted", "sensitive", "community-controlled"]
+    },
     "description": { "type": "string" },
-    "externalIdentifiers": { "type": "array", "items": { "type": "object" } },
+    "externalIdentifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["namespace", "identifier", "license"],
+        "properties": {
+          "namespace": { "type": "string", "minLength": 1 },
+          "identifier": { "type": "string", "minLength": 1 },
+          "canonicalUrl": { "type": "string", "format": "uri" },
+          "license": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
     "taxonomicVariants": {
       "type": "array",
       "items": { "$ref": "#/$defs/taxonomicVariant" }
@@ -27,6 +47,10 @@
     "vernacularNames": {
       "type": "array",
       "items": { "$ref": "#/$defs/culturalName" }
+    },
+    "distribution": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/distribution" }
     },
     "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } }
   },
@@ -75,14 +99,28 @@
       },
       "additionalProperties": false
     },
+    "distribution": {
+      "type": "object",
+      "required": ["label"],
+      "properties": {
+        "placePublicId": { "type": "string", "minLength": 1 },
+        "observationPublicId": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "geometry": { "type": "object" },
+        "sourcePublicId": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
     "source": {
       "type": "object",
       "required": [
         "publicId",
         "title",
         "citation",
+        "sourceType",
         "license",
         "attribution",
+        "accessedAt",
         "assertionType"
       ],
       "properties": {
@@ -90,6 +128,20 @@
         "title": { "type": "string", "minLength": 1 },
         "citation": { "type": "string", "minLength": 1 },
         "url": { "type": "string", "format": "uri" },
+        "doi": { "type": "string", "minLength": 1 },
+        "publishedOn": { "type": "string", "format": "date" },
+        "accessedAt": { "type": "string", "format": "date-time" },
+        "sourceType": {
+          "enum": [
+            "scientific_publication",
+            "historical_account",
+            "archaeological_evidence",
+            "community_knowledge",
+            "external_dataset",
+            "horticultural_guide",
+            "editorial"
+          ]
+        },
         "license": { "type": "string", "minLength": 1 },
         "attribution": { "type": "string", "minLength": 1 },
         "assertionType": { "type": "string", "minLength": 1 }

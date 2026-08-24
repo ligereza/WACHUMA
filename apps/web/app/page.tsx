@@ -1,5 +1,6 @@
 import { Garden3DPreview } from "./components/Garden3DPreview";
 import { SiteNav } from "./components/SiteNav";
+import Link from "next/link";
 
 const layers = [
   ["organismo", "Taxonomía, ecología y distribución"],
@@ -22,9 +23,9 @@ export default function HomePage() {
           ecosistema y memoria cultural, sin borrar sus diferencias.
         </p>
         <div className="hero-actions">
-          <a href="#explorar" className="button button-primary">
+          <Link href="/species" className="button button-primary">
             Explorar especies
-          </a>
+          </Link>
           <a href="https://github.com/ligereza/WACHUMA" className="button">
             Ver el proyecto
           </a>

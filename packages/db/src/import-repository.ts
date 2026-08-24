@@ -52,7 +52,7 @@ export function createImportRepository(sql: Sql) {
               base_url
             ) VALUES (
               ${providerKey},
-              ${providerKey.toUpperCase()} external source,
+              ${`${providerKey.toUpperCase()} external source`},
               'external_dataset',
               ${providerKey === "gbif" ? "https://api.gbif.org/v1" : null}
             )

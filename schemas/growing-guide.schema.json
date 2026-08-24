@@ -13,6 +13,7 @@
     "title",
     "biologicalEntityPublicId",
     "status",
+    "coverage",
     "claims"
   ],
   "properties": {
@@ -28,12 +29,59 @@
     "regionContext": { "type": "string" },
     "status": { "enum": ["draft", "review", "published", "archived"] },
     "summary": { "type": "string" },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sections"],
+      "properties": {
+        "sections": {
+          "type": "array",
+          "minItems": 15,
+          "items": { "$ref": "#/$defs/sectionCoverage" }
+        }
+      }
+    },
     "claims": {
       "type": "array",
       "items": { "$ref": "#/$defs/claim" }
     }
   },
   "$defs": {
+    "sectionCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sectionKey", "status"],
+      "properties": {
+        "sectionKey": {
+          "enum": [
+            "propagation",
+            "substrate",
+            "watering",
+            "light",
+            "temperature",
+            "humidity",
+            "nutrition",
+            "calendar",
+            "pests",
+            "diseases",
+            "transplant",
+            "fruiting",
+            "harvest",
+            "observations",
+            "bibliography"
+          ]
+        },
+        "status": {
+          "enum": [
+            "documented",
+            "in_review",
+            "not_documented",
+            "not_applicable"
+          ]
+        },
+        "note": { "type": "string" }
+      }
+    },
     "claim": {
       "type": "object",
       "additionalProperties": false,

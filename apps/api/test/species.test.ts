@@ -20,7 +20,13 @@ test("species explorer returns the explicit demo record", async () => {
   assert.equal(body.length, 1);
   assert.equal(body[0]?.publicId, "biological-entity-echinopsis-pachanoi");
   assert.equal(body[0]?.scientificName, "Echinopsis pachanoi");
-  assert.deepEqual(body[0]?.externalIdentifiers, []);
+  assert.deepEqual(
+    body[0]?.externalIdentifiers.map(
+      (identifier: { namespace: string; identifier: string }) =>
+        `${identifier.namespace}:${identifier.identifier}`,
+    ),
+    ["ipni:88444-2", "gbif:5622352", "gbif:11093098"],
+  );
   await app.close();
 });
 
@@ -59,7 +65,13 @@ test("species detail keeps cultural names contextualized and sourced", async () 
   );
   assert.deepEqual(
     body.sources.map((source) => source.publicId),
-    ["source-wachuma-demo-editorial"],
+    [
+      "source-wachuma-demo-editorial",
+      "source-powo-echinopsis-pachanoi",
+      "source-gbif-echinopsis-pachanoi",
+      "source-armijos-saraguro-yachakkuna-2014",
+      "source-rhs-cacti-succulents-guide",
+    ],
   );
   assert.equal(body.taxonomicVariants[0]?.name, "Trichocereus pachanoi");
   assert.equal(

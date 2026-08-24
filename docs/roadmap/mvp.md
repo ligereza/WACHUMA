@@ -1,5 +1,31 @@
 # Roadmap del MVP
 
+> Estado actualizado: la fundación técnica y los contratos están implementados,
+> pero el corpus público, la experiencia editorial y la operación de contenido
+> todavía no están completos. Las marcas `[x]` de fases anteriores describen
+> código o contratos existentes; no significan que WACHUMA tenga una base de
+> conocimiento poblada.
+
+## Estado real al iniciar esta fase
+
+| Área                                          | Estado                                                                                                                              |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Esquema PostgreSQL/PostGIS, migraciones y API | funcional                                                                                                                           |
+| Tests, validadores y CI                       | funcional                                                                                                                           |
+| Fixtures de Echinopsis pachanoi               | demo estructural                                                                                                                    |
+| Taxonomía externa persistida y publicada      | E. pachanoi + O. ficus-indica + P. ostreatus, con GBIF atribuido                                                                    |
+| Manuales con bibliografía real                | 4 guías publicadas, 20 claims respaldados y cobertura explícita de 15 secciones; fixture demo archivado                             |
+| Medios externos licenciados                   | importados en staging; publicación condicionada por licencia                                                                        |
+| Relaciones culturales públicas                | flujo editorial protegido en `/admin/culture`; publicación pendiente de revisión comunitaria                                        |
+| Arquitectura de información y lenguaje visual | definidos en `docs/product/ia-and-editorial-v0.1.md` y `docs/product/visual-language-v0.1.md`; aplicados a las superficies públicas |
+| Flujo editorial completo                      | revisión de snapshots, promoción taxonómica, bandeja cultural y metadatos de decisión protegidos                                    |
+| Web contra PostgreSQL sembrado                | smoke test reproducible con explorador, ficha de Opuntia y manuales                                                                 |
+
+La próxima entrega se llama **MVP de contenido real v0.1**. No se considera
+terminada por tener más rutas: debe cumplir el contrato de
+`docs/data/content-seeding-v0.1.md` y eliminar los textos que presentan
+fixtures como si fueran conocimiento publicado.
+
 ## Fase 0 — diseño y gobernanza
 
 **Salida:** este conjunto de documentos.
@@ -53,12 +79,16 @@ objetos a ejemplares y regenerar una representación con la misma receta.
 ## Fase 2 — taxonomía y explorador
 
 - [x] Implementar `Taxon`, `BiologicalEntity`, `ExternalIdentifier`.
-- [x] Crear explorador con búsqueda por nombre científico, sinónimo, nombre
-      vernáculo y namespace externo.
-- [x] Implementar importador y comando reproducible de snapshot GBIF para
-      _Echinopsis pachanoi_; los snapshots locales quedan `pending-license-review`
-      hasta revisar licencia por registro y multimedia.
-- [x] Renderizar ficha de especie con taxonomía, distribución y fuentes.
+- [~] Crear explorador con búsqueda por nombre científico, sinónimo, nombre
+  vernáculo y namespace externo; incluye un primer hongo con taxonomía GBIF.
+- [~] Implementar importador y comando reproducible de snapshot GBIF para
+  _Echinopsis pachanoi_ y _Opuntia ficus-indica_; los snapshots se persisten y
+  proyectan con reconciliación por identificador externo y revisión por registro.
+- [~] Renderizar ficha de especie con taxonomía, distribución y fuentes; las
+  tres fichas leen el corpus persistido. Una ocurrencia GBIF CC BY 4.0 ya fue
+  revisada y publicada; el resto continúa en staging o restringido. El gate
+  `verify:public-web` comprueba además que el render no use el fallback cuando
+  existe una base sembrada.
 
 **Criterio de salida:** una ficha puede distinguir nombre aceptado, sinónimo,
 identificador externo, fuente y fecha de sincronización.
@@ -79,9 +109,13 @@ exacta de ejemplares privados.
 
 - [x] `GrowingGuide` versionado por clima, técnica, región y autor.
 - [x] `GrowingGuideClaim` por afirmación técnica con fuente/evidencia.
+- [x] Cobertura explícita de las 15 secciones, persistida en PostgreSQL y
+      visible en la ficha del manual.
 - [x] `CultivationEvent` para riego, trasplante, propagación, plagas,
       fructificación, cosecha y observaciones.
-- [x] Página de manuales y timeline de eventos del ejemplar público demo.
+- [x] Página de manuales y timeline de eventos del ejemplar público demo; existen
+      cuatro guías publicadas con claims respaldados, cobertura explícita y
+      alcance situado.
 
 **Criterio de salida:** una guía puede tener múltiples versiones y cada sección
 importante enlaza bibliografía cuando existe.
@@ -90,9 +124,12 @@ importante enlaza bibliografía cuando existe.
 
 - [x] `Community`, `Place`, `HistoricalPeriod`, `Source` y `CulturalRelation`.
 - [x] Formulario protegido de relación cultural con `evidenceLevel`, perspectiva,
-      sensibilidad, licencia, revisión y contexto comunitario.
+      sensibilidad, licencia, revisión y contexto comunitario; bandeja editorial
+      separada en `/admin/culture` para mantener, publicar o retirar relaciones.
 - [x] Página de bibliografía/fuentes con atribución visible.
-- [x] Mapa con geometría pública, redondeo y filtros de sensibilidad.
+- [~] Mapa con geometría pública, redondeo y filtros de sensibilidad. Ahora
+  puede proyectar ocurrencias GBIF revisadas, aunque el snapshot actual queda
+  restringido por licencias CC BY-NC.
 - [x] Nombres “wachuma”, “huachuma” y “San Pedro” como relaciones culturales
       contextualizadas; no como sinónimos automáticos de taxonomía.
 
@@ -103,9 +140,12 @@ relación restringida no aparece en el mapa público.
 
 - [x] Worker con job explícito, persistencia idempotente y `source_records`
       inmutables, cola PostgreSQL, singleton key, backoff y dead-letter.
-- [x] Importar taxonomía, ocurrencias/distribución y multimedia declarada por
-      GBIF como staging con licencia y atribución por registro; la publicación
-      sigue bloqueada hasta revisión.
+- [~] Importar taxonomía, ocurrencias/distribución y multimedia declarada por
+  GBIF como staging con licencia y atribución por registro; el endpoint de
+  revisión/promoción existe, audita decisiones y se opera desde
+  `/admin/review`. Una primera ocurrencia compatible se publicó después de
+  revisión y un medio CC BY 4.0 ya aparece en la galería; los medios
+  incompatibles siguen restringidos y sujetos a revisión individual.
 - [x] Producir `THIRD_PARTY.md` y conservar un gate de licencias/atribuciones;
       el export específico de cada release queda automatizable después.
 - [x] Tests de regresión para licencias, coordenadas, contenido y procedencia.
@@ -120,6 +160,9 @@ registros normalizados sin perder el payload original.
 - [x] Eventos de derivación y materiales con entradas/salidas explícitas para
       esquejes, semillas, clones, cultivos, aislados, injertos y spawn.
 - [x] Protocolos y mediciones de traits con incertidumbre y fuente.
+- [x] Contrato y parser de snapshots FungalTraits en staging, con checksum,
+      DOI y bloqueo de publicación cuando la licencia del release no está
+      verificada.
 - [x] Adaptadores puros para Darwin Core, JSON-LD/PROV-O y RO-Crate.
 - [x] `PlantDescriptor` versionado con semilla, parámetros, fuentes y etiqueta
       de interpretación procedural.
@@ -127,7 +170,10 @@ registros normalizados sin perder el payload original.
       del research.
 - [x] Configurar workflow de CI con PostgreSQL/PostGIS efímero y el mismo
       release gate.
-- [ ] Ejecutar el workflow en CI y conservar su registro reproducible.
+- [x] Ejecutar el workflow en CI y conservar su registro reproducible para el
+      commit `903ed48`; cada cambio posterior requiere una nueva corrida.
+- [x] Añadir gate de SBOM CycloneDX, detector de licencias de dependencias y
+      política ejecutable de preparación de release.
 
 **Criterio de salida:** una exportación pública puede reconstruirse desde DTOs
 filtrados sin perder identidad, fuente, licencia, incertidumbre o separación
@@ -141,7 +187,11 @@ entre hecho, observación e interpretación.
 - Marketplace, pagos y distribución de material biológico.
 - Publicación automática de conocimiento cultural sensible.
 
-## Orden de páginas
+## Orden provisional de superficies
+
+Este orden deja de ser una decisión de interfaz definitiva. Se conserva como
+mapa de cobertura hasta validar la arquitectura de información documentada en
+`docs/product/ia-and-editorial-v0.1.md`.
 
 1. Inicio.
 2. Explorador de especies.

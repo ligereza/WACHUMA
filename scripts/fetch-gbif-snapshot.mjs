@@ -7,6 +7,8 @@ const { createGbifImporter } = await import("../importers/gbif/dist/index.js");
 
 const name = (process.env.GBIF_IMPORT_NAME ?? "Echinopsis pachanoi").trim();
 const occurrenceLimit = Number(process.env.GBIF_OCCURRENCE_LIMIT ?? 20);
+const occurrenceLicense = process.env.GBIF_OCCURRENCE_LICENSE?.trim();
+const occurrenceMediaType = process.env.GBIF_OCCURRENCE_MEDIA_TYPE?.trim();
 const retrievedAt = new Date().toISOString();
 const outputPath = resolve(
   root,
@@ -17,6 +19,8 @@ const outputPath = resolve(
 const importer = createGbifImporter({
   occurrenceLimit,
   retrievedAt: () => retrievedAt,
+  ...(occurrenceLicense ? { occurrenceLicense } : {}),
+  ...(occurrenceMediaType ? { occurrenceMediaType } : {}),
 });
 const result = await importer.importSpecies(name);
 const records = [
@@ -38,6 +42,8 @@ const snapshot = {
   retrievedAt,
   importerVersion: result.speciesRecord.importerVersion,
   sourceApi: "https://api.gbif.org/v1",
+  ...(occurrenceLicense ? { occurrenceLicense } : {}),
+  ...(occurrenceMediaType ? { occurrenceMediaType } : {}),
   publicationStatus: "pending-license-review",
   licenseReview: {
     status:

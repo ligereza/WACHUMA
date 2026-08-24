@@ -74,7 +74,7 @@ test("cultivation events stay separate from growing-guide claims", async () => {
   await app.close();
 });
 
-test("guide fallback is versioned and keeps claim provenance", async () => {
+test("demo guide fallback is versioned, archived and keeps claim provenance", async () => {
   const app = buildApi();
   const response = await app.inject({ method: "GET", url: "/api/v1/guides" });
   assert.equal(response.statusCode, 200);
@@ -82,11 +82,18 @@ test("guide fallback is versioned and keeps claim provenance", async () => {
     publicId: string;
     version: number;
     status: string;
+    sections: Array<{ sectionKey: string; status: string; claimCount: number }>;
     claims: Array<{ sourceId?: string }>;
   }>;
   assert.equal(body[0]?.publicId, "guide-echinopsis-pachanoi-demo-v1");
   assert.equal(body[0]?.version, 1);
-  assert.equal(body[0]?.status, "published");
+  assert.equal(body[0]?.status, "archived");
+  assert.equal(body[0]?.sections.length, 15);
+  assert.equal(
+    body[0]?.sections.find((section) => section.sectionKey === "watering")
+      ?.status,
+    "not_documented",
+  );
   assert.ok(body[0]?.claims.every((claim) => claim.sourceId));
   await app.close();
 });

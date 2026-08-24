@@ -31,6 +31,8 @@ type RelationRow = {
   license_uri: string;
   review_notes: string | null;
   review_status: "draft" | "under-review" | "accepted" | "rejected";
+  reviewed_by: string | null;
+  reviewed_at: string | null;
   recorded_on: string | null;
 };
 
@@ -92,6 +94,8 @@ function toRelation(row: RelationRow): AdminCulturalRelationRecord {
     license: row.license_uri,
     ...(row.review_notes ? { reviewNote: row.review_notes } : {}),
     reviewStatus: row.review_status,
+    ...(row.reviewed_by ? { reviewedBy: row.reviewed_by } : {}),
+    ...(row.reviewed_at ? { reviewedAt: row.reviewed_at } : {}),
     ...(row.recorded_on ? { recordedOn: row.recorded_on } : {}),
   };
 }
@@ -212,6 +216,8 @@ export function createCultureAdminRepository(sql: Sql) {
         relation.license_uri,
         relation.review_notes,
         relation.review_status,
+        relation.reviewed_by,
+        relation.reviewed_at,
         relation.recorded_on
       FROM cultural_relations AS relation
       LEFT JOIN biological_entities AS entity ON entity.id = relation.biological_entity_id
@@ -309,6 +315,8 @@ export function createCultureAdminRepository(sql: Sql) {
           relation.license_uri,
           relation.review_notes,
           relation.review_status,
+          relation.reviewed_by,
+          relation.reviewed_at,
           relation.recorded_on
         FROM cultural_relations AS relation
         LEFT JOIN biological_entities AS entity ON entity.id = relation.biological_entity_id
@@ -473,6 +481,14 @@ export function createCultureAdminRepository(sql: Sql) {
               ELSE relation.review_notes
             END,
             review_status = COALESCE(${input.reviewStatus ?? null}, relation.review_status),
+            reviewed_by = CASE
+              WHEN ${input.reviewer !== undefined} THEN ${input.reviewer ?? null}
+              ELSE relation.reviewed_by
+            END,
+            reviewed_at = CASE
+              WHEN ${input.reviewer !== undefined} THEN now()
+              ELSE relation.reviewed_at
+            END,
             recorded_on = CASE
               WHEN ${input.recordedOn !== undefined} THEN ${input.recordedOn ?? null}
               ELSE relation.recorded_on
@@ -499,6 +515,7 @@ export function createCultureAdminRepository(sql: Sql) {
         accessLevel: "restricted",
         sensitivity: "sensitive",
         reviewNote: input.reason,
+        ...(input.reviewer ? { reviewer: input.reviewer } : {}),
       });
     },
   };

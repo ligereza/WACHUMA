@@ -43,8 +43,9 @@ La primera versión debe permitir:
 - consultar mapa, fuentes, galería y escena 3D pública;
 - importar GBIF de forma reproducible, idempotente y inicialmente restringida
   hasta revisar licencias por registro y multimedia;
-- mantener contratos ejecutables para iNaturalist, Wikidata, FungalTraits y
-  Ethnobotany sin importar código o datasets incompatibles.
+- mantener contratos ejecutables para iNaturalist, FungalTraits y Ethnobotany;
+  Wikidata cuenta además con un staging real de claims estructurados e
+  identificadores, sin importar código o datasets incompatibles.
 
 La representación 3D usa recetas deterministas, semillas, hashes, manifiestos,
 licencias y el rótulo `procedural-interpretation`. Blender/Geometry Nodes es un
@@ -63,14 +64,41 @@ conocimiento sensible quedan fuera del MVP.
 
 ## Estado actual
 
-La vertical de aplicación, la capa de evidencia, el grafo de derivación de
-materiales, traits/protocolos, exportadores Darwin Core/JSON-LD/RO-Crate y el
-descriptor procedural 3D están implementados en el repositorio. En este
-entorno ya pasan typecheck, tests, build, formato y validadores de contenido,
-licencias, migraciones, procedural y GLB.
+La fundación técnica está implementada: monorepo, migraciones, API, contratos
+de procedencia, capa de evidencia, derivación de materiales, traits/protocolos,
+exportadores, descriptor procedural 3D, pruebas y CI. Eso demuestra que el
+sistema puede sostener el modelo; no demuestra que el atlas ya esté poblado.
 
-El gate completo todavía requiere ejecutar `pnpm verify:release` con
-PostgreSQL/PostGIS real. La prueba de integración se mantiene omitida cuando
-no existe `DATABASE_URL`; por eso no se declara cierre de release hasta correr
-ese gate en un entorno con la base disponible. Blender/Geometry Nodes sigue
-siendo un adaptador externo y no una dependencia del núcleo.
+El primer corte público ya no depende solo de fixtures: _Echinopsis pachanoi_,
+_Opuntia ficus-indica_ y _Pleurotus ostreatus_ tienen metadatos atribuidos de
+POWO/Kew y GBIF, identificadores externos y claims que conservan la diferencia
+entre proveedores. Las dos especies vegetales tienen guías RHS publicadas con
+once claims horticulturales respaldados en total; _Pleurotus ostreatus_ añade una
+guía experimental CC BY 4.0 con seis claims situados sobre sustrato,
+inoculación, temperatura, luz, cosecha y alcance. Las proyecciones GBIF se
+reconcilian por identificador externo y
+el taxón puede promoverse con una revisión separada y auditable.
+Siguen siendo sintéticos o restringidos los ejemplares, el linaje y la escena de
+jardín. El corpus conserva una relación cultural documentada y restringida para
+_Echinopsis pachanoi_ en un contexto Saraguro específico de una fuente; no se
+publica automáticamente ni habla en nombre de la comunidad. El snapshot vivo de GBIF conserva ocurrencias
+en staging cuando sus licencias no permiten publicación; una ocurrencia CC BY
+4.0 (`6130799370`) y una media asociada ya fueron aceptadas y publicadas
+después de revisión explícita. La geometría pública es redondeada y el payload
+exacto permanece en procedencia. La arquitectura de información ya se aplica a
+las superficies públicas y cuenta con una bandeja web protegida para operar la
+revisión editorial.
+
+La fase activa es **MVP de contenido real v0.1**: fuentes y snapshots revisados,
+proyección pública desde PostgreSQL, estados vacíos honestos, manuales
+navegables por versión, búsqueda pública transversal, intake protegido del jardín
+y una experiencia editorial coherente. El release gate también levanta la web contra PostgreSQL para
+comprobar que la interfaz renderiza el corpus persistido y no queda congelada
+en el fixture de desarrollo. El detalle requisito por requisito está en
+`docs/quality/objective-audit-v0.1.md`. Blender/Geometry Nodes sigue siendo un
+adaptador externo y no una dependencia del núcleo.
+
+La integración Wikidata ya demostró el patrón de reconciliación que se usará
+con otros proveedores: un taxón canónico local, identificadores externos como
+entidades de primera clase, source records inmutables por recuperación y una
+revisión editorial antes de cualquier promoción o publicación.

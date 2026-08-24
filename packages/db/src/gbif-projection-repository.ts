@@ -128,53 +128,111 @@ export function createGbifProjectionRepository(sql: Sql) {
         `;
         if (!source) throw new Error("GBIF source was not created");
 
-        const taxonPublicId = `taxon-gbif-${input.taxon.externalIdentifier.identifier}`;
-        const [taxon] = await transaction<{ id: string }[]>`
-          INSERT INTO taxa (
-            public_id, scientific_name, rank, taxonomic_status, accepted_name,
-            description
-          ) VALUES (
-            ${taxonPublicId},
-            ${input.taxon.scientificName},
-            ${input.taxon.rank},
-            ${input.taxon.taxonomicStatus},
-            ${input.taxon.acceptedName ?? input.taxon.canonicalName ?? null},
-            'Proyección GBIF en revisión; conservar el source_record como fuente de verdad del payload.'
-          )
-          ON CONFLICT (public_id) DO UPDATE SET
-            scientific_name = EXCLUDED.scientific_name,
-            rank = EXCLUDED.rank,
-            taxonomic_status = EXCLUDED.taxonomic_status,
-            accepted_name = EXCLUDED.accepted_name,
-            description = EXCLUDED.description,
-            updated_at = now()
-          RETURNING id
+        const [existingProjection] = await transaction<
+          Array<{
+            taxon_id: string;
+            taxon_public_id: string;
+            biological_entity_id: string | null;
+            biological_entity_public_id: string | null;
+          }>
+        >`
+          SELECT
+            taxon.id AS taxon_id,
+            taxon.public_id AS taxon_public_id,
+            biological_entity.id AS biological_entity_id,
+            biological_entity.public_id AS biological_entity_public_id
+          FROM external_identifiers AS external_identifier
+          LEFT JOIN biological_entities AS direct_entity
+            ON direct_entity.id = external_identifier.biological_entity_id
+          LEFT JOIN taxa AS taxon
+            ON taxon.id = COALESCE(
+              external_identifier.taxon_id,
+              direct_entity.taxon_id
+            )
+          LEFT JOIN biological_entities AS biological_entity
+            ON biological_entity.taxon_id = taxon.id
+          WHERE external_identifier.namespace = 'gbif'
+            AND external_identifier.identifier = ${input.taxon.externalIdentifier.identifier}
+          ORDER BY
+            (biological_entity.visibility = 'public') DESC,
+            biological_entity.id ASC
+          LIMIT 1
         `;
-        if (!taxon) throw new Error("GBIF taxon was not created");
 
-        const biologicalEntityPublicId = `biological-entity-gbif-${input.taxon.externalIdentifier.identifier}`;
-        const [biologicalEntity] = await transaction<{ id: string }[]>`
-          INSERT INTO biological_entities (
-            public_id, entity_type, display_name, taxon_id,
-            authority_note, visibility
-          ) VALUES (
-            ${biologicalEntityPublicId},
-            'species',
-            ${input.taxon.scientificName},
-            ${taxon.id},
-            'Entidad local anclada a GBIF; permanece restringida hasta revisar licencia, taxonomía y atribución.',
-            'restricted'
-          )
-          ON CONFLICT (public_id) DO UPDATE SET
-            display_name = EXCLUDED.display_name,
-            taxon_id = EXCLUDED.taxon_id,
-            authority_note = EXCLUDED.authority_note,
-            visibility = EXCLUDED.visibility,
-            updated_at = now()
-          RETURNING id
-        `;
-        if (!biologicalEntity) {
-          throw new Error("GBIF biological entity was not created");
+        let taxon: { id: string; public_id: string };
+        if (existingProjection) {
+          // External identifiers are reconciliation keys. Do not overwrite a
+          // canonical editorial taxon with a provider-specific taxonomic
+          // status; the raw source record preserves that perspective.
+          taxon = {
+            id: existingProjection.taxon_id,
+            public_id: existingProjection.taxon_public_id,
+          };
+        } else {
+          const taxonPublicId = `taxon-gbif-${input.taxon.externalIdentifier.identifier}`;
+          const [createdTaxon] = await transaction<
+            Array<{ id: string; public_id: string }>
+          >`
+            INSERT INTO taxa (
+              public_id, scientific_name, rank, taxonomic_status, accepted_name,
+              description
+            ) VALUES (
+              ${taxonPublicId},
+              ${input.taxon.scientificName},
+              ${input.taxon.rank},
+              ${input.taxon.taxonomicStatus},
+              ${input.taxon.acceptedName ?? input.taxon.canonicalName ?? null},
+              'Proyección GBIF en revisión; conservar el source_record como fuente de verdad del payload.'
+            )
+            ON CONFLICT (public_id) DO UPDATE SET
+              scientific_name = EXCLUDED.scientific_name,
+              rank = EXCLUDED.rank,
+              taxonomic_status = EXCLUDED.taxonomic_status,
+              accepted_name = EXCLUDED.accepted_name,
+              description = EXCLUDED.description,
+              updated_at = now()
+            RETURNING id, public_id
+          `;
+          if (!createdTaxon) throw new Error("GBIF taxon was not created");
+          taxon = createdTaxon;
+        }
+
+        let biologicalEntity: { id: string; public_id: string };
+        if (
+          existingProjection?.biological_entity_id &&
+          existingProjection.biological_entity_public_id
+        ) {
+          biologicalEntity = {
+            id: existingProjection.biological_entity_id,
+            public_id: existingProjection.biological_entity_public_id,
+          };
+        } else {
+          const biologicalEntityPublicId = `biological-entity-gbif-${input.taxon.externalIdentifier.identifier}`;
+          const [createdBiologicalEntity] = await transaction<
+            Array<{ id: string; public_id: string }>
+          >`
+            INSERT INTO biological_entities (
+              public_id, entity_type, display_name, taxon_id,
+              authority_note, visibility
+            ) VALUES (
+              ${biologicalEntityPublicId},
+              'species',
+              ${input.taxon.scientificName},
+              ${taxon.id},
+              'Entidad local anclada a GBIF; permanece restringida hasta revisar licencia, taxonomía y atribución.',
+              'restricted'
+            )
+            ON CONFLICT (public_id) DO UPDATE SET
+              display_name = EXCLUDED.display_name,
+              taxon_id = EXCLUDED.taxon_id,
+              authority_note = EXCLUDED.authority_note,
+              updated_at = now()
+            RETURNING id, public_id
+          `;
+          if (!createdBiologicalEntity) {
+            throw new Error("GBIF biological entity was not created");
+          }
+          biologicalEntity = createdBiologicalEntity;
         }
 
         await transaction`
@@ -192,23 +250,34 @@ export function createGbifProjectionRepository(sql: Sql) {
           ON CONFLICT (namespace, identifier) DO UPDATE SET
             canonical_url = EXCLUDED.canonical_url,
             retrieved_at = EXCLUDED.retrieved_at,
-            license_uri = EXCLUDED.license_uri,
-            taxon_id = EXCLUDED.taxon_id
+            license_uri = EXCLUDED.license_uri
         `;
 
         await transaction`
           INSERT INTO record_provenance (
-            source_record_id, taxon_id, assertion_type
+            source_record_id, external_identifier_id, source_id, assertion_type
+          )
+          SELECT
+            ${sourceRecordId}, external_identifier.id, ${source.id}, ${input.speciesRecord.assertionType}
+          FROM external_identifiers AS external_identifier
+          WHERE external_identifier.namespace = 'gbif'
+            AND external_identifier.identifier = ${input.taxon.externalIdentifier.identifier}
+          ON CONFLICT DO NOTHING
+        `;
+
+        await transaction`
+          INSERT INTO record_provenance (
+            source_record_id, taxon_id, source_id, assertion_type
           ) VALUES (
-            ${sourceRecordId}, ${taxon.id}, ${input.speciesRecord.assertionType}
+            ${sourceRecordId}, ${taxon.id}, ${source.id}, ${input.speciesRecord.assertionType}
           )
           ON CONFLICT DO NOTHING
         `;
         await transaction`
           INSERT INTO record_provenance (
-            source_record_id, biological_entity_id, assertion_type
+            source_record_id, biological_entity_id, source_id, assertion_type
           ) VALUES (
-            ${sourceRecordId}, ${biologicalEntity.id}, ${input.speciesRecord.assertionType}
+            ${sourceRecordId}, ${biologicalEntity.id}, ${source.id}, ${input.speciesRecord.assertionType}
           )
           ON CONFLICT DO NOTHING
         `;
@@ -231,8 +300,10 @@ export function createGbifProjectionRepository(sql: Sql) {
             longitude === undefined
               ? null
               : roundGbifPublicCoordinate(longitude);
-          const publicLicense = isPublicGbifRecordLicense(record.license);
-          const visibility = publicLicense ? "public" : "restricted";
+          // A compatible license is necessary but not sufficient for
+          // publication. Source records remain pending until an editor
+          // explicitly accepts them through source-review-repository.
+          const visibility = "restricted";
           const eventDate =
             stringField(payload, "eventDate") ??
             stringField(payload, "lastInterpreted") ??
@@ -249,7 +320,13 @@ export function createGbifProjectionRepository(sql: Sql) {
               ${safeDate(eventDate, record.retrievedAt)},
               'external',
               ST_SetSRID(ST_MakePoint(${publicLongitude}, ${publicLatitude}), 4326),
-              ${json({ provider: "gbif", sourceRecordId: record.sourceRecordId })},
+              ${json({
+                provider: "gbif",
+                sourceRecordId: record.sourceRecordId,
+                ...(stringField(payload, "countryCode")
+                  ? { countryCode: stringField(payload, "countryCode") }
+                  : {}),
+              })},
               'Importado como ocurrencia externa; la geometría pública se redondea y el payload exacto queda en source_records.',
               ${visibility}
             )
@@ -266,12 +343,11 @@ export function createGbifProjectionRepository(sql: Sql) {
           if (!observation) continue;
           observationIds.set(occurrenceId, observation.id);
           observations += 1;
-          if (visibility === "public") publicObservations += 1;
           await transaction`
             INSERT INTO record_provenance (
-              source_record_id, observation_id, assertion_type
+              source_record_id, observation_id, source_id, assertion_type
             ) VALUES (
-              ${sourceRecord}, ${observation.id}, ${record.assertionType}
+              ${sourceRecord}, ${observation.id}, ${source.id}, ${record.assertionType}
             )
             ON CONFLICT DO NOTHING
           `;
@@ -288,9 +364,9 @@ export function createGbifProjectionRepository(sql: Sql) {
           const occurrenceId = stringField(payload, "occurrenceId");
           const sourceRecord = input.sourceRecordIds[record.sourceRecordId];
           if (!identifier || !sourceRecord) continue;
-          const visibility = isPublicGbifRecordLicense(record.license)
-            ? "public"
-            : "restricted";
+          // Media also require an explicit source-record review. The
+          // individual media license is still preserved for that decision.
+          const visibility = "restricted";
           const [mediaRow] = await transaction<{ id: string }[]>`
             INSERT INTO media (
               media_type, uri, title, license_uri, attribution, source_id, visibility
@@ -327,9 +403,9 @@ export function createGbifProjectionRepository(sql: Sql) {
           `;
           await transaction`
             INSERT INTO record_provenance (
-              source_record_id, media_id, assertion_type
+              source_record_id, media_id, source_id, assertion_type
             ) VALUES (
-              ${sourceRecord}, ${mediaRow.id}, ${record.assertionType}
+              ${sourceRecord}, ${mediaRow.id}, ${source.id}, ${record.assertionType}
             )
             ON CONFLICT DO NOTHING
           `;
@@ -338,8 +414,8 @@ export function createGbifProjectionRepository(sql: Sql) {
         }
 
         return {
-          taxonPublicId,
-          biologicalEntityPublicId,
+          taxonPublicId: taxon.public_id,
+          biologicalEntityPublicId: biologicalEntity.public_id,
           observations,
           media,
           publicObservations,

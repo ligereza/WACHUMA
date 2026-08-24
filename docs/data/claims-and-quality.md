@@ -13,6 +13,9 @@
 6. Las mediciones conservan unidad, método, incertidumbre y fuente.
 7. Las importaciones conservan payload original, checksum, versión del
    importador y banderas de calidad.
+8. Cada `GrowingGuide` declara cobertura para las 15 secciones de cultivo. La
+   cobertura no sustituye a un claim: sólo hace explícito si una sección está
+   documentada, en revisión, no documentada o no aplica.
 
 ## Estados de calidad de importación
 
@@ -25,3 +28,19 @@ info | warning | error
 
 El error no elimina el registro: impide aceptarlo automáticamente y deja la
 decisión editorial registrada.
+
+## Cobertura de manuales
+
+La lista de secciones se mantiene estable en el contrato compartido y en
+`schemas/growing-guide.schema.json`:
+
+```text
+propagation | substrate | watering | light | temperature | humidity |
+nutrition | calendar | pests | diseases | transplant | fruiting |
+harvest | observations | bibliography
+```
+
+La columna `growing_guides.coverage` conserva la declaración editorial. El API
+la proyecta como `sections`, añadiendo cantidad de claims y fuentes públicas.
+Una guía puede publicarse con áreas sin documentar si ese límite está
+declarado y cada claim existente conserva su fuente.

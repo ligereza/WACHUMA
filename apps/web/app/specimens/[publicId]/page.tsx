@@ -4,7 +4,9 @@ import { demoPublicSpecimen } from "@wachuma/garden";
 import { demoCultivationEvents } from "@wachuma/cultivation";
 import type { PublicCultivationEvent, SpecimenRecord } from "@wachuma/shared";
 import { SiteNav } from "../../components/SiteNav";
-import { loadApi, loadApiOrNull } from "../../lib/api";
+import { isDemoMode, loadApi, loadApiOrNull } from "../../lib/api";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return [{ publicId: demoPublicSpecimen.publicId }];
@@ -16,15 +18,20 @@ export default async function SpecimenDetailPage({
   params: Promise<{ publicId: string }>;
 }) {
   const { publicId } = await params;
+  const demoFallback = isDemoMode();
   const specimen =
     (await loadApiOrNull<SpecimenRecord>(
       `/api/v1/specimens/${encodeURIComponent(publicId)}`,
     )) ??
-    (publicId === demoPublicSpecimen.publicId ? demoPublicSpecimen : null);
+    (demoFallback && publicId === demoPublicSpecimen.publicId
+      ? demoPublicSpecimen
+      : null);
   if (!specimen) notFound();
   const events = await loadApi<PublicCultivationEvent[]>(
     `/api/v1/cultivation/events?specimenPublicId=${encodeURIComponent(publicId)}`,
-    publicId === demoPublicSpecimen.publicId ? demoCultivationEvents : [],
+    demoFallback && publicId === demoPublicSpecimen.publicId
+      ? demoCultivationEvents
+      : [],
   );
 
   return (
@@ -37,8 +44,9 @@ export default async function SpecimenDetailPage({
         <p className="eyebrow">ficha de ejemplar · registro público</p>
         <h1>{specimen.publicId}</h1>
         <p>
-          Este registro es sintético. Sirve para probar identificación,
-          procedencia y linaje sin describir una ubicación privada real.
+          Registro de material biológico con identidad, procedencia y linaje
+          auditables. La ubicación exacta puede permanecer fuera de esta vista
+          por privacidad o sensibilidad.
         </p>
       </header>
       <section className="detail-layout">

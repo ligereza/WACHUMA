@@ -6,8 +6,39 @@
   "version": 1,
   "title": "Guía de demostración · Echinopsis pachanoi",
   "biologicalEntityPublicId": "biological-entity-echinopsis-pachanoi",
-  "status": "published",
+  "status": "archived",
   "summary": "Documento público de demostración del esquema. No presenta recomendaciones de cultivo sin bibliografía verificable.",
+  "coverage": {
+    "sections": [
+      {
+        "sectionKey": "propagation",
+        "status": "in_review",
+        "note": "Claim editorial de demostración; falta investigación horticultural específica."
+      },
+      {
+        "sectionKey": "substrate",
+        "status": "in_review",
+        "note": "Claim editorial de demostración; no es una recomendación publicada."
+      },
+      { "sectionKey": "watering", "status": "not_documented" },
+      { "sectionKey": "light", "status": "not_documented" },
+      { "sectionKey": "temperature", "status": "not_documented" },
+      { "sectionKey": "humidity", "status": "not_documented" },
+      { "sectionKey": "nutrition", "status": "not_documented" },
+      { "sectionKey": "calendar", "status": "not_documented" },
+      { "sectionKey": "pests", "status": "not_documented" },
+      { "sectionKey": "diseases", "status": "not_documented" },
+      { "sectionKey": "transplant", "status": "not_documented" },
+      { "sectionKey": "fruiting", "status": "not_documented" },
+      { "sectionKey": "harvest", "status": "not_documented" },
+      {
+        "sectionKey": "observations",
+        "status": "in_review",
+        "note": "El registro debe completarse con observaciones fechadas del jardín."
+      },
+      { "sectionKey": "bibliography", "status": "documented" }
+    ]
+  },
   "claims": [
     {
       "sectionKey": "propagation",

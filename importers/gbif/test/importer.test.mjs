@@ -95,6 +95,49 @@ test("keeps GBIF payloads, attribution and checksums as pending records", async 
   assert.equal(calls.length, 3);
 });
 
+test("passes an optional occurrence license filter to GBIF", async () => {
+  const requests = [];
+  const importer = createGbifImporter({
+    baseUrl: "https://gbif.test/v1",
+    occurrenceLicense: "CC_BY_4_0",
+    fetchImpl: async (url) => {
+      const parsed = new URL(url);
+      requests.push(parsed);
+      const payload = parsed.pathname.endsWith("/species/match")
+        ? { key: 123, scientificName: "Opuntia ficus-indica" }
+        : parsed.pathname.endsWith("/species/123")
+          ? { key: 123, scientificName: "Opuntia ficus-indica" }
+          : { results: [] };
+      return new Response(JSON.stringify(payload), { status: 200 });
+    },
+  });
+
+  await importer.importSpecies("Opuntia ficus-indica");
+  assert.equal(requests[2].searchParams.get("license"), "CC_BY_4_0");
+});
+
+test("passes an optional occurrence media filter to GBIF", async () => {
+  const requests = [];
+  const importer = createGbifImporter({
+    baseUrl: "https://gbif.test/v1",
+    occurrenceLimit: 1,
+    occurrenceMediaType: "StillImage",
+    fetchImpl: async (url) => {
+      const parsed = new URL(url);
+      requests.push(parsed);
+      const payload = parsed.pathname.endsWith("/species/match")
+        ? { key: 123, scientificName: "Opuntia ficus-indica" }
+        : parsed.pathname.endsWith("/species/123")
+          ? { key: 123, scientificName: "Opuntia ficus-indica" }
+          : { results: [] };
+      return new Response(JSON.stringify(payload), { status: 200 });
+    },
+  });
+
+  await importer.importSpecies("Opuntia ficus-indica");
+  assert.equal(requests[2].searchParams.get("media_type"), "StillImage");
+});
+
 test("normalizes GBIF's live usageKey species-match shape", async () => {
   const importer = createGbifImporter({
     baseUrl: "https://gbif.test/v1",
@@ -116,6 +159,40 @@ test("normalizes GBIF's live usageKey species-match shape", async () => {
   const result = await importer.importSpecies("Echinopsis pachanoi");
   assert.equal(result.taxon.externalIdentifier.identifier, "5622352");
   assert.equal(result.taxon.taxonomicStatus, "synonym");
+});
+
+test("normalizes GBIF species records using live taxonomicStatus and accepted fields", async () => {
+  const importer = createGbifImporter({
+    baseUrl: "https://gbif.test/v1",
+    occurrenceLimit: 0,
+    fetchImpl: async (url) => {
+      const path = new URL(url).pathname;
+      const payload = path.endsWith("/species/match")
+        ? {
+            usageKey: 5622352,
+            scientificName:
+              "Echinopsis pachanoi (Britton & Rose) H.Friedrich & G.D.Rowley",
+          }
+        : {
+            key: 5622352,
+            scientificName:
+              "Echinopsis pachanoi (Britton & Rose) H.Friedrich & G.D.Rowley",
+            canonicalName: "Echinopsis pachanoi",
+            rank: "SPECIES",
+            taxonomicStatus: "SYNONYM",
+            accepted:
+              "Trichocereus macrogonus var. pachanoi (Britton & Rose) Albesiano & R.Kiesling",
+          };
+      return new Response(JSON.stringify(payload), { status: 200 });
+    },
+  });
+
+  const result = await importer.importSpecies("Echinopsis pachanoi");
+  assert.equal(result.taxon.taxonomicStatus, "synonym");
+  assert.equal(
+    result.taxon.acceptedName,
+    "Trichocereus macrogonus var. pachanoi (Britton & Rose) Albesiano & R.Kiesling",
+  );
 });
 
 test("does not hide an HTTP failure behind an empty import", async () => {

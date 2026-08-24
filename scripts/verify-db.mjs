@@ -26,9 +26,42 @@ function run(args, extraEnv = {}) {
     shell: false,
   });
   if (result.error) throw result.error;
-  if (result.status !== 0) process.exit(result.status ?? 1);
+  if (result.status !== 0) {
+    throw new Error(`Command failed: ${args.join(" ")} (${result.status})`);
+  }
 }
 
-run(["db:migrate"]);
-run(["db:seed"]);
-run(["--filter", "@wachuma/api", "test"], { RUN_DB_INTEGRATION: "1" });
+let verificationError;
+let seedWasApplied = false;
+try {
+  run(["db:migrate"]);
+  run(["db:seed"]);
+  seedWasApplied = true;
+  // API integration tests resolve workspace packages through their built
+  // exports. Rebuild the database package so the verification command never
+  // exercises a stale repository implementation after a local source change.
+  run(["--filter", "@wachuma/db", "build"]);
+  run(["--filter", "@wachuma/api", "test"], { RUN_DB_INTEGRATION: "1" });
+} catch (error) {
+  verificationError = error;
+} finally {
+  if (seedWasApplied) {
+    try {
+      // Integration tests intentionally exercise mutations such as takedown
+      // and publication. Restore the canonical editorial projection so later
+      // release gates and the local smoke test see a clean, reproducible DB.
+      run(["db:seed"]);
+    } catch (error) {
+      if (!verificationError) verificationError = error;
+      else
+        console.error(
+          "Could not restore the canonical seed after tests",
+          error,
+        );
+    }
+  }
+}
+
+if (verificationError) {
+  throw verificationError;
+}

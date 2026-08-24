@@ -169,6 +169,16 @@ export function createClaimRepository(sql: Sql) {
               WHEN 'growing_guide' THEN subject_guide.public_id
               ELSE NULL
             END = ${subjectPublicId ?? null}::text
+            OR (
+              claim.subject_type = 'taxon'
+              AND subject_taxon.id = (
+                SELECT linked_entity.taxon_id
+                FROM biological_entities AS linked_entity
+                WHERE linked_entity.public_id = ${subjectPublicId ?? null}::text
+                  AND linked_entity.visibility = 'public'
+                LIMIT 1
+              )
+            )
           )
         ORDER BY claim.recorded_on DESC NULLS LAST, claim.created_at DESC
         LIMIT ${safeLimit}

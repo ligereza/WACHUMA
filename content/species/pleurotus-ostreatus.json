@@ -1,0 +1,57 @@
+{
+  "$schema": "https://wachuma.org/schemas/species-document.schema.json",
+  "schemaVersion": "1.0",
+  "publicId": "biological-entity-pleurotus-ostreatus",
+  "scientificName": "Pleurotus ostreatus",
+  "rank": "species",
+  "taxonomicStatus": "accepted",
+  "entityType": "species",
+  "authorityNote": "Primera entidad fúngica del corpus; cuenta con una guía experimental de cultivo atribuida, mientras sus traits y relaciones culturales requieren fuentes y revisión propias.",
+  "visibility": "public",
+  "description": "Ficha pública inicial de un hongo basidiomiceto anclada a GBIF Backbone. El corpus incorpora una guía experimental de cultivo con fuente abierta, condiciones situadas y límites explícitos; la ecología funcional y las relaciones culturales permanecen pendientes de fuentes específicas.",
+  "externalIdentifiers": [
+    {
+      "namespace": "gbif",
+      "identifier": "2526530",
+      "canonicalUrl": "https://www.gbif.org/species/2526530",
+      "license": "CC BY 4.0"
+    }
+  ],
+  "ecology": [],
+  "distribution": [],
+  "cultivation": [
+    "Existe una guía experimental versionada basada en De Bonis et al. (2026), con protocolo de sustratos, inoculación, temperatura, luz y cosecha; no debe leerse como receta universal."
+  ],
+  "history": [],
+  "relatedSpecies": [],
+  "culturalRelations": [],
+  "media": [],
+  "taxonomicVariants": [],
+  "vernacularNames": [],
+  "sources": [
+    {
+      "publicId": "source-gbif-pleurotus-ostreatus",
+      "title": "GBIF Backbone Taxonomy · Pleurotus ostreatus",
+      "citation": "GBIF Secretariat. GBIF Backbone Taxonomy. Match API y ficha taxonómica consultados el 23 de agosto de 2026.",
+      "url": "https://www.gbif.org/species/2526530",
+      "sourceType": "external_dataset",
+      "license": "CC BY 4.0",
+      "attribution": "GBIF Secretariat; GBIF Backbone Taxonomy",
+      "accessedAt": "2026-08-23T00:00:00Z",
+      "assertionType": "taxonomic_fact"
+    },
+    {
+      "publicId": "source-debonis-pleurotus-light-substrate-2026",
+      "title": "Optimizing Pleurotus ostreatus cultivation: light wavelengths and substrate composition",
+      "citation": "De Bonis, M., Pecchia, J. A. & Nicoletto, C. (2026). Optimizing Pleurotus ostreatus cultivation: the role of light wavelengths and substrate composition on yield and nutritional value. Frontiers in Horticulture, 4, 1720226.",
+      "url": "https://www.frontiersin.org/journals/horticulture/articles/10.3389/fhort.2025.1720226/full",
+      "sourceType": "scientific_publication",
+      "license": "CC BY 4.0",
+      "attribution": "De Bonis, M.; Pecchia, J. A.; Nicoletto, C.; Frontiers in Horticulture",
+      "doi": "10.3389/fhort.2025.1720226",
+      "publishedOn": "2026-01-12",
+      "accessedAt": "2026-08-23T00:00:00Z",
+      "assertionType": "academic_publication"
+    }
+  ]
+}

@@ -19,6 +19,16 @@ licencia, creador, titular y el payload original; no redistribuye archivos.
 Ejemplo conceptual:
 
 ```ts
-const importer = createGbifImporter({ occurrenceLimit: 20 });
+const importer = createGbifImporter({
+  occurrenceLimit: 20,
+  // Optional: restrict the GBIF query to records declaring this license.
+  occurrenceLicense: "CC_BY_4_0",
+  // Optional: prefer observations with declared image media.
+  occurrenceMediaType: "StillImage",
+});
 const snapshot = await importer.importSpecies("Echinopsis pachanoi");
 ```
+
+El filtro de licencia sólo reduce el universo que se trae del proveedor; no
+publica registros. Las ocurrencias y multimedia permanecen restringidas hasta
+que una revisión editorial confirme licencia, atribución y privacidad.

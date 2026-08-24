@@ -112,11 +112,15 @@ export function createObservationRepository(sql: Sql) {
         LEFT JOIN data_sources AS data_source
           ON data_source.id = source_record.data_source_id
         LEFT JOIN sources AS source
-          ON source.public_id = CASE
-            WHEN data_source.provider_key IS NULL THEN NULL
-            WHEN data_source.provider_key = 'gbif' THEN 'source-gbif'
-            ELSE 'source-' || data_source.provider_key
-          END
+          ON source.id = provenance.source_id
+          OR (
+            provenance.source_id IS NULL
+            AND source.public_id = CASE
+              WHEN data_source.provider_key IS NULL THEN NULL
+              WHEN data_source.provider_key = 'gbif' THEN 'source-gbif'
+              ELSE 'source-' || data_source.provider_key
+            END
+          )
         WHERE observation.visibility = 'public'
           AND (specimen.id IS NULL OR specimen.visibility = 'public')
           AND (entity.id IS NULL OR entity.visibility = 'public')
@@ -129,6 +133,12 @@ export function createObservationRepository(sql: Sql) {
             OR entity.public_id = ${subjectPublicId ?? null}::text
             OR specimen_entity.public_id = ${subjectPublicId ?? null}::text
             OR taxon.public_id = ${subjectPublicId ?? null}::text
+            OR EXISTS (
+              SELECT 1
+              FROM biological_entities AS requested_entity
+              WHERE requested_entity.public_id = ${subjectPublicId ?? null}::text
+                AND requested_entity.taxon_id = taxon.id
+            )
             OR specimen.public_id = ${subjectPublicId ?? null}::text
           )
         ORDER BY observation.id, source_record.retrieved_at DESC NULLS LAST

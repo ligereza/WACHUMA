@@ -1,4 +1,8 @@
-import type { GrowingGuide, PublicCultivationEvent } from "@wachuma/shared";
+import {
+  buildGrowingGuideSections,
+  type GrowingGuide,
+  type PublicCultivationEvent,
+} from "@wachuma/shared";
 
 export const demoGrowingGuide = {
   id: "guide-echinopsis-pachanoi-demo-v1",
@@ -11,9 +15,10 @@ export const demoGrowingGuide = {
   climateContext: "Pendiente de definir con fuentes y región",
   techniqueContext: "Documento estructurado de prueba",
   regionContext: "No especificada",
-  status: "published",
+  status: "archived",
   summary:
     "Documento público de demostración del esquema. No presenta recomendaciones de cultivo sin bibliografía verificable.",
+  sections: [],
   claims: [
     {
       id: "claim-echinopsis-propagation-demo",
@@ -44,6 +49,8 @@ export const demoGrowingGuide = {
     },
   ],
 } as unknown as GrowingGuide;
+
+demoGrowingGuide.sections = buildGrowingGuideSections(demoGrowingGuide.claims);
 
 export type { GrowingGuide } from "@wachuma/shared";
 

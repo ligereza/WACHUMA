@@ -50,6 +50,10 @@ export function createLineageRepository(sql: Sql) {
           ) AS child_public_id,
           source.public_id AS source_public_id
         FROM lineage_relationships AS lr
+        JOIN record_provenance AS lineage_provenance
+          ON lineage_provenance.lineage_relationship_id = lr.id
+        JOIN source_records AS lineage_source_record
+          ON lineage_source_record.id = lineage_provenance.source_record_id
         LEFT JOIN biological_entities AS parent_entity
           ON parent_entity.id = lr.parent_entity_id
          AND parent_entity.visibility = 'public'
@@ -87,6 +91,16 @@ export function createLineageRepository(sql: Sql) {
             child_entity.public_id,
             CASE WHEN child_specimen_entity.id IS NOT NULL THEN child_specimen.public_id END
           ) IS NOT NULL
+          AND lineage_source_record.status = 'accepted'
+          AND EXISTS (
+            SELECT 1
+            FROM source_record_reviews AS lineage_review
+            WHERE lineage_review.source_record_id = lineage_source_record.id
+              AND lineage_review.decision = 'accepted'
+              AND lineage_review.license_confirmed = true
+              AND lineage_review.attribution_confirmed = true
+              AND lineage_review.privacy_confirmed = true
+          )
         ORDER BY parent_public_id ASC, child_public_id ASC, lr.relationship_type ASC
       `;
 

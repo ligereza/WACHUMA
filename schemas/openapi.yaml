@@ -20,6 +20,28 @@ paths:
                 properties:
                   status: { type: string, enum: [ok] }
                   service: { type: string }
+  /search:
+    get:
+      operationId: searchPublicKnowledge
+      summary: Buscar en las proyecciones públicas del conocimiento
+      description: Devuelve especies, manuales, relaciones culturales, fuentes, lugares y ejemplares que cumplen las reglas públicas de visibilidad y revisión. No busca en registros restringidos.
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema: { type: string, maxLength: 160 }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 30 }
+      responses:
+        "200":
+          description: Resultados públicos con rutas y procedencia
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PublicSearchResult" }
   /species:
     get:
       operationId: listSpecies
@@ -180,7 +202,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: { type: object }
+                items: { $ref: "#/components/schemas/GrowingGuide" }
   /guides/{publicId}:
     get:
       operationId: getGrowingGuide
@@ -195,7 +217,7 @@ paths:
           description: Manual publicado
           content:
             application/json:
-              schema: { type: object }
+              schema: { $ref: "#/components/schemas/GrowingGuide" }
         "404":
           description: Manual no encontrado o no publicado
   /cultivation/events:
@@ -341,6 +363,91 @@ paths:
                 type: array
                 items: { type: object }
 
+  /admin/source-records:
+    get:
+      operationId: listAdminSourceRecords
+      summary: Listar snapshots externos pendientes de revisión editorial
+      description: Devuelve registros importados con su licencia, atribución y estado de revisión. No publica datos por sí mismo.
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: provider
+          in: query
+          required: false
+          schema: { type: string, example: gbif }
+        - name: status
+          in: query
+          required: false
+          schema:
+            { type: string, enum: [pending, accepted, rejected, superseded] }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 24 }
+      responses:
+        "200":
+          description: Registros externos para revisión
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/AdminSourceRecord" }
+        "400": { description: Parámetros inválidos }
+        "403": { description: Credenciales ausentes o inválidas }
+
+  /admin/source-records/{sourceRecordId}/review:
+    parameters:
+      - name: sourceRecordId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      operationId: reviewAdminSourceRecord
+      summary: Registrar la decisión editorial de un snapshot externo
+      description: Aceptar requiere confirmar licencia, atribución y privacidad. Una licencia compatible puede hacer públicas las observaciones y medios asociados; una licencia no compatible permanece restringida.
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminSourceRecordReview" }
+      responses:
+        "200":
+          description: Registro revisado y decisión auditada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminSourceRecord" }
+        "400": { description: Entrada inválida o confirmaciones incompletas }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Registro externo no encontrado }
+
+  /admin/source-records/{sourceRecordId}/promote-taxon:
+    parameters:
+      - name: sourceRecordId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      operationId: promoteAdminTaxonProjection
+      summary: Promover una proyección taxonómica GBIF a la capa pública
+      description: Es una decisión separada de la revisión de licencia. Solo opera sobre un source record GBIF de especie ya aceptado y exige confirmación taxonómica, de licencia, atribución y privacidad.
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminTaxonPromotion" }
+      responses:
+        "200":
+          description: Proyección taxonómica promovida
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdminTaxonPromotionResult" }
+        "400": { description: Entrada inválida o licencia incompatible }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Registro o proyección no encontrados }
+        "409":
+          { description: Revisión previa o tipo de proyección incompatible }
+
   /admin/locations:
     get:
       operationId: listAdminLocations
@@ -456,6 +563,64 @@ paths:
         "400": { description: Entrada inválida }
         "403": { description: Credenciales ausentes o inválidas }
         "404": { description: Entidad biológica no encontrada }
+
+  /admin/garden/intake/specimens:
+    post:
+      operationId: intakeAdminGardenSpecimen
+      summary: Incorporar un ejemplar real con procedencia explícita
+      description: Crea un ejemplar restringido y su source record en una transacción. La visibilidad pública requiere la revisión posterior del source record; este endpoint nunca acepta una entrada pública directa.
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AdminGardenSpecimenIntake" }
+      responses:
+        "201":
+          description: Ejemplar incorporado y pendiente de revisión
+          content:
+            application/json:
+              schema:
+                { $ref: "#/components/schemas/AdminGardenSpecimenIntakeResult" }
+        "200":
+          description: Entrada repetida de forma idempotente
+          content:
+            application/json:
+              schema:
+                { $ref: "#/components/schemas/AdminGardenSpecimenIntakeResult" }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Entidad o fuente no encontrada }
+        "409": { description: El identificador ya pertenece a otra procedencia }
+
+  /admin/lineage/relationships:
+    post:
+      operationId: createAdminLineageRelationship
+      summary: Incorporar una relación de linaje con procedencia explícita
+      description: Crea una relación entre entidades biológicas o ejemplares y su source record en una transacción. El árbol público sólo la expone después de una revisión aceptada del source record.
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              { $ref: "#/components/schemas/AdminLineageRelationshipInput" }
+      responses:
+        "201":
+          description: Relación incorporada y pendiente de revisión
+          content:
+            application/json:
+              schema:
+                { $ref: "#/components/schemas/AdminLineageRelationshipResult" }
+        "200":
+          description: Entrada repetida de forma idempotente
+          content:
+            application/json:
+              schema:
+                { $ref: "#/components/schemas/AdminLineageRelationshipResult" }
+        "400": { description: Entrada inválida }
+        "403": { description: Credenciales ausentes o inválidas }
+        "404": { description: Sujeto o fuente no encontrada }
 
   /admin/specimens/{publicId}:
     parameters:
@@ -676,6 +841,170 @@ components:
         message: { type: string }
         requestId: { type: string }
         details: { type: object }
+    AdminSourceRecord:
+      type: object
+      required:
+        [
+          id,
+          providerKey,
+          sourceRecordId,
+          retrievedAt,
+          license,
+          attribution,
+          assertionType,
+          rawPayload,
+          status,
+          targets,
+        ]
+      properties:
+        id: { type: string, format: uuid }
+        providerKey: { type: string }
+        sourceRecordId: { type: string }
+        sourceUrl: { type: string, format: uri }
+        retrievedAt: { type: string, format: date-time }
+        license: { type: string }
+        attribution: { type: string }
+        assertionType: { type: string }
+        rawPayload: { type: object, additionalProperties: true }
+        status:
+          { type: string, enum: [pending, accepted, rejected, superseded] }
+        reviewNotes: { type: string }
+        reviewedBy: { type: string }
+        reviewedAt: { type: string, format: date-time }
+        targets:
+          type: array
+          items: { $ref: "#/components/schemas/AdminSourceRecordTarget" }
+    AdminSourceRecordTarget:
+      type: object
+      required: [kind]
+      properties:
+        kind:
+          {
+            type: string,
+            enum:
+              [
+                taxon,
+                biological_entity,
+                observation,
+                media,
+                specimen,
+                lineage_relationship,
+                external_identifier,
+              ],
+          }
+        publicId: { type: string }
+        id: { type: string, format: uuid }
+        visibility:
+          {
+            type: string,
+            enum: [public, restricted, sensitive, community-controlled],
+          }
+        uri: { type: string, format: uri }
+        title: { type: string }
+        mediaType: { type: string }
+        license: { type: string }
+        namespace: { type: string }
+        identifier: { type: string }
+        canonicalUrl: { type: string, format: uri }
+    AdminSourceRecordReview:
+      type: object
+      required:
+        [
+          reviewer,
+          decision,
+          note,
+          licenseConfirmed,
+          attributionConfirmed,
+          privacyConfirmed,
+        ]
+      properties:
+        reviewer: { type: string, minLength: 1 }
+        decision: { type: string, enum: [accepted, rejected] }
+        note: { type: string }
+        licenseConfirmed: { type: boolean }
+        attributionConfirmed: { type: boolean }
+        privacyConfirmed: { type: boolean }
+    AdminTaxonPromotion:
+      type: object
+      required:
+        [
+          reviewer,
+          note,
+          taxonomyConfirmed,
+          licenseConfirmed,
+          attributionConfirmed,
+          privacyConfirmed,
+        ]
+      properties:
+        reviewer: { type: string, minLength: 1 }
+        note: { type: string, minLength: 1 }
+        taxonomyConfirmed: { type: boolean }
+        licenseConfirmed: { type: boolean }
+        attributionConfirmed: { type: boolean }
+        privacyConfirmed: { type: boolean }
+    AdminTaxonPromotionResult:
+      type: object
+      required:
+        [
+          sourceRecordId,
+          taxonPublicId,
+          biologicalEntityPublicId,
+          visibility,
+          reviewer,
+          promotedAt,
+        ]
+      properties:
+        sourceRecordId: { type: string, format: uuid }
+        taxonPublicId: { type: string }
+        biologicalEntityPublicId: { type: string }
+        visibility: { type: string, enum: [public] }
+        reviewer: { type: string }
+        promotedAt: { type: string, format: date-time }
+    GrowingGuide:
+      type: object
+      required: [publicId, guideKey, version, title, status, sections, claims]
+      properties:
+        id: { type: string }
+        publicId: { type: string }
+        guideKey: { type: string }
+        version: { type: integer, minimum: 1 }
+        title: { type: string }
+        taxonId: { type: string }
+        biologicalEntityId: { type: string }
+        subjectPublicId: { type: string }
+        climateContext: { type: string }
+        techniqueContext: { type: string }
+        regionContext: { type: string }
+        status: { type: string, enum: [draft, review, published, archived] }
+        summary: { type: string }
+        sections:
+          type: array
+          items:
+            type: object
+            required: [sectionKey, status, claimCount, sourcePublicIds]
+            properties:
+              sectionKey: { type: string }
+              status:
+                {
+                  type: string,
+                  enum: [documented, in_review, not_documented, not_applicable],
+                }
+              claimCount: { type: integer, minimum: 0 }
+              sourcePublicIds: { type: array, items: { type: string } }
+              note: { type: string }
+        claims:
+          type: array
+          items:
+            type: object
+            required: [id, sectionKey, statement, evidenceLevel, assertionType]
+            properties:
+              id: { type: string }
+              sectionKey: { type: string }
+              statement: { type: string }
+              evidenceLevel: { type: string }
+              sourceId: { type: string }
+              sourcePublicId: { type: string }
+              assertionType: { type: string }
     SpeciesSummary:
       type: object
       required:
@@ -707,6 +1036,21 @@ components:
               namespace: { type: string }
               identifier: { type: string }
               canonicalUrl: { type: string, format: uri }
+    PublicSearchResult:
+      type: object
+      required: [kind, publicId, title, summary, path, sourcePublicIds]
+      properties:
+        kind:
+          type: string
+          enum: [species, guide, cultural_relation, source, place, specimen]
+        publicId: { type: string }
+        title: { type: string }
+        summary: { type: string }
+        path: { type: string }
+        subjectPublicId: { type: string }
+        sourcePublicIds:
+          type: array
+          items: { type: string }
     PublicObservation:
       type: object
       required:
@@ -841,7 +1185,17 @@ components:
             taxonomicVariants: { type: array, items: { type: object } }
             description: { type: string }
             ecology: { type: array, items: { type: string } }
-            distribution: { type: array, items: { type: object } }
+            distribution:
+              type: array
+              items:
+                type: object
+                required: [label]
+                properties:
+                  placePublicId: { type: string }
+                  observationPublicId: { type: string }
+                  label: { type: string }
+                  geometry: { type: object }
+                  sourcePublicId: { type: string }
             cultivation: { type: array, items: { type: string } }
             vernacularNames: { type: array, items: { type: object } }
             culturalRelations: { type: array, items: { type: object } }
@@ -920,6 +1274,151 @@ components:
         visibility: { type: string }
         acquiredAt: { type: string, format: date-time }
         notes: { type: string }
+    AdminGardenSpecimenIntake:
+      type: object
+      required:
+        [
+          publicId,
+          specimenType,
+          biologicalEntityPublicId,
+          status,
+          visibility,
+          provenance,
+        ]
+      description: La incorporación nace restringida; la publicación requiere revisar el source record asociado.
+      properties:
+        publicId: { type: string }
+        specimenType: { type: string }
+        biologicalEntityPublicId: { type: string }
+        status: { type: string }
+        visibility:
+          { type: string, enum: [restricted, sensitive, community-controlled] }
+        acquiredAt: { type: string, format: date-time }
+        notes: { type: string }
+        provenance:
+          type: object
+          required:
+            [
+              sourceRecordId,
+              retrievedAt,
+              license,
+              attribution,
+              rawPayload,
+              importerVersion,
+              assertionType,
+              sourcePublicId,
+            ]
+          properties:
+            sourceRecordId: { type: string }
+            sourceUrl: { type: string, format: uri }
+            retrievedAt: { type: string, format: date-time }
+            license: { type: string }
+            attribution: { type: string }
+            rawPayload: { type: object }
+            importerVersion: { type: string }
+            assertionType:
+              {
+                type: string,
+                enum: [contemporary_observation, editorial_interpretation],
+              }
+            sourcePublicId: { type: string }
+    AdminLineageRelationshipInput:
+      type: object
+      required: [relationshipType, parent, child, provenance]
+      properties:
+        relationshipType:
+          type: string
+          enum:
+            [
+              parent_of,
+              cutting_of,
+              clone_of,
+              seed_from,
+              culture_from,
+              isolate_from,
+              cross_of,
+            ]
+        parent:
+          $ref: "#/components/schemas/AdminLineageSubject"
+        child:
+          $ref: "#/components/schemas/AdminLineageSubject"
+        generationLabel: { type: string }
+        occurredAt: { type: string, format: date-time }
+        notes: { type: string }
+        provenance:
+          $ref: "#/components/schemas/AdminLineageProvenance"
+    AdminLineageSubject:
+      type: object
+      required: [kind, publicId]
+      properties:
+        kind: { type: string, enum: [biological_entity, specimen] }
+        publicId: { type: string }
+    AdminLineageProvenance:
+      type: object
+      required:
+        [
+          sourceRecordId,
+          retrievedAt,
+          license,
+          attribution,
+          rawPayload,
+          importerVersion,
+          assertionType,
+          sourcePublicId,
+        ]
+      properties:
+        sourceRecordId: { type: string }
+        sourceUrl: { type: string, format: uri }
+        retrievedAt: { type: string, format: date-time }
+        license: { type: string }
+        attribution: { type: string }
+        rawPayload: { type: object }
+        importerVersion: { type: string }
+        assertionType:
+          {
+            type: string,
+            enum: [contemporary_observation, editorial_interpretation],
+          }
+        sourcePublicId: { type: string }
+    AdminLineageRelationshipResult:
+      type: object
+      required:
+        [
+          id,
+          relationshipType,
+          parent,
+          child,
+          sourcePublicId,
+          sourceRecordId,
+          sourceRecordKey,
+          sourceRecordStatus,
+          created,
+        ]
+      properties:
+        id: { type: string, format: uuid }
+        relationshipType: { type: string }
+        parent: { $ref: "#/components/schemas/AdminLineageSubject" }
+        child: { $ref: "#/components/schemas/AdminLineageSubject" }
+        generationLabel: { type: string }
+        occurredAt: { type: string, format: date-time }
+        notes: { type: string }
+        sourcePublicId: { type: string }
+        sourceRecordId: { type: string, format: uuid }
+        sourceRecordKey: { type: string }
+        sourceRecordStatus:
+          { type: string, enum: [pending, accepted, rejected, superseded] }
+        created: { type: boolean }
+    AdminGardenSpecimenIntakeResult:
+      type: object
+      required:
+        [specimen, sourceRecordId, sourceRecordKey, sourceRecordStatus, created]
+      properties:
+        specimen: { $ref: "#/components/schemas/AdminSpecimen" }
+        sourceRecordId: { type: string, format: uuid }
+        sourceRecordKey: { type: string }
+        sourceRecordStatus:
+          { type: string, enum: [pending, accepted, rejected, superseded] }
+        created: { type: boolean }
     AdminSpecimenUpdate:
       type: object
       minProperties: 1
@@ -1016,12 +1515,18 @@ components:
         license: { type: string }
         reviewNote: { type: string }
         reviewStatus: { type: string }
+        reviewer: { type: string, minLength: 1, maxLength: 160 }
         recordedOn: { type: string, format: date }
     AdminCulturalTakedownInput:
       type: object
       required: [reason]
       properties:
         reason: { type: string, minLength: 1, maxLength: 4000 }
+        reviewer: { type: string, minLength: 1, maxLength: 160 }
     AdminCulturalRelation:
       allOf:
         - $ref: "#/components/schemas/AdminCulturalRelationInput"
+        - type: object
+          properties:
+            reviewedBy: { type: string }
+            reviewedAt: { type: string, format: date-time }

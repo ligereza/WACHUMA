@@ -1,0 +1,63 @@
+{
+  "$schema": "https://wachuma.org/schemas/growing-guide.schema.json",
+  "schemaVersion": "1.0",
+  "publicId": "guide-echinopsis-pachanoi-general-cacti-v1",
+  "guideKey": "echinopsis-pachanoi-general-cacti",
+  "version": 1,
+  "title": "Orientación de cultivo · Echinopsis pachanoi · cactáceas en contenedor",
+  "biologicalEntityPublicId": "biological-entity-echinopsis-pachanoi",
+  "climateContext": "Condiciones de cultivo en contenedor; ajustar a clima local",
+  "techniqueContext": "Guía institucional general para cactáceas y suculentas",
+  "regionContext": "Orientación horticultural RHS; no sustituye un protocolo regional",
+  "status": "published",
+  "summary": "Guía publicada con alcance explícito: las afirmaciones provienen de una guía general de RHS para cactáceas y suculentas, no de un ensayo específico de Echinopsis pachanoi.",
+  "coverage": {
+    "sections": [
+      { "sectionKey": "propagation", "status": "documented" },
+      { "sectionKey": "substrate", "status": "documented" },
+      { "sectionKey": "watering", "status": "documented" },
+      { "sectionKey": "light", "status": "not_documented" },
+      { "sectionKey": "temperature", "status": "documented" },
+      { "sectionKey": "humidity", "status": "not_documented" },
+      { "sectionKey": "nutrition", "status": "not_documented" },
+      { "sectionKey": "calendar", "status": "not_documented" },
+      { "sectionKey": "pests", "status": "not_documented" },
+      { "sectionKey": "diseases", "status": "not_documented" },
+      { "sectionKey": "transplant", "status": "not_documented" },
+      { "sectionKey": "fruiting", "status": "not_documented" },
+      { "sectionKey": "harvest", "status": "not_documented" },
+      { "sectionKey": "observations", "status": "not_documented" },
+      { "sectionKey": "bibliography", "status": "documented" }
+    ]
+  },
+  "claims": [
+    {
+      "sectionKey": "substrate",
+      "statement": "Para cactáceas y suculentas en contenedor, RHS recomienda un medio muy drenante y con material granular que evite el encharcamiento. Es una orientación general, no una mezcla validada específicamente para Echinopsis pachanoi.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "watering",
+      "statement": "RHS recomienda regar de forma abundante cuando la superficie del sustrato está seca durante el periodo de crecimiento y dejar escurrir el exceso; el calendario depende del clima y del contenedor.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "propagation",
+      "statement": "RHS indica que un esqueje debe secar y formar callo antes de colocarse en un medio de enraizamiento ligeramente húmedo; la fuente describe cactáceas y suculentas de forma general.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "temperature",
+      "statement": "Para cactáceas de interior en el contexto británico, RHS describe un reposo otoñal/invernal con condiciones más frescas y riego mínimo o nulo; no debe extrapolarse sin revisar el clima local.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    }
+  ]
+}

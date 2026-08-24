@@ -27,9 +27,9 @@ export interface SpeciesSourceReference {
   title: string;
   citation: string;
   url?: string;
+  sourceType: string;
   license: string;
   attribution: string;
-  assertionType: string;
 }
 
 export interface SpeciesCulturalName {
@@ -57,6 +57,7 @@ export interface SpeciesDocument extends SpeciesSummary {
   ecology: string[];
   distribution: Array<{
     placePublicId?: PublicId;
+    observationPublicId?: PublicId;
     label: string;
     geometry?: Record<string, unknown>;
     sourcePublicId?: PublicId;
@@ -75,6 +76,7 @@ export interface SpeciesDocument extends SpeciesSummary {
   relatedSpecies: SpeciesSummary[];
   media: Array<{
     uri: string;
+    mediaType?: string;
     title?: string;
     license: string;
     attribution: string;

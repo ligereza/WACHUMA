@@ -16,6 +16,7 @@ export interface Source {
     | "archaeological_evidence"
     | "community_knowledge"
     | "external_dataset"
+    | "horticultural_guide"
     | "editorial";
   title: string;
   citation: string;
@@ -134,30 +135,97 @@ export interface GrowingGuide {
   regionContext?: string;
   status: "draft" | "review" | "published" | "archived";
   summary?: string;
+  sections: GrowingGuideSection[];
   claims: GrowingGuideClaim[];
+}
+
+export const GROWING_GUIDE_SECTION_KEYS = [
+  "propagation",
+  "substrate",
+  "watering",
+  "light",
+  "temperature",
+  "humidity",
+  "nutrition",
+  "calendar",
+  "pests",
+  "diseases",
+  "transplant",
+  "fruiting",
+  "harvest",
+  "observations",
+  "bibliography",
+] as const;
+
+export type GrowingGuideSectionKey =
+  (typeof GROWING_GUIDE_SECTION_KEYS)[number];
+
+export type GrowingGuideSectionStatus =
+  "documented" | "in_review" | "not_documented" | "not_applicable";
+
+export interface GrowingGuideSection {
+  sectionKey: GrowingGuideSectionKey;
+  status: GrowingGuideSectionStatus;
+  claimCount: number;
+  sourcePublicIds: PublicId[];
+  note?: string;
+}
+
+export interface GrowingGuideSectionDeclaration {
+  sectionKey: GrowingGuideSectionKey;
+  status: GrowingGuideSectionStatus;
+  note?: string;
+}
+
+export function buildGrowingGuideSections(
+  claims: ReadonlyArray<{
+    sectionKey: GrowingGuideSectionKey;
+    evidenceLevel: string;
+    sourcePublicId?: PublicId | null;
+  }>,
+  declarations?: readonly GrowingGuideSectionDeclaration[],
+): GrowingGuideSection[] {
+  const declarationsByKey = new Map(
+    declarations?.map((declaration) => [declaration.sectionKey, declaration]) ??
+      [],
+  );
+
+  return GROWING_GUIDE_SECTION_KEYS.map((sectionKey) => {
+    const sectionClaims = claims.filter(
+      (claim) => claim.sectionKey === sectionKey,
+    );
+    const declaration = declarationsByKey.get(sectionKey);
+    const inferredStatus: GrowingGuideSectionStatus =
+      sectionClaims.length === 0
+        ? "not_documented"
+        : sectionClaims.every((claim) => claim.evidenceLevel === "unverified")
+          ? "in_review"
+          : "documented";
+    const sourcePublicIds = Array.from(
+      new Set(
+        sectionClaims.flatMap((claim) =>
+          claim.sourcePublicId ? [claim.sourcePublicId] : [],
+        ),
+      ),
+    );
+
+    return {
+      sectionKey,
+      status: declaration?.status ?? inferredStatus,
+      claimCount: sectionClaims.length,
+      sourcePublicIds,
+      ...(declaration?.note ? { note: declaration.note } : {}),
+    };
+  });
 }
 
 export interface GrowingGuideClaim {
   id: Id;
-  sectionKey:
-    | "propagation"
-    | "substrate"
-    | "watering"
-    | "light"
-    | "temperature"
-    | "humidity"
-    | "nutrition"
-    | "calendar"
-    | "pests"
-    | "diseases"
-    | "transplant"
-    | "fruiting"
-    | "harvest"
-    | "observations"
-    | "bibliography";
+  sectionKey: GrowingGuideSectionKey;
   statement: string;
   evidenceLevel: string;
   sourceId?: Id;
+  sourcePublicId?: PublicId;
   assertionType: AssertionType;
 }
 

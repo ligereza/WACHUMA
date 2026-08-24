@@ -38,8 +38,11 @@ erDiagram
   DATA_SOURCE ||--o{ SOURCE_RECORD : publishes
   SOURCE_RECORD ||--o{ RECORD_PROVENANCE : proves
   RECORD_PROVENANCE }o--o| TAXON : targets
+  RECORD_PROVENANCE }o--o| BIOLOGICAL_ENTITY : targets
   RECORD_PROVENANCE }o--o| OBSERVATION : targets
   RECORD_PROVENANCE }o--o| MEDIA : targets
+  RECORD_PROVENANCE }o--o| LINEAGE_RELATIONSHIP : targets
+  RECORD_PROVENANCE }o--o| EXTERNAL_IDENTIFIER : targets
   MEDIA ||--o{ MEDIA_ATTACHMENT : attaches
   SOURCE ||--o{ MEDIA : licenses
   GARDEN_SCENE ||--o{ GARDEN_SCENE_ASSET : publishes
@@ -352,8 +355,11 @@ erDiagram
     uuid id PK
     uuid source_record_id FK
     uuid taxon_id FK
+    uuid biological_entity_id FK
     uuid observation_id FK
     uuid media_id FK
+    uuid lineage_relationship_id FK
+    uuid external_identifier_id FK
     text assertion_type
   }
 ```
@@ -381,7 +387,9 @@ erDiagram
   sensibles se guarda en un esquema protegido o se omite; `geometry_public` se
   redondea, desplaza o reemplaza por una región.
 - `RECORD_PROVENANCE` conserva el snapshot externo y no se sobrescribe cuando
-  se actualiza una importación.
+  se actualiza una importación. También puede apuntar a un
+  `EXTERNAL_IDENTIFIER` como target revisable; un enlace Wikidata no equivale
+  por sí solo a una promoción taxonómica.
 - Las proyecciones GBIF pueden apuntar un `SOURCE_RECORD` a taxón, observación
   o media; la fila bruta conserva la licencia/atribución original y la
   proyección solo publica geometría redondeada o media compatible.

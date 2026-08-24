@@ -40,7 +40,7 @@ export default async function SpeciesExplorerPage({
         </p>
       </header>
       <form className="species-search" method="get">
-        <label htmlFor="species-query">Buscar en el fixture público</label>
+        <label htmlFor="species-query">Buscar en el catálogo público</label>
         <div>
           <input
             id="species-query"
@@ -64,7 +64,7 @@ export default async function SpeciesExplorerPage({
               <p>{species.description}</p>
               <div className="tag-row">
                 <span className="tag">taxon · {species.taxonomicStatus}</span>
-                <span className="tag">fixture editorial</span>
+                <span className="tag">registro publicable</span>
               </div>
             </article>
           ))

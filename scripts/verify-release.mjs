@@ -9,12 +9,18 @@ const commands = [
   ["test"],
   ["build"],
   ["quality:content"],
+  ["quality:content-manifest"],
   ["quality:licenses"],
+  ["quality:sbom"],
+  ["quality:release-policy"],
   ["quality:migrations"],
   ["quality:procedural"],
   ["validate:glb"],
   ["format:check"],
   ["db:verify"],
+  ["quality:corpus"],
+  ["quality:content-db"],
+  ["verify:public-web"],
 ];
 
 for (const args of commands) {

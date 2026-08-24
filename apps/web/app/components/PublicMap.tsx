@@ -64,7 +64,7 @@ export function PublicMap({ features }: { features: PublicMapFeature[] }) {
           strokeOpacity="0.35"
         />
         {points.map(({ feature, point }) => (
-          <g key={feature.publicId}>
+          <g key={feature.publicId} id={feature.publicId}>
             <circle
               cx={xFor(point[0])}
               cy={yFor(point[1])}

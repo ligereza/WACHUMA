@@ -13,6 +13,9 @@
   "dependencies": {
     "@wachuma/db": "workspace:*",
     "@wachuma/importer-gbif": "workspace:*",
+    "@wachuma/importer-fungaltraits": "workspace:*",
+    "@wachuma/importer-inaturalist": "workspace:*",
+    "@wachuma/importer-wikidata": "workspace:*",
     "@wachuma/shared": "workspace:*",
     "pg-boss": "^12.5.0",
     "postgres": "^3.4.7"
