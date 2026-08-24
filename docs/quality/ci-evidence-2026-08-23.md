@@ -116,15 +116,16 @@ deprecación de Node 20 en las actions de GitHub.
 | Campo    | Valor                                                                                          |
 | -------- | ---------------------------------------------------------------------------------------------- |
 | Workflow | `WACHUMA verification`                                                                         |
-| Commit   | `7ff627637839b35efca26b7b07d6879a69b4342c`                                                     |
+| Commit   | `33345f649ade74e06e9bc02925a9877aed4c5c5e`                                                     |
 | Estado   | `completed / success`                                                                          |
 | Servicio | `postgis/postgis:16-3.4`                                                                       |
 | Job      | `release-gate`                                                                                 |
-| Duración | 2m 37s                                                                                         |
-| Registro | [GitHub Actions run 32683483302](https://github.com/ligereza/WACHUMA/actions/runs/32683483302) |
+| Duración | 2m 43s                                                                                         |
+| Registro | [GitHub Actions run 32684487188](https://github.com/ligereza/WACHUMA/actions/runs/32684487188) |
 
-Esta corrida verificó el cambio de decisión de FungalTraits junto con los
-gates completos del repositorio: 33 typechecks, 38 tareas de tests, 19 builds,
+Esta corrida verificó el guard de aceptación FungalTraits, sus filtros y la
+superficie editorial de blockers junto con los gates completos del repositorio:
+33 typechecks, 38 tareas de tests, 19 builds,
 20 SBOM, 20 migraciones, auditoría de corpus y smoke web DB-backed. La única
 anotación fue la deprecación de Node 20 en las actions de GitHub; no cambió el
 resultado del gate.
