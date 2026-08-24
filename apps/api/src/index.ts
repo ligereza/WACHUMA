@@ -702,11 +702,18 @@ export function buildApi(options: ApiOptions = {}) {
   app.get<{
     Querystring: {
       provider?: string;
+      sourceRecordId?: string;
       status?: "pending" | "accepted" | "rejected" | "superseded";
       limit?: string;
     };
   }>("/api/v1/admin/source-records", async (request) => {
     requireAdmin(request);
+    const sourceRecordId = request.query.sourceRecordId?.trim();
+    if (sourceRecordId && sourceRecordId.length > 255) {
+      throw new ValidationError(
+        "sourceRecordId must be at most 255 characters",
+      );
+    }
     const limit = request.query.limit
       ? parseSpeciesListQuery({ limit: request.query.limit }).limit
       : undefined;
@@ -714,6 +721,7 @@ export function buildApi(options: ApiOptions = {}) {
       ...(request.query.provider
         ? { providerKey: request.query.provider }
         : {}),
+      ...(sourceRecordId ? { sourceRecordId } : {}),
       ...(request.query.status ? { status: request.query.status } : {}),
       ...(limit ? { limit } : {}),
     });

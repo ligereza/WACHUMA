@@ -35,7 +35,14 @@ compatible mantiene restringidas las observaciones y los medios asociados.
 La misma operación puede manejarse desde la bandeja local de la web en
 `http://localhost:3000/admin/review`, ingresando el token configurado para el
 API. La pantalla no consulta la bandeja sin token y no sustituye la revisión
-por registro.
+por registro. Permite filtrar por `provider` o `sourceRecordId` exacto para
+trabajar con snapshots grandes sin mezclar proveedores.
+
+FungalTraits tiene una barrera adicional: sus `source_records` permanecen en
+staging y una aceptación genérica responde `409 license_required` o `409
+conflict` con blockers explicables hasta resolver licencia, mapeo de taxón y
+definición de trait. El endpoint no permite que una casilla editorial publique
+traits por accidente.
 
 La publicación del taxón externo es una decisión adicional:
 `POST /api/v1/admin/source-records/{sourceRecordId}/promote-taxon` exige

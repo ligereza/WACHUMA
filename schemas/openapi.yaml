@@ -374,6 +374,15 @@ paths:
           in: query
           required: false
           schema: { type: string, example: gbif }
+        - name: sourceRecordId
+          in: query
+          required: false
+          schema:
+            {
+              type: string,
+              maxLength: 255,
+              example: v0.0.3:measurement:study-001:row-42,
+            }
         - name: status
           in: query
           required: false
@@ -417,6 +426,11 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/AdminSourceRecord" }
         "400": { description: Entrada inválida o confirmaciones incompletas }
+        "409":
+          {
+            description: El registro sigue bloqueado por licencia,
+            procedencia o mapeo de datos,
+          }
         "403": { description: Credenciales ausentes o inválidas }
         "404": { description: Registro externo no encontrado }
 

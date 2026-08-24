@@ -382,10 +382,16 @@ export function importFungalTraitsSnapshot(input: {
       doi: input.metadata.doi,
       citation: input.metadata.citation,
       snapshotUrl: input.metadata.snapshotUrl,
+      license: input.metadata.license,
+      attribution: input.metadata.attribution,
       licenseReview: input.metadata.licenseReview,
       ...(input.metadata.licenseExpression
         ? { licenseExpression: input.metadata.licenseExpression }
         : {}),
+      ...(input.metadata.licenseEvidenceUrl
+        ? { licenseEvidenceUrl: input.metadata.licenseEvidenceUrl }
+        : {}),
+      publicationDecision,
       row,
     } satisfies Record<string, unknown>;
     return {

@@ -257,6 +257,27 @@ body {
   background: rgba(232, 225, 211, 0.34);
   padding: 0.9rem;
 }
+.review-guard {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid rgba(139, 87, 48, 0.35);
+  border-radius: 0.8rem;
+  background: rgba(224, 190, 145, 0.18);
+  padding: 0.9rem;
+  color: var(--muted);
+  font:
+    0.86rem/1.5 system-ui,
+    sans-serif;
+}
+.review-guard p {
+  margin: 0.25rem 0 0;
+}
+.review-guard ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding-left: 1.2rem;
+}
 .review-targets-intro {
   margin: 0.25rem 0 0;
   color: var(--muted);

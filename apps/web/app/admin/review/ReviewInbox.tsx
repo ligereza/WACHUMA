@@ -42,6 +42,25 @@ type SourceRecord = {
   targets: SourceRecordTarget[];
 };
 
+type PublicationDecision = {
+  publishable?: boolean;
+  blockers?: string[];
+};
+
+const publicationBlockerLabels: Record<string, string> = {
+  license_review_unresolved: "La revisión de licencia no está verificada.",
+  license_expression_missing: "Falta una expresión de licencia de datos.",
+  license_expression_unsupported:
+    "La expresión de licencia de datos no está soportada.",
+  license_evidence_missing: "Falta una URL de evidencia de licencia.",
+  publication_decision_missing:
+    "El registro se importó antes de conservar una decisión explícita.",
+  publication_decision_invalid: "La decisión de publicación está mal formada.",
+  publication_decision_blocked: "La decisión de publicación está bloqueada.",
+  trait_mapping_pending:
+    "Falta mapear el trait a una definición local publicable.",
+};
+
 const apiUrl = (
   process.env.NEXT_PUBLIC_WACHUMA_API_URL ?? "http://localhost:3001"
 ).replace(/\/$/, "");
@@ -77,6 +96,15 @@ function SourceRecordCard({
     record.providerKey === "gbif" &&
     record.sourceRecordId.startsWith("species:") &&
     record.assertionType === "taxonomic_fact";
+  const isFungalTraits = record.providerKey === "fungaltraits";
+  const publicationDecision = isFungalTraits
+    ? (record.rawPayload.publicationDecision as PublicationDecision | undefined)
+    : undefined;
+  const publicationBlockers = isFungalTraits
+    ? publicationDecision?.blockers?.length
+      ? publicationDecision.blockers
+      : ["publication_decision_missing"]
+    : [];
 
   const targetLabel: Record<SourceRecordTarget["kind"], string> = {
     taxon: "taxón",
@@ -222,6 +250,26 @@ function SourceRecordCard({
           <p className="empty-note">Sin objeto derivado registrado.</p>
         )}
       </section>
+      {isFungalTraits ? (
+        <section className="review-guard" aria-label="Bloqueo de publicación">
+          <div>
+            <p className="card-kicker">FungalTraits en staging</p>
+            <p>
+              La API no permite aceptar estas mediciones desde la bandeja
+              genérica. Primero deben resolverse los derechos del dataset y el
+              mapeo de taxón/trait.
+            </p>
+          </div>
+          <ul>
+            {publicationBlockers.map((blocker) => (
+              <li key={blocker}>
+                {publicationBlockerLabels[blocker] ?? blocker}
+              </li>
+            ))}
+            <li>{publicationBlockerLabels.trait_mapping_pending}</li>
+          </ul>
+        </section>
+      ) : null}
       <details className="review-payload">
         <summary>Payload estructurado del origen</summary>
         <pre>{JSON.stringify(record.rawPayload, null, 2)}</pre>
@@ -278,7 +326,7 @@ function SourceRecordCard({
         ) : null}
       </div>
       <div className="review-actions">
-        {record.status === "pending" ? (
+        {record.status === "pending" && !isFungalTraits ? (
           <>
             <button
               className="button button-primary"
@@ -325,6 +373,8 @@ export function ReviewInbox() {
   const [token, setToken] = useState("");
   const [reviewer, setReviewer] = useState("editorial-local");
   const [status, setStatus] = useState<ReviewStatus>("pending");
+  const [provider, setProvider] = useState("");
+  const [sourceRecordId, setSourceRecordId] = useState("");
   const [records, setRecords] = useState<SourceRecord[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -337,8 +387,16 @@ export function ReviewInbox() {
     setBusy(true);
     setMessage(null);
     try {
+      const params = new URLSearchParams({
+        status: nextStatus,
+        limit: "100",
+      });
+      if (provider.trim()) params.set("provider", provider.trim());
+      if (sourceRecordId.trim()) {
+        params.set("sourceRecordId", sourceRecordId.trim());
+      }
       const response = await fetch(
-        `${apiUrl}/api/v1/admin/source-records?status=${nextStatus}&limit=100`,
+        `${apiUrl}/api/v1/admin/source-records?${params.toString()}`,
         { headers: { authorization: `Bearer ${token}` } },
       );
       if (!response.ok) throw new Error(await readError(response));
@@ -369,6 +427,27 @@ export function ReviewInbox() {
           <input
             value={reviewer}
             onChange={(event) => setReviewer(event.target.value)}
+          />
+        </label>
+        <label>
+          Proveedor
+          <select
+            value={provider}
+            onChange={(event) => setProvider(event.target.value)}
+          >
+            <option value="">Todos</option>
+            <option value="fungaltraits">FungalTraits</option>
+            <option value="gbif">GBIF</option>
+            <option value="inaturalist">iNaturalist</option>
+            <option value="wikidata">Wikidata</option>
+          </select>
+        </label>
+        <label>
+          ID exacto de registro
+          <input
+            value={sourceRecordId}
+            onChange={(event) => setSourceRecordId(event.target.value)}
+            placeholder="release:measurement:…"
           />
         </label>
         <button

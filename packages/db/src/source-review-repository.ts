@@ -56,11 +56,34 @@ export function isPubliclyUsableLicense(license: string): boolean {
   );
 }
 
+function fungalTraitsPublicationBlockers(
+  rawPayload: Record<string, unknown>,
+): string[] {
+  const decision = rawPayload.publicationDecision;
+  if (!decision || typeof decision !== "object" || Array.isArray(decision)) {
+    return ["publication_decision_missing"];
+  }
+
+  if (decision && typeof decision === "object" && !Array.isArray(decision)) {
+    const publishable = (decision as { publishable?: unknown }).publishable;
+    const blockers = (decision as { blockers?: unknown }).blockers;
+    if (
+      Array.isArray(blockers) &&
+      blockers.every((item) => typeof item === "string")
+    ) {
+      if (publishable === true) return [];
+      return blockers.length > 0 ? blockers : ["publication_decision_blocked"];
+    }
+  }
+  return ["publication_decision_invalid"];
+}
+
 export function createSourceReviewRepository(sql: Sql) {
   return {
     async listSourceRecords(
       options: {
         providerKey?: string;
+        sourceRecordId?: string;
         status?: AdminSourceRecord["status"];
         limit?: number;
       } = {},
@@ -144,6 +167,8 @@ export function createSourceReviewRepository(sql: Sql) {
           ON target_external_identifier.id = provenance.external_identifier_id
         WHERE (${options.providerKey ?? null}::text IS NULL
           OR data_source.provider_key = ${options.providerKey ?? null})
+          AND (${options.sourceRecordId ?? null}::text IS NULL
+          OR source_record.source_record_id = ${options.sourceRecordId ?? null})
           AND (${options.status ?? null}::text IS NULL
           OR source_record.status = ${options.status ?? null})
         GROUP BY
@@ -274,6 +299,22 @@ export function createSourceReviewRepository(sql: Sql) {
         ) {
           throw new Error(
             "Accepted source records require license, attribution and privacy confirmation",
+          );
+        }
+
+        if (
+          input.decision === "accepted" &&
+          record.provider_key === "fungaltraits"
+        ) {
+          const publicationBlockers = fungalTraitsPublicationBlockers(
+            record.raw_payload,
+          );
+          const blockers = [...publicationBlockers, "trait_mapping_pending"];
+          throw new DomainError(
+            publicationBlockers.length > 0 ? "license_required" : "conflict",
+            "FungalTraits source records remain in staging until license and trait mapping are resolved",
+            409,
+            { provider: "fungaltraits", blockers },
           );
         }
 

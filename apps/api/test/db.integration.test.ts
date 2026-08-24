@@ -106,6 +106,108 @@ test(
       assert.equal(typeof promotedSourceRecord.rawPayload, "object");
       assert.ok(promotedSourceRecord.rawPayload);
 
+      const fungalTraitsSourceRecordKey = "fungaltraits:integration-guard";
+      const fungalTraitsSourceRecordId = "00000000-0000-4000-9000-000000000778";
+      const fungalTraitsDataSourceId = "00000000-0000-4000-9000-000000000777";
+      const [existingFungalTraitsDataSource] = await sql<{ id: string }[]>`
+        SELECT id
+        FROM data_sources
+        WHERE provider_key = 'fungaltraits'
+        LIMIT 1
+      `;
+      const createdFungalTraitsDataSource = !existingFungalTraitsDataSource;
+      const resolvedFungalTraitsDataSourceId =
+        existingFungalTraitsDataSource?.id ?? fungalTraitsDataSourceId;
+      if (createdFungalTraitsDataSource) {
+        await sql`
+          INSERT INTO data_sources (
+            id, provider_key, name, source_type, base_url, terms_url,
+            default_license_uri
+          ) VALUES (
+            ${fungalTraitsDataSourceId},
+            'fungaltraits',
+            'FungalTraits integration guard',
+            'external_dataset',
+            'https://zenodo.org/records/1216257',
+            'https://zenodo.org/records/1216257',
+            'Other (Open)'
+          )
+        `;
+      }
+      try {
+        await sql`
+          DELETE FROM source_records
+          WHERE source_record_id = ${fungalTraitsSourceRecordKey}
+        `;
+        await sql`
+          INSERT INTO source_records (
+            id, data_source_id, source_record_id, source_url, retrieved_at,
+            license_uri, attribution, assertion_type, raw_payload, raw_checksum,
+            importer_version, status
+          ) VALUES (
+            ${fungalTraitsSourceRecordId},
+            ${resolvedFungalTraitsDataSourceId},
+            ${fungalTraitsSourceRecordKey},
+            'https://zenodo.org/records/1216257',
+            '2026-08-24T00:00:00Z',
+            'Other (Open)',
+            'FungalTraits integration fixture',
+            'academic_publication',
+            ${sql.json({ legacyFixture: true, licenseReview: "unresolved" })},
+            'sha256:fungaltraits-integration-guard',
+            'integration-guard-0.1.0',
+            'pending'
+          )
+        `;
+
+        const fungalTraitsPending = await app.inject({
+          method: "GET",
+          url: `/api/v1/admin/source-records?provider=fungaltraits&sourceRecordId=${encodeURIComponent(fungalTraitsSourceRecordKey)}&status=pending&limit=1`,
+          headers: { authorization: "Bearer integration-token" },
+        });
+        assert.equal(fungalTraitsPending.statusCode, 200);
+        const fungalTraitsRecord = fungalTraitsPending.json()[0] as
+          { id?: string; rawPayload?: Record<string, unknown> } | undefined;
+        assert.equal(fungalTraitsRecord?.id, fungalTraitsSourceRecordId);
+        const fungalTraitsReview = await app.inject({
+          method: "POST",
+          url: `/api/v1/admin/source-records/${fungalTraitsSourceRecordId}/review`,
+          headers: { authorization: "Bearer integration-token" },
+          payload: {
+            reviewer: "integration-editor",
+            decision: "accepted",
+            note: "No aceptar traits hasta resolver derechos del dataset agregado.",
+            licenseConfirmed: true,
+            attributionConfirmed: true,
+            privacyConfirmed: true,
+          },
+        });
+        assert.equal(fungalTraitsReview.statusCode, 409);
+        assert.equal(fungalTraitsReview.json().error, "license_required");
+        assert.ok(
+          fungalTraitsReview
+            .json()
+            .details.blockers.includes("publication_decision_missing"),
+        );
+        const fungalTraitsStatus = await sql<{ status: string }[]>`
+          SELECT status
+          FROM source_records
+          WHERE id = ${fungalTraitsSourceRecordId}
+        `;
+        assert.equal(fungalTraitsStatus[0]?.status, "pending");
+      } finally {
+        await sql`
+          DELETE FROM source_records
+          WHERE id = ${fungalTraitsSourceRecordId}
+        `;
+        if (createdFungalTraitsDataSource) {
+          await sql`
+            DELETE FROM data_sources
+            WHERE id = ${fungalTraitsDataSourceId}
+          `;
+        }
+      }
+
       const echinopsis = await app.inject({
         method: "GET",
         url: "/api/v1/species/biological-entity-echinopsis-pachanoi",

@@ -162,7 +162,8 @@ registros normalizados sin perder el payload original.
 - [x] Protocolos y mediciones de traits con incertidumbre y fuente.
 - [x] Contrato y parser de snapshots FungalTraits en staging, con checksum,
       DOI y bloqueo de publicación cuando la licencia del release no está
-      verificada.
+      verificada; la API conserva el bloqueo hasta resolver también el mapeo
+      de taxón y definición de trait, y la bandeja permite filtrar el provider.
 - [x] Adaptadores puros para Darwin Core, JSON-LD/PROV-O y RO-Crate.
 - [x] `PlantDescriptor` versionado con semilla, parámetros, fuentes y etiqueta
       de interpretación procedural.
