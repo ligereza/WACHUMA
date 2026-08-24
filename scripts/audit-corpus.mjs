@@ -50,6 +50,31 @@ try {
       UNION ALL
 
       SELECT
+        'fungaltraits_staging_record_not_pending',
+        COUNT(*)::int
+      FROM source_records AS source_record
+      JOIN data_sources AS data_source
+        ON data_source.id = source_record.data_source_id
+      WHERE data_source.provider_key = 'fungaltraits'
+        AND source_record.status <> 'pending'
+
+      UNION ALL
+
+      SELECT
+        'fungaltraits_staging_missing_checksum',
+        COUNT(*)::int
+      FROM source_records AS source_record
+      JOIN data_sources AS data_source
+        ON data_source.id = source_record.data_source_id
+      WHERE data_source.provider_key = 'fungaltraits'
+        AND (
+          source_record.raw_checksum IS NULL
+          OR trim(source_record.raw_checksum) = ''
+        )
+
+      UNION ALL
+
+      SELECT
         'public_taxon_without_provenance',
         COUNT(*)::int
       FROM taxa AS taxon
@@ -447,6 +472,12 @@ try {
       (SELECT COUNT(*)::int FROM media WHERE visibility = 'public') AS public_media,
       (SELECT COUNT(*)::int FROM source_records WHERE status = 'pending') AS pending_source_records,
       (SELECT COUNT(*)::int FROM source_records WHERE status = 'accepted') AS accepted_source_records,
+      (SELECT COUNT(*)::int
+       FROM source_records AS source_record
+       JOIN data_sources AS data_source
+         ON data_source.id = source_record.data_source_id
+       WHERE data_source.provider_key = 'fungaltraits'
+         AND source_record.status = 'pending') AS fungaltraits_pending_source_records,
       (SELECT COUNT(*)::int FROM cultural_relations WHERE review_status = 'under-review') AS cultural_relations_under_review
   `);
 

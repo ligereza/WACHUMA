@@ -82,8 +82,15 @@ _Echinopsis pachanoi_ sin duplicarlo y registró cinco identificadores externos
 con `record_provenance`. Claims textuales, nombres vernáculos y multimedia no
 se importaron; el source record permanece `pending`.
 
+El importador FungalTraits también se probó con el release real `v0.0.3` sin
+copiar el snapshot al repositorio: 51.555 filas se persistieron como
+`source_records` pendientes, con DOI, checksum y payload por fila. La licencia
+del dataset agregado sigue sin resolver, por lo que no se crearon traits
+públicos. `quality:corpus` verifica que esos registros continúen pendientes y
+con checksum.
+
 El nuevo `quality:corpus` consulta la base persistida después del seed y
-verifica 20 invariantes de salud, incluida una decisión de revisión aceptada
+verifica 22 invariantes de salud, incluida una decisión de revisión aceptada
 con confirmaciones de derechos para cada proyección externa pública: la corrida local reportó cero violaciones y
 dejó conteos reproducibles de taxones, entidades, ejemplares, observaciones,
 medios, fuentes pendientes/aceptadas y relaciones culturales en revisión.

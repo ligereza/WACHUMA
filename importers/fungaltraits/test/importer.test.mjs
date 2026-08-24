@@ -53,6 +53,40 @@ test("stages every measurement with provenance and blocks unresolved publication
   assert.equal(result.measurements[0].publishable, false);
 });
 
+test("preserves rows with an empty value as explicitly missing", () => {
+  const rows = parseFungalTraitsCsv(
+    "obj_id,species,trait_name,value\n" +
+      "synthetic_missing,Pleurotus_ostreatus,substrate,\n",
+  );
+  assert.equal(rows[0].rawValue, "");
+
+  const result = importFungalTraitsSnapshot({
+    metadata,
+    csv:
+      "obj_id,species,trait_name,value\n" +
+      "synthetic_missing,Pleurotus_ostreatus,substrate,\n",
+  });
+  assert.equal(result.sourceRecords.length, 1);
+  assert.equal(result.measurements[0].uncertainty.valuePresence, "missing");
+  assert.equal(result.measurements[0].publishable, false);
+});
+
+test("keeps repeated study identifiers distinct by source row", () => {
+  const result = importFungalTraitsSnapshot({
+    metadata,
+    csv:
+      "obj_id,species,trait_name,value\n" +
+      "same_study_row,Pleurotus_ostreatus,substrate,wood\n" +
+      "same_study_row,Pleurotus_ostreatus,temperature,18.5\n",
+  });
+  assert.equal(result.sourceRecords.length, 2);
+  assert.notEqual(
+    result.sourceRecords[0].sourceRecordId,
+    result.sourceRecords[1].sourceRecordId,
+  );
+  assert.match(result.sourceRecords[1].sourceRecordId, /row-3$/);
+});
+
 test("requires an explicit license evidence URL before publication can be considered", () => {
   assert.equal(canPublishFungalTraitsSnapshot(metadata), false);
   assert.equal(

@@ -83,6 +83,21 @@ function optionalText(value: unknown): string | undefined {
   return normalized || undefined;
 }
 
+function requiredField(
+  record: Record<string, string>,
+  aliases: readonly string[],
+  label: string,
+  rowNumber: number,
+): string {
+  const value = getField(record, aliases);
+  if (value === undefined) {
+    throw new FungalTraitsImportError(
+      `${label} es obligatorio en la fila ${rowNumber}`,
+    );
+  }
+  return value.trim();
+}
+
 function getField(
   record: Record<string, string>,
   aliases: readonly string[],
@@ -185,8 +200,9 @@ function normalizeRow(
       "trait_name",
       rowNumber,
     ),
-    rawValue: requiredText(
-      getField(record, ["value", "trait_value", "raw_value"]),
+    rawValue: requiredField(
+      record,
+      ["value", "trait_value", "raw_value"],
       "value",
       rowNumber,
     ),
@@ -290,7 +306,7 @@ export function importFungalTraitsSnapshot(input: {
   const rows = parseFungalTraitsCsv(input.csv);
   const publishable = canPublishFungalTraitsSnapshot(input.metadata);
   const measurements = rows.map((row) => {
-    const sourceRecordId = `${input.metadata.releaseVersion}:measurement:${row.recordId}`;
+    const sourceRecordId = `${input.metadata.releaseVersion}:measurement:${row.recordId}:row-${row.rowNumber}`;
     const value = projectValue(row.rawValue);
     return {
       sourceRecordId,
@@ -304,6 +320,7 @@ export function importFungalTraitsSnapshot(input: {
         measuredAt: "snapshot_retrieval_date",
         sourceRow: row.rowNumber,
         rawValue: row.rawValue,
+        valuePresence: row.rawValue === "" ? "missing" : "present",
         taxonResolution: row.speciesMatched
           ? "provided_by_snapshot"
           : "unresolved",
@@ -331,7 +348,7 @@ export function importFungalTraitsSnapshot(input: {
     return {
       source: FUNGALTRAITS_PROVIDER_KEY,
       sourceRecordId: measurement.sourceRecordId,
-      sourceUrl: `${input.metadata.snapshotUrl}#${encodeURIComponent(row.recordId)}`,
+      sourceUrl: `${input.metadata.snapshotUrl}#row-${row.rowNumber}`,
       retrievedAt: input.metadata.retrievedAt,
       license: input.metadata.license,
       attribution: `${input.metadata.attribution}; release ${input.metadata.releaseVersion}; registro ${row.recordId}`,

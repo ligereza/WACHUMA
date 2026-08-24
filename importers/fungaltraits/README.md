@@ -10,6 +10,12 @@ por el proyecto (`obj_id`, `species`, `speciesMatched`, `uuid`,
 - una medición normalizada pendiente de resolver contra un taxón local y una
   definición de trait.
 
+La identidad de cada medición incluye el número de fila del snapshot además de
+`obj_id`: el release contiene identificadores de estudio repetidos y no se
+deben colapsar filas distintas. Los valores vacíos se conservan como filas
+pendientes con `uncertainty.valuePresence = missing`, nunca se rellenan por
+inferencia.
+
 Todas las mediciones quedan `pending`. El importador no considera publicable un
 snapshot si no se entrega una licencia del release exacto, una URL que sirva de
 evidencia de esa licencia y la revisión marcada como `verified`. Esto es
