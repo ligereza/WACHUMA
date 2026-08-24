@@ -159,6 +159,15 @@ importers:
         specifier: workspace:*
         version: link:../../packages/shared
 
+  importers/garden:
+    dependencies:
+      "@wachuma/shared":
+        specifier: workspace:*
+        version: link:../../packages/shared
+      zod:
+        specifier: ^4.0.17
+        version: 4.4.3
+
   importers/gbif:
     dependencies:
       "@wachuma/shared":

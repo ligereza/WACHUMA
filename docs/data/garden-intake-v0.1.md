@@ -35,6 +35,27 @@ Este flujo permite incorporar ejemplares reales del jardín cuando exista
 consentimiento de custodia, sin convertir los ejemplares demo del seed en
 hechos del corpus.
 
+## Ledger reproducible por lote
+
+Para una colección real, el formulario individual se puede alimentar desde un
+manifiesto versionado con `schemaVersion: "1.0"` en
+`content/garden/ledger.example.json`. El importador vive en
+`importers/garden` y el comando raíz es:
+
+```text
+pnpm import:garden:ledger -- --file ./mi-ledger.json
+```
+
+Ese modo sólo valida y resume. La aplicación requiere `--apply` y
+`WACHUMA_ADMIN_TOKEN`; cada fila se envía al mismo endpoint protegido del
+intake y queda pendiente. El contrato rechaza visibilidad `public`, IDs de
+ejemplar repetidos y claves `(sourcePublicId, sourceRecordId, retrievedAt)`
+repetidas dentro del lote. El payload original puede conservar datos exactos de
+ubicación o custodia, pero no se copia a los DTOs públicos.
+
+El archivo de ejemplo tiene cero registros deliberadamente: la herramienta
+queda lista para los datos reales del jardín, pero no fabrica una colección.
+
 ## Relaciones de linaje
 
 Las relaciones entre ejemplares o entidades usan el endpoint protegido

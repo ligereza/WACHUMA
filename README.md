@@ -36,6 +36,7 @@ registros reales revisados.
 - [Auditoría del objetivo completo](docs/quality/objective-audit-v0.1.md)
 - [Preparación de release y revisión humana](docs/governance/release-readiness-v0.1.md)
 - [Revisión comunitaria y takedown](docs/governance/review-and-takedown.md)
+- [Ledger de ejemplares reales](docs/data/garden-intake-v0.1.md)
 - [Licencia de código](LICENSE)
 - [Licencia de contenido](LICENSE-CONTENT.md)
 - [Tipos de dominio iniciales](packages/shared/src/types.ts)

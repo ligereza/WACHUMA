@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0",
+  "sourcePublicId": "source-wachuma-garden-ledger",
+  "sourceUrl": "https://github.com/ligereza/WACHUMA",
+  "retrievedAt": "2026-08-23T12:00:00.000Z",
+  "license": "WACHUMA-GARDEN-PRIVATE",
+  "attribution": "Custodia del jardín WACHUMA; registro no público.",
+  "importerVersion": "garden-ledger-v0.1.0",
+  "records": []
+}

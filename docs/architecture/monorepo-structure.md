@@ -26,6 +26,7 @@ apps consumen los paquetes.
 │   ├── inaturalist/           # Complementario, licencia por registro/media
 │   ├── wikidata/              # Identificadores/LOD, sin duplicar taxonomía
 │   ├── fungaltraits/          # Traits versionados y citables
+│   ├── garden/                # Ledger de custodia e intake protegido por lote
 │   └── ethnobotany/           # Solo después de revisar fuentes individualmente
 ├── integrations/
 │   └── blender/               # Adaptador externo; no dependencia del web/API
@@ -33,6 +34,7 @@ apps consumen los paquetes.
 │   ├── species/               # Fichas editoriales y ejemplos versionados
 │   ├── cultivation-guides/    # Semillas o fixtures de manuales
 │   ├── cultures/              # Contenido comunitario con revisión explícita
+│   ├── garden/                 # Manifiestos de custodia; vacío hasta recibir datos reales
 │   └── scenes/                # Escenas y recetas 3D versionadas
 ├── packages/db/
 │   ├── src/                   # Schema Drizzle y repositorios
