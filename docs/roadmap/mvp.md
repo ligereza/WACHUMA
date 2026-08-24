@@ -89,6 +89,9 @@ objetos a ejemplares y regenerar una representación con la misma receta.
   revisada y publicada; el resto continúa en staging o restringido. El gate
   `verify:public-web` comprueba además que el render no use el fallback cuando
   existe una base sembrada.
+- [x] Declarar los claims taxonómicos/ecológicos públicos en cada documento de
+      `content/species` con `sourceRecordId`, perspectiva y revisión; el seed los
+      proyecta a PostgreSQL y `quality:content-db` detecta divergencias.
 
 **Criterio de salida:** una ficha puede distinguir nombre aceptado, sinónimo,
 identificador externo, fuente y fecha de sincronización.

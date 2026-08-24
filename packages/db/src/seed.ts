@@ -269,6 +269,33 @@ const seedSourceIdByPublicId = new Map([
   ["source-gbif", ids.sourceGbifOccurrence],
 ]);
 
+const editorialTaxonIdBySpeciesPublicId = new Map([
+  ["biological-entity-echinopsis-pachanoi", ids.taxon],
+  ["biological-entity-opuntia-ficus-indica", ids.taxonOpuntia],
+  ["biological-entity-pleurotus-ostreatus", ids.taxonPleurotus],
+]);
+
+const editorialClaimIdByPublicId = new Map([
+  ["claim-powo-echinopsis-pachanoi-accepted", ids.claimPowo],
+  ["claim-gbif-echinopsis-pachanoi-name-match", ids.claimGbif],
+  ["claim-powo-echinopsis-pachanoi-native-range", ids.claimPowoRange],
+  ["claim-powo-echinopsis-pachanoi-biome", ids.claimPowoBiome],
+  ["claim-powo-opuntia-ficus-indica-accepted", ids.claimPowoOpuntiaStatus],
+  ["claim-powo-opuntia-ficus-indica-native-range", ids.claimPowoOpuntiaRange],
+  ["claim-powo-opuntia-ficus-indica-biome", ids.claimPowoOpuntiaBiome],
+  ["claim-gbif-opuntia-ficus-indica-name-match", ids.claimGbifOpuntiaMatch],
+  ["claim-gbif-pleurotus-ostreatus-accepted", ids.claimGbifPleurotusStatus],
+  ["claim-gbif-pleurotus-ostreatus-name-match", ids.claimGbifPleurotusMatch],
+]);
+
+const editorialSourceRecordIdByProviderRecordId = new Map([
+  ["taxon:88444-2", ids.sourceRecordPowo],
+  ["species:5622352", ids.sourceRecordGbif],
+  ["taxon:1151735-2", ids.sourceRecordPowoOpuntia],
+  ["species:5384064", ids.sourceRecordGbifOpuntia],
+  ["species:2526530", ids.sourceRecordGbifPleurotus],
+]);
+
 function resolveSeedSourceId(publicId: string): string {
   return (
     seedSourceIdByPublicId.get(publicId) ??
@@ -1718,6 +1745,70 @@ try {
           source_record_id = EXCLUDED.source_record_id,
           role = EXCLUDED.role
       `;
+    }
+
+    // The deterministic IDs above preserve fixture identity across seeds;
+    // content/species is the editorial source of truth for the claim values.
+    for (const speciesDocument of editorialContent.species) {
+      const taxonId = editorialTaxonIdBySpeciesPublicId.get(
+        speciesDocument.publicId,
+      );
+      if (!taxonId) {
+        throw new Error(
+          `Editorial species ${speciesDocument.publicId} has no deterministic taxon identity`,
+        );
+      }
+      for (const claim of speciesDocument.claims ?? []) {
+        const claimId = editorialClaimIdByPublicId.get(claim.publicId);
+        const sourceId = seedSourceIdByPublicId.get(claim.sourcePublicId);
+        const sourceRecordId = editorialSourceRecordIdByProviderRecordId.get(
+          claim.sourceRecordId,
+        );
+        const source = editorialContent.sources.find(
+          (candidate) => candidate.publicId === claim.sourcePublicId,
+        );
+        if (!claimId || !sourceId || !sourceRecordId || !source) {
+          throw new Error(
+            `Editorial species claim ${claim.publicId} has no deterministic identity, source or source record mapping`,
+          );
+        }
+        await transaction`
+          INSERT INTO claims (
+            id, public_id, subject_type, subject_id, predicate, object_text,
+            assertion_type, evidence_level, source_id, source_record_id,
+            author_perspective, recorded_on, visibility, license_uri, review_status
+          ) VALUES (
+            ${claimId}, ${claim.publicId}, 'taxon', ${taxonId},
+            ${claim.predicate}, ${claim.statement}, ${claim.assertionType},
+            ${claim.evidenceLevel}, ${sourceId}, ${sourceRecordId},
+            ${claim.authorPerspective}, ${claim.recordedOn}, ${claim.visibility},
+            ${source.license}, ${claim.reviewStatus}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            public_id = EXCLUDED.public_id,
+            subject_type = EXCLUDED.subject_type,
+            subject_id = EXCLUDED.subject_id,
+            predicate = EXCLUDED.predicate,
+            object_text = EXCLUDED.object_text,
+            assertion_type = EXCLUDED.assertion_type,
+            evidence_level = EXCLUDED.evidence_level,
+            source_id = EXCLUDED.source_id,
+            source_record_id = EXCLUDED.source_record_id,
+            author_perspective = EXCLUDED.author_perspective,
+            recorded_on = EXCLUDED.recorded_on,
+            visibility = EXCLUDED.visibility,
+            license_uri = EXCLUDED.license_uri,
+            review_status = EXCLUDED.review_status,
+            updated_at = now()
+        `;
+        await transaction`
+          INSERT INTO claim_sources (claim_id, source_id, source_record_id, role)
+          VALUES (${claimId}, ${sourceId}, ${sourceRecordId}, 'primary')
+          ON CONFLICT (claim_id, source_id) DO UPDATE SET
+            source_record_id = EXCLUDED.source_record_id,
+            role = EXCLUDED.role
+        `;
+      }
     }
 
     await transaction`

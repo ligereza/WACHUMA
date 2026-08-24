@@ -9,6 +9,60 @@
   "authorityNote": "Entidad editorial anclada a fuentes taxonómicas externas; no equipara nombres culturales con el taxón.",
   "visibility": "public",
   "description": "Ficha pública inicial anclada a POWO/Kew y GBIF. Conserva la diferencia entre una especie aceptada en POWO, una coincidencia GBIF con estado sinónimo y los nombres culturales documentados en contextos específicos.",
+  "claims": [
+    {
+      "publicId": "claim-powo-echinopsis-pachanoi-accepted",
+      "predicate": "taxonomicStatus",
+      "statement": "POWO registra Echinopsis pachanoi como especie aceptada; su rango nativo se indica desde el sur de Ecuador hasta Perú.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-powo-echinopsis-pachanoi",
+      "sourceRecordId": "taxon:88444-2",
+      "authorPerspective": "Plants of the World Online; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
+      "publicId": "claim-gbif-echinopsis-pachanoi-name-match",
+      "predicate": "gbifNameMatch",
+      "statement": "GBIF Backbone devuelve una coincidencia exacta para Echinopsis pachanoi, con estado SYNONYM y acceptedUsageKey 11093098.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-gbif-echinopsis-pachanoi",
+      "sourceRecordId": "species:5622352",
+      "authorPerspective": "GBIF Backbone Taxonomy; se conserva la diferencia con la evaluación editorial de POWO.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
+      "publicId": "claim-powo-echinopsis-pachanoi-native-range",
+      "predicate": "nativeRange",
+      "statement": "Plants of the World Online indica un rango nativo desde el sur de Ecuador hasta Perú.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-powo-echinopsis-pachanoi",
+      "sourceRecordId": "taxon:88444-2",
+      "authorPerspective": "Plants of the World Online; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
+      "publicId": "claim-powo-echinopsis-pachanoi-biome",
+      "predicate": "biome",
+      "statement": "Plants of the World Online vincula la especie con un bioma tropical estacionalmente seco.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-powo-echinopsis-pachanoi",
+      "sourceRecordId": "taxon:88444-2",
+      "authorPerspective": "Plants of the World Online; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    }
+  ],
   "externalIdentifiers": [
     {
       "namespace": "ipni",

@@ -77,6 +77,15 @@ export async function readEditorialContent(root) {
       }
     }
   }
+  for (const speciesDocument of species.map((item) => item.document)) {
+    for (const claim of speciesDocument.claims ?? []) {
+      if (!sourcesByPublicId.has(claim.sourcePublicId)) {
+        throw new Error(
+          `Editorial species ${speciesDocument.publicId} references missing source ${claim.sourcePublicId}`,
+        );
+      }
+    }
+  }
   for (const culture of cultures.map((item) => item.document)) {
     for (const relation of culture.relations ?? []) {
       if (!sourcesByPublicId.has(relation.sourcePublicId)) {

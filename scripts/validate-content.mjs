@@ -84,6 +84,42 @@ for (const speciesDocument of speciesDocuments) {
     );
   }
 
+  for (const claim of speciesDocument.claims ?? []) {
+    assert.ok(
+      claim.publicId,
+      `${speciesDocument.publicId} claims need a publicId`,
+    );
+    assert.ok(claim.predicate, `${claim.publicId} needs a predicate`);
+    assert.ok(claim.statement, `${claim.publicId} needs a statement`);
+    assert.ok(claim.assertionType, `${claim.publicId} needs an assertionType`);
+    assert.ok(claim.evidenceLevel, `${claim.publicId} needs an evidenceLevel`);
+    assert.ok(
+      sourceIds.has(claim.sourcePublicId),
+      `${claim.publicId} references a missing source`,
+    );
+    assert.ok(
+      claim.sourceRecordId,
+      `${claim.publicId} needs a provider sourceRecordId`,
+    );
+    assert.ok(
+      claim.authorPerspective,
+      `${claim.publicId} needs an authorPerspective`,
+    );
+    assert.ok(claim.recordedOn, `${claim.publicId} needs a recordedOn date`);
+    assert.ok(
+      ["public", "restricted", "sensitive", "community-controlled"].includes(
+        claim.visibility,
+      ),
+      `${claim.publicId} has an invalid visibility`,
+    );
+    assert.ok(
+      ["draft", "under-review", "accepted", "rejected"].includes(
+        claim.reviewStatus,
+      ),
+      `${claim.publicId} has an invalid reviewStatus`,
+    );
+  }
+
   for (const name of speciesDocument.vernacularNames ?? []) {
     assert.ok(
       sourceIds.has(name.sourcePublicId),

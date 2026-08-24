@@ -170,6 +170,74 @@ try {
       }
     }
 
+    const persistedClaims = await sql`
+      SELECT
+        claim.public_id,
+        claim.predicate,
+        claim.object_text,
+        claim.assertion_type,
+        claim.evidence_level,
+        source.public_id AS source_public_id,
+        source_record.source_record_id AS provider_source_record_id,
+        claim.author_perspective,
+        claim.recorded_on,
+        claim.visibility,
+        claim.review_status
+      FROM claims AS claim
+      JOIN sources AS source ON source.id = claim.source_id
+      LEFT JOIN source_records AS source_record
+        ON source_record.id = claim.source_record_id
+      WHERE claim.subject_type = 'taxon'
+        AND claim.subject_id = ${entity.taxon_id}
+        AND claim.source_record_id IS NOT NULL
+      ORDER BY claim.public_id ASC
+    `;
+    const expectedClaims = document.claims ?? [];
+    check(
+      persistedClaims.length === expectedClaims.length,
+      `species ${document.publicId} has ${persistedClaims.length} persisted claims but content declares ${expectedClaims.length}`,
+    );
+    for (const expected of expectedClaims) {
+      const actual = persistedClaims.find(
+        (claim) => claim.public_id === expected.publicId,
+      );
+      check(
+        Boolean(actual),
+        `species ${document.publicId} claim ${expected.publicId} is not persisted`,
+      );
+      if (!actual) continue;
+      const fields = [
+        ["predicate", actual.predicate, expected.predicate],
+        ["statement", actual.object_text, expected.statement],
+        ["assertionType", actual.assertion_type, expected.assertionType],
+        ["evidenceLevel", actual.evidence_level, expected.evidenceLevel],
+        ["sourcePublicId", actual.source_public_id, expected.sourcePublicId],
+        [
+          "sourceRecordId",
+          actual.provider_source_record_id,
+          expected.sourceRecordId,
+        ],
+        [
+          "authorPerspective",
+          actual.author_perspective,
+          expected.authorPerspective,
+        ],
+        [
+          "recordedOn",
+          normalizeDatabaseDate(actual.recorded_on, true),
+          expected.recordedOn,
+        ],
+        ["visibility", actual.visibility, expected.visibility],
+        ["reviewStatus", actual.review_status, expected.reviewStatus],
+      ];
+      for (const [field, actualValue, expectedValue] of fields) {
+        check(
+          actualValue === expectedValue,
+          `species ${document.publicId} claim ${expected.publicId} ${field} differs between content and PostgreSQL`,
+        );
+      }
+    }
+
     const publicObservations = await sql`
       SELECT observation.public_id
       FROM observations AS observation

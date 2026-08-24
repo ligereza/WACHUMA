@@ -154,7 +154,13 @@ El loader de `packages/db/src/editorial-content.ts` descubre todos los JSON sin
 listas codificadas a mano y construye un catálogo único de fuentes a partir de
 las especies. Cada fuente exige `publicId`, título, cita, `sourceType`, licencia,
 atribución, `accessedAt` y una clasificación de la afirmación. DOI y fechas de
-publicación son opcionales, pero se conservan cuando existen.
+publicación son opcionales, pero se conservan cuando existen. Los hechos
+taxonómicos/ecológicos publicables también viven en `claims` dentro de cada
+documento de especie: cada claim exige `sourcePublicId`, el identificador del
+registro del proveedor (`sourceRecordId`), perspectiva, fecha, visibilidad y
+estado de revisión. El seed conserva un registro de IDs deterministas para no
+romper referencias históricas, pero proyecta el valor editorial desde esos
+documentos.
 
 Durante `pnpm db:seed`, ese catálogo proyecta de forma idempotente las fuentes,
 los campos editoriales de los tres taxones, sus identificadores externos y las

@@ -31,8 +31,23 @@ export type EditorialSpeciesDocument = {
     canonicalUrl?: string;
     license?: string;
   }>;
+  claims?: EditorialSpeciesClaim[];
   sources?: EditorialSourceReference[];
   [key: string]: unknown;
+};
+
+export type EditorialSpeciesClaim = {
+  publicId: string;
+  predicate: string;
+  statement: string;
+  assertionType: string;
+  evidenceLevel: string;
+  sourcePublicId: string;
+  sourceRecordId: string;
+  authorPerspective: string;
+  recordedOn: string;
+  visibility: "public" | "restricted" | "sensitive" | "community-controlled";
+  reviewStatus: "draft" | "under-review" | "accepted" | "rejected";
 };
 
 export type EditorialGuideClaim = {
@@ -173,6 +188,15 @@ export async function loadEditorialContent(
       if (!sourcesByPublicId.has(claim.sourcePublicId)) {
         throw new Error(
           `Editorial guide ${guide.publicId} references missing source ${claim.sourcePublicId}`,
+        );
+      }
+    }
+  }
+  for (const speciesDocument of species) {
+    for (const claim of speciesDocument.claims ?? []) {
+      if (!sourcesByPublicId.has(claim.sourcePublicId)) {
+        throw new Error(
+          `Editorial species ${speciesDocument.publicId} references missing source ${claim.sourcePublicId}`,
         );
       }
     }

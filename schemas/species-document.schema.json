@@ -44,6 +44,10 @@
       "type": "array",
       "items": { "$ref": "#/$defs/taxonomicVariant" }
     },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/speciesClaim" }
+    },
     "vernacularNames": {
       "type": "array",
       "items": { "$ref": "#/$defs/culturalName" }
@@ -91,6 +95,40 @@
         "context": { "type": "string", "minLength": 1 },
         "sourcePublicId": { "type": "string", "minLength": 1 },
         "accessLevel": {
+          "enum": ["public", "restricted", "sensitive", "community-controlled"]
+        },
+        "reviewStatus": {
+          "enum": ["draft", "under-review", "accepted", "rejected"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "speciesClaim": {
+      "type": "object",
+      "required": [
+        "publicId",
+        "predicate",
+        "statement",
+        "assertionType",
+        "evidenceLevel",
+        "sourcePublicId",
+        "sourceRecordId",
+        "authorPerspective",
+        "recordedOn",
+        "visibility",
+        "reviewStatus"
+      ],
+      "properties": {
+        "publicId": { "type": "string", "minLength": 1 },
+        "predicate": { "type": "string", "minLength": 1 },
+        "statement": { "type": "string", "minLength": 1 },
+        "assertionType": { "type": "string", "minLength": 1 },
+        "evidenceLevel": { "type": "string", "minLength": 1 },
+        "sourcePublicId": { "type": "string", "minLength": 1 },
+        "sourceRecordId": { "type": "string", "minLength": 1 },
+        "authorPerspective": { "type": "string", "minLength": 1 },
+        "recordedOn": { "type": "string", "format": "date" },
+        "visibility": {
           "enum": ["public", "restricted", "sensitive", "community-controlled"]
         },
         "reviewStatus": {

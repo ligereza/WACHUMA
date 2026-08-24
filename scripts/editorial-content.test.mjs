@@ -144,6 +144,40 @@ test("rejects conflicting definitions for one source public identifier", async (
   }
 });
 
+test("rejects a species claim that has no editorial source", async () => {
+  const root = await mkdtemp(join(tmpdir(), "wachuma-editorial-"));
+  try {
+    for (const directory of ["species", "cultivation-guides", "cultures"]) {
+      await mkdir(join(root, "content", directory), { recursive: true });
+    }
+    await writeFile(
+      join(root, "content", "species", "claim.json"),
+      JSON.stringify({
+        schemaVersion: "1.0",
+        publicId: "entity-with-claim",
+        scientificName: "Specimen claimatum",
+        sources: [],
+        claims: [
+          {
+            publicId: "claim-missing-source",
+            predicate: "biome",
+            statement: "Afirmación de prueba",
+            assertionType: "taxonomic_fact",
+            evidenceLevel: "documented",
+            sourcePublicId: "source-does-not-exist",
+          },
+        ],
+      }),
+    );
+    await assert.rejects(
+      () => readEditorialContent(root),
+      /Editorial species entity-with-claim references missing source source-does-not-exist/,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("rejects duplicate editorial public identifiers", async () => {
   const root = await mkdtemp(join(tmpdir(), "wachuma-editorial-"));
   try {

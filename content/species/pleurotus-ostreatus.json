@@ -9,6 +9,34 @@
   "authorityNote": "Primera entidad fúngica del corpus; cuenta con una guía experimental de cultivo atribuida, mientras sus traits y relaciones culturales requieren fuentes y revisión propias.",
   "visibility": "public",
   "description": "Ficha pública inicial de un hongo basidiomiceto anclada a GBIF Backbone. El corpus incorpora una guía experimental de cultivo con fuente abierta, condiciones situadas y límites explícitos; la ecología funcional y las relaciones culturales permanecen pendientes de fuentes específicas.",
+  "claims": [
+    {
+      "publicId": "claim-gbif-pleurotus-ostreatus-accepted",
+      "predicate": "taxonomicStatus",
+      "statement": "GBIF Backbone registra Pleurotus ostreatus como especie aceptada con una coincidencia exacta.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-gbif-pleurotus-ostreatus",
+      "sourceRecordId": "species:2526530",
+      "authorPerspective": "GBIF Backbone Taxonomy; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
+      "publicId": "claim-gbif-pleurotus-ostreatus-name-match",
+      "predicate": "gbifNameMatch",
+      "statement": "GBIF Backbone devuelve usageKey 2526530 para Pleurotus ostreatus y conserva la clasificación Fungi · Basidiomycota · Agaricomycetes · Agaricales · Pleurotaceae.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-gbif-pleurotus-ostreatus",
+      "sourceRecordId": "species:2526530",
+      "authorPerspective": "GBIF Backbone Taxonomy; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    }
+  ],
   "externalIdentifiers": [
     {
       "namespace": "gbif",

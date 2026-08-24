@@ -9,6 +9,60 @@
   "authorityNote": "Entidad editorial independiente del primer cactus; sus claims y fuentes no heredan datos de Echinopsis pachanoi.",
   "visibility": "public",
   "description": "Ficha pública inicial anclada a POWO/Kew y GBIF. El registro distingue el rango nativo indicado por una fuente taxonómica de una ocurrencia contemporánea externa revisada; una observación no se presenta como distribución nativa.",
+  "claims": [
+    {
+      "publicId": "claim-powo-opuntia-ficus-indica-accepted",
+      "predicate": "taxonomicStatus",
+      "statement": "POWO registra Opuntia ficus-indica como especie aceptada.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-powo-opuntia-ficus-indica",
+      "sourceRecordId": "taxon:1151735-2",
+      "authorPerspective": "Plants of the World Online; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
+      "publicId": "claim-powo-opuntia-ficus-indica-native-range",
+      "predicate": "nativeRange",
+      "statement": "Plants of the World Online indica un rango nativo en México (Oaxaca).",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-powo-opuntia-ficus-indica",
+      "sourceRecordId": "taxon:1151735-2",
+      "authorPerspective": "Plants of the World Online; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
+      "publicId": "claim-powo-opuntia-ficus-indica-biome",
+      "predicate": "biome",
+      "statement": "Plants of the World Online vincula la especie con un bioma tropical estacionalmente seco.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-powo-opuntia-ficus-indica",
+      "sourceRecordId": "taxon:1151735-2",
+      "authorPerspective": "Plants of the World Online; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    },
+    {
+      "publicId": "claim-gbif-opuntia-ficus-indica-name-match",
+      "predicate": "gbifNameMatch",
+      "statement": "GBIF Backbone devuelve una coincidencia exacta y estado ACCEPTED para Opuntia ficus-indica, con usageKey 5384064.",
+      "assertionType": "taxonomic_fact",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-gbif-opuntia-ficus-indica",
+      "sourceRecordId": "species:5384064",
+      "authorPerspective": "GBIF Backbone Taxonomy; lectura editorial de WACHUMA.",
+      "recordedOn": "2026-08-23",
+      "visibility": "public",
+      "reviewStatus": "accepted"
+    }
+  ],
   "externalIdentifiers": [
     {
       "namespace": "ipni",
