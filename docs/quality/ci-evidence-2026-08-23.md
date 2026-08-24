@@ -98,8 +98,10 @@ regresión de procedencia. El único seed editorial conserva ahora los UUID
 estables de las dos relaciones y la procedencia sigue resolviendo por
 `publicId`. La corrida local posterior reproduce seed, 37 tests de API con
 PostgreSQL y el seed de restauración sin violar
-`cultural_relations_public_id_idx`; el siguiente push debe confirmar la
-corrección completa en Ubuntu.
+`cultural_relations_public_id_idx`. El CI remoto `32681626456`, sobre el
+commit `ad5e55d`, confirmó la corrección completa en Ubuntu/PostGIS; la única
+anotación fue la advertencia de deprecación de Node 20 en las actions de
+GitHub, sin impacto en el gate.
 
 El nuevo `quality:corpus` consulta la base persistida después del seed y
 verifica 22 invariantes de salud, incluida una decisión de revisión aceptada

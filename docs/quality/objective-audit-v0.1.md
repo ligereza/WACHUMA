@@ -29,7 +29,7 @@ declarar cumplidos los otros dos.
 | Wikidata                                                   | `functional-pending-review`        | Se importó el ítem real `Q133426` para _Echinopsis pachanoi_: 1 source record pendiente, 5 identificadores enlazados y claims estructurados seleccionados; no se copian texto, nombres vernáculos ni multimedia. Ver `docs/data/wikidata-import-run-2026-08-23.md`.                                         |
 | FungalTraits                                               | `functional-staged-pending-review` | El release real `v0.0.3` se descargó fuera del repositorio y dejó 51.555 source records pendientes, con DOI, checksum, fila original y payload conservados; no hay traits públicos porque la licencia del agregado sigue sin resolver. Ver `docs/data/fungaltraits-import-run-2026-08-24.md`.               |
 | Ethnobotany                                                | `contract-only`                    | Conserva un contrato manual para incorporar conocimiento etnobotánico con comunidad, perspectiva, territorio, restricciones, licencia y revisión; no se importan datos comunitarios sin ese circuito.                                                                                                       |
-| CI remoto                                                  | `pending-remote-verification`      | `main` commit `831cdec` pasa los gates locales; la nueva corrida remota debe confirmar el ajuste de UUID estable en Ubuntu.                                                                                                                                                                                 |
+| CI remoto                                                  | `baseline-verified`                | El CI remoto `32681626456` verificó el commit `ad5e55d` en Ubuntu/PostGIS; la advertencia de Node 20 pertenece a las actions y no afecta el gate.                                                                                                                                                           |
 | SBOM y detector de licencias                               | `automated`                        | El gate genera un SBOM CycloneDX 1.5 por workspace y comprueba que no queden expresiones de licencia sin resolver; el conteo se registra en la evidencia de cada corrida.                                                                                                                                   |
 | Salud del corpus persistido                                | `automated`                        | `quality:corpus` comprueba 22 invariantes de revisión aceptada, derechos, procedencia, fuentes, sensibilidad, auditoría cultural, cobertura de manuales y publicación segura de linajes directamente en PostgreSQL/PostGIS.                                                                                 |
 | Paridad contenido versionado → PostgreSQL                  | `automated`                        | `quality:content-db` compara especies, IDs externos, manuales, cobertura, claims, relaciones culturales, estados y fuentes versionados; `quality:content-manifest` prueba descubrimiento, incorporación y duplicados; las importaciones externas adicionales pueden existir fuera del manifiesto editorial. |
@@ -82,9 +82,8 @@ que exista autorización cultural o jurídica para distribuirlo ampliamente.
 3. Usar `/admin/culture` para registrar la decisión de revisión comunitaria de
    la relación cultural restringida; si no existe autorización, dejarla como
    registro no publicable.
-4. Ejecutar CI nuevamente después de commit/push de los cambios actuales y
-   conservar ese artefacto SBOM; la corrida remota aún debe confirmar el último
-   ajuste de UUID estable.
+4. Conservar el artefacto SBOM de la corrida remota `32681626456`; el ajuste de
+   UUID estable ya quedó verificado en Ubuntu/PostGIS.
 5. Obtener asesoría jurídica sobre las combinaciones de licencias antes de una
    release pública amplia.
 6. Diseñar una edición de contenido mantenible para crecer el atlas sin
