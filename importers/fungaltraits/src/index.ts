@@ -6,6 +6,22 @@ export const FUNGALTRAITS_PROVIDER_KEY = "fungaltraits" as const;
 export const FUNGALTRAITS_IMPORTER_VERSION = "fungaltraits-v0.1.0";
 
 export type FungalTraitsLicenseReview = "verified" | "unresolved";
+export const FUNGALTRAITS_SUPPORTED_LICENSE_EXPRESSIONS = [
+  "CC0-1.0",
+  "CC-BY-3.0",
+  "CC-BY-4.0",
+  "CC-BY-SA-3.0",
+  "CC-BY-SA-4.0",
+  "ODbL-1.0",
+] as const;
+export type FungalTraitsLicenseExpression =
+  (typeof FUNGALTRAITS_SUPPORTED_LICENSE_EXPRESSIONS)[number];
+
+export type FungalTraitsPublicationBlocker =
+  | "license_review_unresolved"
+  | "license_expression_missing"
+  | "license_expression_unsupported"
+  | "license_evidence_missing";
 
 export interface FungalTraitsSnapshotMetadata {
   releaseVersion: string;
@@ -16,6 +32,7 @@ export interface FungalTraitsSnapshotMetadata {
   attribution: string;
   retrievedAt: string;
   licenseReview: FungalTraitsLicenseReview;
+  licenseExpression?: string;
   licenseEvidenceUrl?: string;
 }
 
@@ -51,8 +68,14 @@ export interface FungalTraitsMeasurementProjection {
 export interface FungalTraitsImportResult {
   metadata: FungalTraitsSnapshotMetadata;
   publishable: boolean;
+  publicationDecision: FungalTraitsPublicationDecision;
   sourceRecords: ExternalSourceRecord[];
   measurements: FungalTraitsMeasurementProjection[];
+}
+
+export interface FungalTraitsPublicationDecision {
+  publishable: boolean;
+  blockers: FungalTraitsPublicationBlocker[];
 }
 
 export class FungalTraitsImportError extends Error {
@@ -277,25 +300,42 @@ function assertMetadata(metadata: FungalTraitsSnapshotMetadata): void {
   }
 }
 
+function hasValidUrl(value: string | undefined): boolean {
+  if (!value) return false;
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function evaluateFungalTraitsPublication(
+  metadata: FungalTraitsSnapshotMetadata,
+): FungalTraitsPublicationDecision {
+  const blockers: FungalTraitsPublicationBlocker[] = [];
+  if (metadata.licenseReview !== "verified") {
+    blockers.push("license_review_unresolved");
+  }
+  if (!metadata.licenseExpression?.trim()) {
+    blockers.push("license_expression_missing");
+  } else if (
+    !FUNGALTRAITS_SUPPORTED_LICENSE_EXPRESSIONS.includes(
+      metadata.licenseExpression.trim() as FungalTraitsLicenseExpression,
+    )
+  ) {
+    blockers.push("license_expression_unsupported");
+  }
+  if (!hasValidUrl(metadata.licenseEvidenceUrl)) {
+    blockers.push("license_evidence_missing");
+  }
+  return { publishable: blockers.length === 0, blockers };
+}
+
 export function canPublishFungalTraitsSnapshot(
   metadata: FungalTraitsSnapshotMetadata,
 ): boolean {
-  const normalizedLicense = metadata.license.trim().toLowerCase();
-  let hasValidEvidenceUrl = false;
-  if (metadata.licenseEvidenceUrl) {
-    try {
-      new URL(metadata.licenseEvidenceUrl);
-      hasValidEvidenceUrl = true;
-    } catch {
-      hasValidEvidenceUrl = false;
-    }
-  }
-  return (
-    metadata.licenseReview === "verified" &&
-    normalizedLicense !== "unknown" &&
-    !normalizedLicense.includes("all rights reserved") &&
-    hasValidEvidenceUrl
-  );
+  return evaluateFungalTraitsPublication(metadata).publishable;
 }
 
 export function importFungalTraitsSnapshot(input: {
@@ -304,7 +344,7 @@ export function importFungalTraitsSnapshot(input: {
 }): FungalTraitsImportResult {
   assertMetadata(input.metadata);
   const rows = parseFungalTraitsCsv(input.csv);
-  const publishable = canPublishFungalTraitsSnapshot(input.metadata);
+  const publicationDecision = evaluateFungalTraitsPublication(input.metadata);
   const measurements = rows.map((row) => {
     const sourceRecordId = `${input.metadata.releaseVersion}:measurement:${row.recordId}:row-${row.rowNumber}`;
     const value = projectValue(row.rawValue);
@@ -343,6 +383,9 @@ export function importFungalTraitsSnapshot(input: {
       citation: input.metadata.citation,
       snapshotUrl: input.metadata.snapshotUrl,
       licenseReview: input.metadata.licenseReview,
+      ...(input.metadata.licenseExpression
+        ? { licenseExpression: input.metadata.licenseExpression }
+        : {}),
       row,
     } satisfies Record<string, unknown>;
     return {
@@ -362,7 +405,8 @@ export function importFungalTraitsSnapshot(input: {
 
   return {
     metadata: input.metadata,
-    publishable,
+    publishable: publicationDecision.publishable,
+    publicationDecision,
     sourceRecords,
     measurements,
   };

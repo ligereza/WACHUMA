@@ -84,10 +84,11 @@ se importaron; el source record permanece `pending`.
 
 El importador FungalTraits también se probó con el release real `v0.0.3` sin
 copiar el snapshot al repositorio: 51.555 filas se persistieron como
-`source_records` pendientes, con DOI, checksum y payload por fila. La licencia
-del dataset agregado sigue sin resolver, por lo que no se crearon traits
-públicos. `quality:corpus` verifica que esos registros continúen pendientes y
-con checksum.
+`source_records` pendientes, con DOI, checksum y payload por fila. La decisión
+de publicación ahora conserva blockers explícitos: la licencia MIT del paquete
+R no se hereda al CSV agregado y `Other (Open)` sin expresión de datos
+soportada no habilita traits públicos. `quality:corpus` verifica que esos
+registros continúen pendientes y con checksum.
 
 Los dos primeros CI remotos posteriores a ese cambio revelaron el mismo patrón
 durante `db:verify`: el seed insertaba dos veces cada relación cultural, una vez

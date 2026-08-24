@@ -67,6 +67,10 @@ define también `FUNGALTRAITS_RELEASE_VERSION`, `FUNGALTRAITS_SNAPSHOT_URL`,
 `FUNGALTRAITS_DOI`, `FUNGALTRAITS_CITATION`, `FUNGALTRAITS_LICENSE`,
 `FUNGALTRAITS_ATTRIBUTION` y `FUNGALTRAITS_LICENSE_REVIEW` (`unresolved` o
 `verified`). `FUNGALTRAITS_LICENSE_EVIDENCE_URL` solo se acepta como evidencia
-adicional; una revisión `unresolved` siempre deja los registros pendientes.
+adicional. Para una revisión `verified` se debe definir también
+`FUNGALTRAITS_LICENSE_EXPRESSION` con una expresión de licencia de datos
+soportada; `Other (Open)` no es suficiente. Una revisión `unresolved`, una
+expresión ausente/no soportada o una evidencia inválida siempre dejan los
+registros pendientes.
 El worker persiste un `source_record` por medición y no crea claims o traits
 públicos automáticamente.

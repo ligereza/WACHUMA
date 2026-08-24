@@ -3,6 +3,7 @@ import test from "node:test";
 
 const {
   canPublishFungalTraitsSnapshot,
+  evaluateFungalTraitsPublication,
   importFungalTraitsSnapshot,
   parseFungalTraitsCsv,
 } = await import("../dist/index.js");
@@ -48,6 +49,11 @@ test("stages every measurement with provenance and blocks unresolved publication
   assert.equal(result.sourceRecords.length, 2);
   assert.equal(result.measurements.length, 2);
   assert.equal(result.sourceRecords[0].status, "pending");
+  assert.deepEqual(result.publicationDecision.blockers, [
+    "license_review_unresolved",
+    "license_expression_missing",
+    "license_evidence_missing",
+  ]);
   assert.match(result.sourceRecords[0].rawChecksum, /^sha256:/);
   assert.equal(result.measurements[1].valueNumeric, 18.5);
   assert.equal(result.measurements[0].publishable, false);
@@ -89,11 +95,17 @@ test("keeps repeated study identifiers distinct by source row", () => {
 
 test("requires an explicit license evidence URL before publication can be considered", () => {
   assert.equal(canPublishFungalTraitsSnapshot(metadata), false);
+  assert.deepEqual(evaluateFungalTraitsPublication(metadata).blockers, [
+    "license_review_unresolved",
+    "license_expression_missing",
+    "license_evidence_missing",
+  ]);
   assert.equal(
     canPublishFungalTraitsSnapshot({
       ...metadata,
       license: "CC BY 4.0",
       licenseReview: "verified",
+      licenseExpression: "CC-BY-4.0",
       licenseEvidenceUrl: "https://example.org/license",
     }),
     true,
@@ -103,8 +115,19 @@ test("requires an explicit license evidence URL before publication can be consid
       ...metadata,
       license: "CC BY 4.0",
       licenseReview: "verified",
+      licenseExpression: "CC-BY-4.0",
       licenseEvidenceUrl: "not-a-url",
     }),
     false,
+  );
+  assert.deepEqual(
+    evaluateFungalTraitsPublication({
+      ...metadata,
+      license: "Other (Open)",
+      licenseReview: "verified",
+      licenseExpression: "Other (Open)",
+      licenseEvidenceUrl: "https://zenodo.org/records/1216257",
+    }).blockers,
+    ["license_expression_unsupported"],
   );
 });

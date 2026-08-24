@@ -258,6 +258,7 @@ function fungalTraitsMetadataFromEnvironment(): FungalTraitsSnapshotMetadata {
   }
   const licenseEvidenceUrl =
     process.env.FUNGALTRAITS_LICENSE_EVIDENCE_URL?.trim();
+  const licenseExpression = process.env.FUNGALTRAITS_LICENSE_EXPRESSION?.trim();
   return {
     releaseVersion: requiredEnvironment("FUNGALTRAITS_RELEASE_VERSION"),
     snapshotUrl: requiredEnvironment("FUNGALTRAITS_SNAPSHOT_URL"),
@@ -268,6 +269,7 @@ function fungalTraitsMetadataFromEnvironment(): FungalTraitsSnapshotMetadata {
     retrievedAt:
       process.env.FUNGALTRAITS_RETRIEVED_AT?.trim() ?? new Date().toISOString(),
     licenseReview,
+    ...(licenseExpression ? { licenseExpression } : {}),
     ...(licenseEvidenceUrl ? { licenseEvidenceUrl } : {}),
   };
 }

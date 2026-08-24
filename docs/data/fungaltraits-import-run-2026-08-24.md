@@ -13,16 +13,20 @@ repositorio ni publicarlo en el atlas.
 | Filas de datos    | 51.555                                                                                                                     |
 | Resultado         | 51.555 source records insertados; 0 omitidos                                                                               |
 | Estado            | Todos `pending`; `publishable=false`                                                                                       |
-| Licencia          | `unknown`; licencia del dataset agregado no resuelta                                                                       |
+| Licencia          | Zenodo: `Other (Open)` sin descripción adicional; licencia del dataset agregado no resuelta                                |
 
 ## Decisiones de procedencia
 
-El repositorio fuente contiene un archivo `LICENSE` que identifica copyright,
-pero no declara una licencia SPDX o una licencia abierta suficiente para
-redistribuir automáticamente el dataset agregado. El snapshot se descargó a
-un directorio temporal local, se conservaron release, DOI, URL, atribución,
-checksum y fila original en `source_records.raw_payload`, y no se crearon
-`trait_measurements` públicos ni claims.
+El repositorio fuente declara MIT para el paquete R mediante `DESCRIPTION` y
+conserva un archivo `LICENSE` con copyright, pero eso no declara una licencia
+de los datos agregados. El registro Zenodo del release exacto dice `Other
+(Open)` y no ofrece una descripción adicional. Por eso la decisión automática
+queda bloqueada por `license_expression_missing` y no se trata MIT como licencia
+del CSV.
+
+El snapshot se descargó a un directorio temporal local, se conservaron release,
+DOI, URL, atribución, checksum y fila original en `source_records.raw_payload`,
+y no se crearon `trait_measurements` públicos ni claims.
 
 La relación entre una fila y su fuente usa:
 
@@ -45,4 +49,5 @@ release. Las filas con `value` vacío se mantienen con
 El siguiente paso no es publicar traits: requiere resolver la licencia del
 release exacto, mapear taxones y definiciones de traits, conservar la fuente de
 cada medición y obtener revisión editorial antes de proyectar cualquier dato a
-la capa pública.
+la capa pública. El contrato ahora distingue explícitamente licencia de código
+de licencia de datos y enumera el motivo de cada bloqueo.
