@@ -111,6 +111,24 @@ completa. El importador `@wachuma/importer-garden` aportó seis pruebas, y el
 manifiesto de ejemplo se mantuvo vacío. La única anotación siguió siendo la
 deprecación de Node 20 en las actions de GitHub.
 
+## Verificación remota más reciente
+
+| Campo    | Valor                                                                                          |
+| -------- | ---------------------------------------------------------------------------------------------- |
+| Workflow | `WACHUMA verification`                                                                         |
+| Commit   | `7ff627637839b35efca26b7b07d6879a69b4342c`                                                     |
+| Estado   | `completed / success`                                                                          |
+| Servicio | `postgis/postgis:16-3.4`                                                                       |
+| Job      | `release-gate`                                                                                 |
+| Duración | 2m 37s                                                                                         |
+| Registro | [GitHub Actions run 32683483302](https://github.com/ligereza/WACHUMA/actions/runs/32683483302) |
+
+Esta corrida verificó el cambio de decisión de FungalTraits junto con los
+gates completos del repositorio: 33 typechecks, 38 tareas de tests, 19 builds,
+20 SBOM, 20 migraciones, auditoría de corpus y smoke web DB-backed. La única
+anotación fue la deprecación de Node 20 en las actions de GitHub; no cambió el
+resultado del gate.
+
 El nuevo `quality:corpus` consulta la base persistida después del seed y
 verifica 22 invariantes de salud, incluida una decisión de revisión aceptada
 con confirmaciones de derechos para cada proyección externa pública: la corrida local reportó cero violaciones y
