@@ -160,7 +160,6 @@ const ids = {
   guideClaimPropagation: "00000000-0000-4000-8000-000000000125",
   guideClaimSubstrate: "00000000-0000-4000-8000-000000000126",
   guideClaimObservation: "00000000-0000-4000-8000-000000000127",
-  culturalRelationDemo: "00000000-0000-4000-8000-000000000128",
   cultureDemo: "00000000-0000-4000-8000-000000000129",
   historicalPeriodDemo: "00000000-0000-4000-8000-000000000130",
   agentDemo: "00000000-0000-4000-8000-000000000131",
@@ -2297,55 +2296,6 @@ try {
           recorded_on = EXCLUDED.recorded_on
       `;
     }
-
-    await transaction`
-      INSERT INTO cultural_relations (
-        id, public_id, relation_type, biological_entity_id, community_id,
-        historical_period_id, documented_by_agent_id, source_id, value_text,
-        description, evidence_level, assertion_type, author_perspective,
-        sensitivity, access_level, license_uri, review_notes, review_status,
-        recorded_on
-      ) VALUES (
-        ${ids.culturalRelationDemo},
-        'cultural-relation-wachuma-demo',
-        'vernacular_name',
-        ${ids.biologicalEntity},
-        ${ids.communityDemo},
-        ${ids.historicalPeriodDemo},
-        ${ids.agentDemo},
-        ${ids.source},
-        'wachuma / huachuma / San Pedro',
-        'Registro sintético para probar que un nombre cultural debe mantenerse contextualizado y no convertirse automáticamente en sinónimo taxonómico.',
-        'unverified',
-        'editorial_interpretation',
-        'Fixture editorial de prueba; no atribuye una afirmación a una comunidad real.',
-        'sensitive',
-        'restricted',
-        'WACHUMA-PROJECT',
-        'No publicar: requiere revisión de procedencia, contexto y consentimiento.',
-        'draft',
-        '2026-08-21'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        public_id = EXCLUDED.public_id,
-        relation_type = EXCLUDED.relation_type,
-        biological_entity_id = EXCLUDED.biological_entity_id,
-        community_id = EXCLUDED.community_id,
-        historical_period_id = EXCLUDED.historical_period_id,
-        documented_by_agent_id = EXCLUDED.documented_by_agent_id,
-        source_id = EXCLUDED.source_id,
-        value_text = EXCLUDED.value_text,
-        description = EXCLUDED.description,
-        evidence_level = EXCLUDED.evidence_level,
-        assertion_type = EXCLUDED.assertion_type,
-        author_perspective = EXCLUDED.author_perspective,
-        sensitivity = EXCLUDED.sensitivity,
-        access_level = EXCLUDED.access_level,
-        license_uri = EXCLUDED.license_uri,
-        review_notes = EXCLUDED.review_notes,
-        review_status = EXCLUDED.review_status,
-        recorded_on = EXCLUDED.recorded_on
-    `;
 
     await transaction`
       INSERT INTO cultural_relations (
