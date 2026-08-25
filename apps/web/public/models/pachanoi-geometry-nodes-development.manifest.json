@@ -1,0 +1,71 @@
+{
+  "$schema": "https://wachuma.org/schemas/procedural-asset-manifest.schema.json",
+  "schemaVersion": "1.0",
+  "asset": "pachanoi-geometry-nodes-development.glb",
+  "format": "glb",
+  "contentHash": "245851df7d6e0434af176ee4b20cc2c2a268c43f8975db4bb526f43ee6e3b375",
+  "origin": "procedural",
+  "representationType": "procedural-interpretation",
+  "generator": {
+    "algorithm": "pachanoi-geometry-nodes-modular-rib-development",
+    "algorithmVersion": "0.3.2-controls-and-svg-pulp",
+    "runtime": "Blender 4.5.4 Geometry Nodes",
+    "license": "MIT",
+    "attribution": "WACHUMA"
+  },
+  "adapterBoundary": "external-process",
+  "seed": 0,
+  "license": "MIT",
+  "attribution": "WACHUMA Geometry Nodes / Blender 4.5.4",
+  "metadata": {
+    "nodeGroup": "WACHUMA_Pachanoi_Modular_GeometryNodes_45",
+    "editableBlend": "C:\\IA\\wachuma\\integrations\\blender\\projects\\wachuma-pachanoi-geometry-nodes.blend",
+    "parameters": {
+      "Development": 0.76,
+      "Hydration": 0.0,
+      "Mature Height": 2.6,
+      "Radius": 0.34,
+      "Rib Count": 7,
+      "Rib Relief": 0.28,
+      "Inner Rib Roundness": 0.35,
+      "Rib Phase": -1.121997376282069,
+      "Phase Drift (deg)": 0.0,
+      "Apical Fraction": 0.4,
+      "Apical Rib Memory": 0.3,
+      "Apical Lobe Lift": 0.24,
+      "Node Scale": 1.0,
+      "Parastichy Step": 2,
+      "Areole Rows": 8,
+      "Areole Stagger": 0.0,
+      "Pulp Core Radius": 0.46,
+      "Pulp Contrast": 0.78,
+      "Spine Length": 0.14,
+      "Spine Bend": 0.006,
+      "Spine Radius": 0.0026,
+      "Spine Scale": 1.0,
+      "Branch Development": 0.0
+    },
+    "svgRole": "reference-only for inner rib texture; never used as growth time",
+    "mathematicalPrimitive": "M_i(s,u), u in [-1,1], s in [0,1]",
+    "growthModel": "apical elongation + C2 rib-memory meristem + compact areole kernels",
+    "lateralShootModel": "disabled in approved visual baseline; parent shoot only",
+    "innerTexture": "SVG-inspired radial pulp gradient: light central core, intermediate pulp and darker outer pulp on |u| < 0.68 rib band",
+    "spineModel": "seven fixed tapered Bézier spine slots per areole with unequal lengths; apical birth, age scaling and Spine Scale",
+    "animation": {
+      "frameStart": 1,
+      "frameEnd": 180,
+      "fps": 24,
+      "keyframedInputs": [
+        "Development",
+        "Hydration"
+      ],
+      "webSequenceManifest": "apps/web/public/models/pachanoi-sequence/sequence.manifest.json"
+    },
+    "notClaimed": [
+      "measured species law",
+      "cell division simulation",
+      "universal phyllotaxis"
+    ]
+  },
+  "taxonomicClaim": false
+}

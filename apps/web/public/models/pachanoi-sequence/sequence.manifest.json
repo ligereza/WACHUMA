@@ -1,0 +1,66 @@
+{
+  "$schema": "https://wachuma.org/schemas/procedural-asset-sequence.schema.json",
+  "schemaVersion": "1.0",
+  "origin": "procedural",
+  "source": "integrations/blender/projects/wachuma-pachanoi-geometry-nodes.blend",
+  "generator": "integrations/blender/generate_pachanoi_geometry_nodes.py",
+  "runtime": "Blender 4.5.4 Geometry Nodes",
+  "frames": [
+    {
+      "frame": 1,
+      "asset": "frame-001.glb",
+      "contentHash": "c2546533005cd5f5a2fcd2c07837cd480bbe7745c39054ca0c780eb582179ffe"
+    },
+    {
+      "frame": 24,
+      "asset": "frame-024.glb",
+      "contentHash": "d2f145847e88aa447aed56ce7dec90394072b73d242af58ae39d5ac143a9f779"
+    },
+    {
+      "frame": 48,
+      "asset": "frame-048.glb",
+      "contentHash": "539e8ca75cbb9e0b058459a450a4a2d77c2a90e431124bc9d0a54f6c6a0ade57"
+    },
+    {
+      "frame": 72,
+      "asset": "frame-072.glb",
+      "contentHash": "c2261121d9c5742ccf4ef6f64967c526f582e48ed5e70306eaced9824b8edec4"
+    },
+    {
+      "frame": 96,
+      "asset": "frame-096.glb",
+      "contentHash": "39838513d19f507a2f3c9db8bb59313a1e5c5a86c7cc3bda8f2581332d04af40"
+    },
+    {
+      "frame": 118,
+      "asset": "frame-118.glb",
+      "contentHash": "0900d0bbd35f12d90433a1ac8804ad129df180a99f7c31cc2a5c9cd819ebd8ad"
+    },
+    {
+      "frame": 130,
+      "asset": "frame-130.glb",
+      "contentHash": "db847e62e775a43008091ebe02a2556164122b5850123e27f032a4d2f8313658"
+    },
+    {
+      "frame": 145,
+      "asset": "frame-145.glb",
+      "contentHash": "b788243a941a95f491ddb8df7459297ea3a1ea0886255f8719ac22e70ae46447"
+    },
+    {
+      "frame": 160,
+      "asset": "frame-160.glb",
+      "contentHash": "0766d738850bccfdc698475af07bf36807837c19be6cb68cc8dac6587f1804ac"
+    },
+    {
+      "frame": 180,
+      "asset": "frame-180.glb",
+      "contentHash": "fecd70558d97497f60016ca8280c5cfb53a0e648424519d83f655c83fbc434b0"
+    }
+  ],
+  "interpolation": "discrete evaluated snapshots from one animated Geometry Nodes graph",
+  "notClaimed": [
+    "glTF native animation clip",
+    "cell division simulation",
+    "universal species law"
+  ]
+}

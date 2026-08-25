@@ -32,6 +32,45 @@ Fuentes:
 
 ## Nacimiento de módulos y superficie
 
+El crecimiento primario del tallo es apical. El estado no debe escalar un
+organismo terminado: el meristemo apical (`SAM`) aumenta la altura y produce
+primordios en la corona.
+
+```text
+H(t) = H0 + integral_0^t v_SAM(tau) d tau
+tau_k <= t  iff  primordio k iniciado
+age_k(t) = clamp((t - tau_k) / (T - tau_k))
+z_k(t) = H(t) [s_apex - Delta(age_k)]
+```
+
+En la implementación procedural, la corona inicial no espera a la primera
+fracción de una rejilla arbitraria. Para `m` niveles de areolas, el tiempo de
+nacimiento del nivel `j` es:
+
+```text
+tau_j = 0.86 * j / max(m - 1, 1),       j = 0,...,m-1
+```
+
+Por tanto `tau_0 = 0`: el brote nace con su primera areola y sus espinas. Las
+filas posteriores aparecen hacia el ápice; `age_j` controla su actividad y
+`Delta(age_j)` las advecta hacia abajo a medida que el meristemo elonga el
+tallo. El `0.86` es un parámetro visual/de desarrollo calibrable, no una
+constante universal de la especie.
+
+La base queda fija como referencia, `H(t)` mueve el límite superior y `Delta`
+advecta las areolas ya iniciadas hacia abajo. Una rama es crecimiento
+secundario: sólo puede nacer desde una areola existente cuando una condición de
+liberación se cumple. Nunca debe ser la causa del crecimiento del tronco.
+
+```text
+create_child(a_k) iff
+  a_k in A and state(a_k) == vegetative and release(a_k,E,H) == true
+```
+
+La anatomía de esta separación tiene respaldo en la literatura de Cactaceae;
+los valores concretos de `v_SAM`, `Delta`, `release` y sus umbrales siguen
+siendo parámetros calibrables, no hechos medidos de *E. pachanoi*.
+
 Cada primordio/areola recibe identidad al nacer:
 
 ```text
@@ -54,6 +93,24 @@ delta_nodes = sum_k taper(s_k) [
 ```
 
 `f_n` es un perfil C2 periódico, ancho y redondeado. El primer kernel C2 compacto produce el crecimiento modular tenue de la areola; el segundo, desplazado hacia el ápice, forma la depresión sobre ella. Ambos se anulan suavemente en el polo para evitar una estrella o una tapa.
+
+Las espinas no son conos repetidos: para cada areola `a_j`, se construye un
+abanico determinista de cinco espinas con dirección:
+
+```text
+d_jk = cos(alpha_k) N_j + sin(alpha_k) T_j + v_jk e_z
+alpha_k in {-0.92,-0.62,-0.30,0,0.30,0.62,0.90}
+L_jk = L0 * activity_j * age_factor_j * lambda_k
+lambda_k = {0.28, 0.40, 0.62, 1.25, 0.66, 0.43, 0.30}
+```
+
+`N_j` es la normal radial de la cresta, `T_j` la tangente alrededor del
+tallo, `v_jk` una inclinación axial suave y `age_factor_j` evita que todas las
+espinas tengan idéntica longitud. Los siete slots pertenecen al patrón de la
+areola; los exteriores pueden ser visualmente muy cortos, pero no se eliminan
+por una máscara aleatoria. Cada curva se reduce de radio hacia su extremo,
+por lo que la generación conserva la lógica areola → espinas desde el
+nacimiento y no una decoración añadida después.
 
 ## Escalas de animación
 

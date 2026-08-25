@@ -42,6 +42,11 @@
       ]
     },
     "taxonomicClaim": { "type": "boolean" },
+    "metadata": {
+      "type": "object",
+      "description": "Generator-specific provenance that does not change the asset contract.",
+      "additionalProperties": true
+    },
     "sourceUrl": { "type": "string", "format": "uri" }
   },
   "$defs": {

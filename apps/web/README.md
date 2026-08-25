@@ -12,3 +12,18 @@ explorador, ficha de especie, colección, ejemplar, linaje, cultivo, cultura,
 mapa y bibliografía. La bandeja protegida `/admin/review` puede filtrar por
 proveedor o ID exacto de source record; FungalTraits muestra sus blockers y no
 ofrece aceptación genérica mientras sus mediciones sigan en staging.
+
+## Preview Geometry Nodes → GLB
+
+Con el servidor web levantado, abrir:
+
+`http://127.0.0.1:3000/preview/svg-loft`
+
+La primera escena muestra el GLB horneado desde
+`integrations/blender/projects/wachuma-pachanoi-geometry-nodes.blend`. El
+proyecto fuente usa Geometry Nodes 4.5 para instanciar costillas modulares
+`M_i(s,u)`, evaluar areolas y espinas sobre la misma superficie y prolongar un
+meristemo apical. El SVG de referencia sólo describe textura interior; no es
+una línea temporal ni una colección de estados de crecimiento. La segunda
+sección conserva la implementación TSX analítica para comparar ambas
+representaciones sin confundirlas.

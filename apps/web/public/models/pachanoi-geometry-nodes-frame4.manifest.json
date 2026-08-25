@@ -1,0 +1,50 @@
+{
+  "$schema": "https://wachuma.org/schemas/procedural-asset-manifest.schema.json",
+  "schemaVersion": "1.0",
+  "asset": "pachanoi-geometry-nodes-frame4.glb",
+  "format": "glb",
+  "contentHash": "f62b4aa00e92508d8d34bce74aed589b413b7cc3449eba704b229d1f0cbea0a7",
+  "origin": "procedural",
+  "representationType": "procedural-interpretation",
+  "generator": {
+    "algorithm": "pachanoi-geometry-nodes-svg-calibrated",
+    "algorithmVersion": "0.1.0",
+    "runtime": "Blender 4.5.4 Geometry Nodes",
+    "license": "MIT",
+    "attribution": "WACHUMA"
+  },
+  "adapterBoundary": "external-process",
+  "seed": 4,
+  "license": "MIT",
+  "attribution": "WACHUMA Geometry Nodes / Blender 4.5.4",
+  "metadata": {
+    "sourceSvg": "apps\\web\\public\\animations\\echinopsis-rib-progression.svg",
+    "sourceFrame": 4,
+    "nodeGroup": "WACHUMA_Pachanoi_GeometryNodes_45",
+    "parameters": {
+      "height": 2.6,
+      "radius": 0.30340459925394786,
+      "rib_count": 8,
+      "rib_relief": 0.33547916038916137,
+      "rib_phase": 0.1254012070729445,
+      "areole_rows": 8,
+      "spine_length": 0.055
+    },
+    "svgCalibration": {
+      "frame": 4,
+      "frameCount": 9,
+      "fitMeanRadius": 102.00046438170602,
+      "fitAmplitude": 15.267957543446421,
+      "fitPhaseRadians": 0.1254012070729445,
+      "inferredRibCount": 8,
+      "baselineRatio": 0.8923664683939642,
+      "ribRelief": 0.33547916038916137,
+      "targetMeanRadius": 0.34,
+      "baselineRadius": 0.30340459925394786,
+      "shapeExponent": 2.2
+    },
+    "primaryGrowth": "apical_meristem",
+    "areoleAuthority": "procedural_lattice"
+  },
+  "taxonomicClaim": false
+}

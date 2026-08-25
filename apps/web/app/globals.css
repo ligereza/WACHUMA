@@ -1415,3 +1415,273 @@ footer {
     padding-inline: 0;
   }
 }
+
+.svg-loft-page {
+  min-height: 100svh;
+  padding: 1.25rem;
+  background: #d8d2c2;
+  color: var(--ink);
+}
+.svg-loft-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto 1rem;
+  font:
+    700 0.7rem/1.4 system-ui,
+    sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.svg-loft-nav a {
+  color: var(--leaf);
+  text-decoration: none;
+}
+.svg-loft-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.svg-loft-preview-stage {
+  position: relative;
+  height: min(78svh, 720px);
+  min-height: min(78svh, 720px);
+  overflow: hidden;
+  border: 1px solid rgba(49, 72, 56, 0.28);
+  border-radius: 1.25rem;
+  background: #111a15;
+  box-shadow: 0 1rem 3rem rgba(43, 48, 35, 0.18);
+}
+.svg-loft-preview-stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.svg-loft-preview-loading {
+  display: grid;
+  min-height: inherit;
+  place-items: center;
+  color: #d8e4c4;
+  font: 0.9rem/1.4 system-ui, sans-serif;
+}
+.svg-loft-preview-rendering {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: #d8e4c4;
+  background: rgba(17, 26, 21, 0.92);
+  font: 0.78rem/1.4 system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.svg-loft-preview-panel {
+  align-self: start;
+  display: grid;
+  gap: 1.35rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border: 1px solid rgba(49, 72, 56, 0.22);
+  border-radius: 1.25rem;
+  background: rgba(244, 241, 228, 0.78);
+}
+.svg-loft-preview-panel h1 {
+  margin: 0.55rem 0 0.8rem;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+.svg-loft-preview-panel > div > p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.svg-loft-control {
+  display: grid;
+  gap: 0.55rem;
+  color: var(--leaf);
+  font:
+    700 0.72rem/1.3 system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.svg-loft-control input {
+  width: 100%;
+  accent-color: var(--leaf);
+}
+.svg-loft-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.svg-loft-metrics span {
+  padding: 0.42rem 0.58rem;
+  border: 1px solid rgba(73, 107, 80, 0.3);
+  border-radius: 999px;
+  color: var(--leaf);
+  font:
+    700 0.65rem/1.2 system-ui,
+    sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.svg-loft-cross-section-panel {
+  display: grid;
+  justify-items: start;
+  gap: 0.65rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(73, 107, 80, 0.22);
+}
+.svg-loft-cross-section {
+  width: min(100%, 220px);
+  aspect-ratio: 1;
+  overflow: visible;
+}
+.svg-loft-cross-section-shape {
+  fill: rgba(126, 170, 82, 0.25);
+  stroke: var(--leaf);
+  stroke-width: 0.008;
+  vector-effect: non-scaling-stroke;
+}
+.svg-loft-cross-section-guide {
+  fill: none;
+  stroke: rgba(73, 107, 80, 0.38);
+  stroke-width: 0.006;
+  stroke-dasharray: 0.018 0.018;
+  vector-effect: non-scaling-stroke;
+}
+.svg-loft-cross-section-center {
+  fill: var(--leaf);
+}
+.svg-loft-meridian {
+  width: 100%;
+  max-width: 280px;
+  height: 180px;
+  overflow: visible;
+}
+.svg-loft-meridian-shape {
+  fill: rgba(126, 170, 82, 0.22);
+  stroke: var(--leaf);
+  stroke-width: 0.008;
+  vector-effect: non-scaling-stroke;
+}
+.svg-loft-meridian-axis {
+  stroke: rgba(73, 107, 80, 0.24);
+  stroke-width: 0.006;
+  vector-effect: non-scaling-stroke;
+}
+.svg-loft-meridian-join {
+  stroke: #b8874c;
+  stroke-width: 0.006;
+  stroke-dasharray: 0.02 0.015;
+  vector-effect: non-scaling-stroke;
+}
+.svg-loft-metadata {
+  max-width: 28rem;
+  color: var(--muted);
+  font: 0.7rem/1.45 system-ui, sans-serif;
+}
+.svg-loft-debug-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.35rem;
+  color: var(--leaf);
+  font:
+    700 0.65rem/1.2 system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.svg-loft-debug-toggle input {
+  accent-color: var(--leaf);
+}
+.svg-loft-debug-panel {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.75rem 0;
+  border-block: 1px solid rgba(73, 107, 80, 0.22);
+  color: var(--muted);
+  font: 0.7rem/1.35 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+.svg-loft-debug-join,
+.svg-loft-debug-table {
+  display: grid;
+  gap: 0.35rem 0.55rem;
+}
+.svg-loft-debug-join {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.svg-loft-debug-table {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(73, 107, 80, 0.16);
+}
+.svg-loft-debug-table span:nth-child(-n + 5) {
+  color: var(--leaf);
+  font-weight: 700;
+}
+
+.gn-pachanoi-project {
+  margin-bottom: 1rem;
+}
+.gn-pachanoi-project-stage {
+  min-height: min(78svh, 720px);
+}
+.gn-pachanoi-project-panel {
+  gap: 1.15rem;
+}
+.gn-control-group {
+  display: grid;
+  gap: 0.72rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(73, 107, 80, 0.22);
+}
+.gn-control-group > .eyebrow {
+  margin: 0;
+}
+.gn-control-group .svg-loft-control {
+  gap: 0.4rem;
+}
+.gn-control-group .svg-loft-control span {
+  display: flex;
+  justify-content: space-between;
+  color: var(--leaf);
+  font-size: 0.68rem;
+}
+.gn-pachanoi-source {
+  display: grid;
+  gap: 0.55rem;
+  color: var(--muted);
+  font: 0.7rem/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+.gn-pachanoi-source img {
+  width: min(100%, 220px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  border: 1px solid rgba(73, 107, 80, 0.22);
+  border-radius: 0.75rem;
+  background: #111a15;
+}
+
+@media (max-width: 760px) {
+  .svg-loft-page {
+    padding: 0.75rem;
+  }
+  .svg-loft-nav {
+    padding-inline: 0.25rem;
+  }
+  .svg-loft-preview {
+    grid-template-columns: 1fr;
+  }
+  .svg-loft-preview-stage {
+    height: 68svh;
+    min-height: 68svh;
+  }
+}
