@@ -1,6 +1,6 @@
 # WACHUMA — desarrollo, cultivo y animación de cactus columnares
 
-Estado: contrato de arquitectura para generadores procedurales. La escena no representa una malla que se deforma, sino un organismo con historia. Este documento separa evidencia anatómica, entradas de cultivo y reglas visuales hipotéticas; no predice la horticultura de un ejemplar concreto.
+Estado: contrato de arquitectura para generadores procedurales. La escena no representa una malla que se deforma, sino un organismo con historia. Este documento separa evidencia anatómica, entradas de cultivo y reglas visuales hipotéticas; no predice la horticultura de un ejemplar concreto. La salida activa se produce con Geometry Nodes y se exporta como snapshots GLB; los invariantes geométricos que todavía no tengan una prueba ejecutable deben tratarse como requisitos, no como hechos demostrados.
 
 ## Modelo de estado
 
@@ -21,14 +21,14 @@ La malla es una proyección de este estado. No se obtiene una rama interpolando 
 
 Las areolas de Cactaceae son yemas axilares persistentes. La expansión de las costillas lleva las areolas hacia afuera y hacia abajo; una misma areola puede producir espinas, rama o flor. Toda rama y toda flor debe referenciar la `id` de una areola existente. Las areolas más jóvenes pertenecen a una corona periférica del ápice, no al punto matemático central.
 
-Las costillas/surcos permiten cambios de volumen hídrico. Esto exige distinguir la respiración reversible del agua de la producción irreversible de tejido. Para *Echinopsis pachanoi*, el perfil objetivo es de costillas anchas, redondeadas y areolas sobre las crestas; las flores se asocian a areolas superiores y tienen apertura nocturna. No se fija ángulo áureo, frecuencia de ramificación ni gatillo cuantitativo de floración.
+Las costillas/surcos permiten cambios de volumen hídrico. Esto exige distinguir la respiración reversible del agua de la producción irreversible de tejido. Para _Echinopsis pachanoi_, el perfil objetivo es de costillas anchas, redondeadas y areolas sobre las crestas; las flores se asocian a areolas superiores y tienen apertura nocturna. No se fija ángulo áureo, frecuencia de ramificación ni gatillo cuantitativo de floración.
 
 Fuentes:
 
 - [Mauseth: anatomía y relación areola--costilla--rama](https://pmc.ncbi.nlm.nih.gov/articles/PMC2803597/)
 - [Mauseth et al.: actividad apical y posición de areolas](https://pmc.ncbi.nlm.nih.gov/articles/PMC12401885/)
 - [Rib-and-furrow y ajuste hídrico](https://www.sciencedirect.com/science/article/abs/pii/S014019631630204X)
-- [Ficha morfológica de *E. pachanoi*](https://www.cactus-art.biz/schede/TRICHOCEREUS/Trichocereus_pachanoi/Trichocereus_pachanoi/Trichocereus_pachanoi.htm)
+- [Ficha morfológica de _E. pachanoi_](https://www.cactus-art.biz/schede/TRICHOCEREUS/Trichocereus_pachanoi/Trichocereus_pachanoi/Trichocereus_pachanoi.htm)
 
 ## Nacimiento de módulos y superficie
 
@@ -69,7 +69,7 @@ create_child(a_k) iff
 
 La anatomía de esta separación tiene respaldo en la literatura de Cactaceae;
 los valores concretos de `v_SAM`, `Delta`, `release` y sus umbrales siguen
-siendo parámetros calibrables, no hechos medidos de *E. pachanoi*.
+siendo parámetros calibrables, no hechos medidos de _E. pachanoi_.
 
 Cada primordio/areola recibe identidad al nacer:
 
@@ -114,11 +114,11 @@ nacimiento y no una decoración añadida después.
 
 ## Escalas de animación
 
-| Escala | Estado | Resultado | Reversible |
-| --- | --- | --- | --- |
-| horas--días | `W` | apertura/cierre leve de costillas | sí |
-| semanas--meses | `M`, `A` | elongación, nacimiento y advección | no |
-| estaciones--años | yemas | pups, brazos, botones y flores | parcialmente |
+| Escala           | Estado   | Resultado                          | Reversible   |
+| ---------------- | -------- | ---------------------------------- | ------------ |
+| horas--días      | `W`      | apertura/cierre leve de costillas  | sí           |
+| semanas--meses   | `M`, `A` | elongación, nacimiento y advección | no           |
+| estaciones--años | yemas    | pups, brazos, botones y flores     | parcialmente |
 
 ```text
 dW/dt = (W_target(E,t) - W) / tau_W

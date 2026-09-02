@@ -36,6 +36,7 @@ import bpy
 
 TAU = math.tau
 BLENDER_RUNTIME = "Blender 4.5.4 Geometry Nodes"
+GENERATOR_VERSION = "0.3.4-cyclic-body-closure"
 
 
 def is_socket(value):
@@ -532,6 +533,132 @@ def build_geometry_nodes(body_material, interior_material, areole_material, spin
     rib_realize = nodes.new("GeometryNodeRealizeInstances")
     rib_realize.location = (180, 760)
     links.new(rib_instances.outputs["Instances"], rib_realize.inputs["Geometry"])
+    # The module parameter domains meet at the same valley coordinates. Weld
+    # those shared boundaries before the organism is joined with areoles and
+    # spines; otherwise the exported body is seven coincident open patches
+    # even when the render looks continuous.
+    body_weld = nodes.new("GeometryNodeMergeByDistance")
+    body_weld.label = "body topology: weld cyclic rib boundaries"
+    body_weld.location = (360, 760)
+    body_weld.inputs["Distance"].default_value = 1e-6
+    links.new(rib_realize.outputs["Geometry"], body_weld.inputs["Geometry"])
+    # Close the remaining base loop from the same parameter equation as the
+    # first longitudinal row. This is a derived boundary face, not an
+    # independent topological or visual cap: every boundary vertex is computed
+    # by build_point_fields with s=0 and the matching module phase.
+    boundary_segments = 24.0
+    total_boundary_vertices = math_field(
+        nodes,
+        links,
+        "MULTIPLY",
+        group_input.outputs["Rib Count"],
+        boundary_segments,
+        "body base boundary vertex count",
+    )
+    boundary_circle = nodes.new("GeometryNodeMeshCircle")
+    boundary_circle.fill_type = "NGON"
+    boundary_circle.label = "derived body base boundary loop"
+    boundary_circle.location = (520, 560)
+    links.new(total_boundary_vertices, boundary_circle.inputs["Vertices"])
+    boundary_index = nodes.new("GeometryNodeInputIndex")
+    boundary_rib = math_field(
+        nodes,
+        links,
+        "FLOOR",
+        math_field(
+            nodes,
+            links,
+            "DIVIDE",
+            boundary_index.outputs["Index"],
+            boundary_segments,
+            "base boundary module quotient",
+        ),
+        "base boundary module id",
+    )
+    boundary_local_index = math_field(
+        nodes,
+        links,
+        "MODULO",
+        boundary_index.outputs["Index"],
+        boundary_segments,
+        "base boundary local index",
+    )
+    boundary_u_fraction = math_field(
+        nodes,
+        links,
+        "DIVIDE",
+        boundary_local_index,
+        boundary_segments,
+        "base boundary local fraction",
+    )
+    boundary_u = math_field(
+        nodes,
+        links,
+        "ADD",
+        -1.0,
+        math_field(
+            nodes,
+            links,
+            "MULTIPLY",
+            2.0,
+            boundary_u_fraction,
+            "base boundary local u scale",
+        ),
+        "base boundary local u",
+    )
+    boundary_phase = math_field(
+        nodes,
+        links,
+        "ADD",
+        group_input.outputs["Rib Phase"],
+        math_field(
+            nodes,
+            links,
+            "MULTIPLY",
+            boundary_rib,
+            rib_delta,
+            "base boundary module phase offset",
+        ),
+        "base boundary module phase",
+    )
+    boundary_fields = build_point_fields(
+        nodes,
+        links,
+        boundary_u,
+        0.0,
+        {**params, "rib_phase": boundary_phase},
+        "BODY BASE BOUNDARY",
+    )
+    boundary_set_position = nodes.new("GeometryNodeSetPosition")
+    boundary_set_position.label = "body base boundary from M_i(s=0,u)"
+    boundary_set_position.location = (760, 560)
+    links.new(boundary_circle.outputs["Mesh"], boundary_set_position.inputs["Geometry"])
+    links.new(boundary_fields["position"], boundary_set_position.inputs["Position"])
+    body_boundary_material = nodes.new("GeometryNodeSetMaterial")
+    body_boundary_material.label = "derived body base closure material"
+    body_boundary_material.location = (940, 560)
+    body_boundary_material.inputs["Material"].default_value = body_material
+    body_boundary_flip = nodes.new("GeometryNodeFlipFaces")
+    body_boundary_flip.label = "orient derived body closure outward"
+    body_boundary_flip.location = (920, 420)
+    links.new(
+        boundary_set_position.outputs["Geometry"],
+        body_boundary_flip.inputs["Mesh"],
+    )
+    links.new(
+        body_boundary_flip.outputs["Mesh"],
+        body_boundary_material.inputs["Geometry"],
+    )
+    body_join = nodes.new("GeometryNodeJoinGeometry")
+    body_join.label = "body surface + derived closure"
+    body_join.location = (1080, 760)
+    links.new(body_weld.outputs["Geometry"], body_join.inputs["Geometry"])
+    links.new(body_boundary_material.outputs["Geometry"], body_join.inputs["Geometry"])
+    body_close_weld = nodes.new("GeometryNodeMergeByDistance")
+    body_close_weld.label = "body topology: weld closure boundary"
+    body_close_weld.location = (1240, 760)
+    body_close_weld.inputs["Distance"].default_value = 1e-6
+    links.new(body_join.outputs["Geometry"], body_close_weld.inputs["Geometry"])
     areole_line = nodes.new("GeometryNodeMeshLine")
     areole_line.label = "finite birth lattice: order -> rib -> s"
     areole_line.location = (-1050, -140)
@@ -645,7 +772,10 @@ def build_geometry_nodes(body_material, interior_material, areole_material, spin
     spine_curve.label = "curved spine Bézier primitive"
     spine_curve.inputs["Resolution"].default_value = 8
     spine_curve.inputs["Start"].default_value = (0.0, 0.0, 0.0)
-    controlled_spine_length = math_field(nodes, links, "MULTIPLY", group_input.outputs["Spine Length"], group_input.outputs["Spine Scale"], "controlled spine length")
+    # Spine Scale is applied once, at the per-areole instance fan below. Keep
+    # the shared curve at its base length so the slider remains linear and the
+    # birth point/direction are not silently scaled a second time.
+    controlled_spine_length = group_input.outputs["Spine Length"]
     spine_end = vector_field(nodes, links, 0.0, 0.0, controlled_spine_length, "spine curve end")
     spine_curve.inputs["Start Handle"].default_value = (0.0, 0.0, 0.0)
     spine_start_handle = vector_field(
@@ -1021,7 +1151,7 @@ def build_geometry_nodes(body_material, interior_material, areole_material, spin
     join.label = "organism: rib modules + areoles + spines + shoots"
     join.location = (1250, 180)
     for geometry in (
-        rib_realize.outputs["Geometry"],
+        body_close_weld.outputs["Geometry"],
         areole_material_set.outputs["Geometry"],
         spine_material_set.outputs["Geometry"],
         branch_realize.outputs["Geometry"],
@@ -1151,6 +1281,8 @@ def main():
     bpy.context.view_layer.objects.active = host
     host.select_set(True)
     bpy.ops.wm.save_as_mainfile(filepath=str(args.blend_out.resolve()))
+    generator_hash = hashlib.sha256(Path(__file__).resolve().read_bytes()).hexdigest()
+    blend_hash = hashlib.sha256(args.blend_out.resolve().read_bytes()).hexdigest()
     manifest_path = args.out.with_suffix(".manifest.json")
     manifest = {
         "$schema": "https://wachuma.org/schemas/procedural-asset-manifest.schema.json",
@@ -1162,11 +1294,14 @@ def main():
         "representationType": "procedural-interpretation",
         "generator": {
             "algorithm": "pachanoi-geometry-nodes-modular-rib-development",
-            "algorithmVersion": "0.3.2-controls-and-svg-pulp",
+            "algorithmVersion": GENERATOR_VERSION,
             "runtime": BLENDER_RUNTIME,
             "license": "MIT",
             "attribution": "WACHUMA",
         },
+        "generatorVersion": GENERATOR_VERSION,
+        "generatorHash": generator_hash,
+        "blendHash": blend_hash,
         "adapterBoundary": "external-process",
         "seed": 0,
         "license": "MIT",
@@ -1189,6 +1324,19 @@ def main():
                 "webSequenceManifest": "apps/web/public/models/pachanoi-sequence/sequence.manifest.json",
             },
             "notClaimed": ["measured species law", "cell division simulation", "universal phyllotaxis"],
+        },
+        "identity": {
+            "schemaVersion": "0.1",
+            "fields": ["rib_id", "areole_id", "u", "delta_theta", "local_s", "birth_frame"],
+            "encoding": "not encoded in GLB; sequence manifest is the current sidecar",
+            "correspondence": "not proven at vertex level",
+        },
+        "validation": {
+            "export": "passed",
+            "nonEmpty": bool(baked.data.vertices and baked.data.polygons),
+            "gltfValidator": "run by release gate",
+            "bodyTopology": "run by .local/audit/implementation-audit-2026-08-28.json",
+            "vertexIdentity": "not encoded in GLB",
         },
         "taxonomicClaim": False,
     }

@@ -15,6 +15,7 @@ const commands = [
   ["quality:release-policy"],
   ["quality:migrations"],
   ["quality:procedural"],
+  ["quality:source-map"],
   ["validate:glb"],
   ["format:check"],
   ["db:verify"],

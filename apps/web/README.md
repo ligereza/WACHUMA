@@ -19,11 +19,11 @@ Con el servidor web levantado, abrir:
 
 `http://127.0.0.1:3000/preview/svg-loft`
 
-La primera escena muestra el GLB horneado desde
+La escena activa muestra los GLB horneados desde
 `integrations/blender/projects/wachuma-pachanoi-geometry-nodes.blend`. El
 proyecto fuente usa Geometry Nodes 4.5 para instanciar costillas modulares
 `M_i(s,u)`, evaluar areolas y espinas sobre la misma superficie y prolongar un
 meristemo apical. El SVG de referencia sólo describe textura interior; no es
-una línea temporal ni una colección de estados de crecimiento. La segunda
-sección conserva la implementación TSX analítica para comparar ambas
-representaciones sin confundirlas.
+una línea temporal ni una colección de estados de crecimiento. El componente
+activo es `GeometryNodesPachanoiPreview.tsx`; `SvgLoftPreview.tsx` se conserva
+como artefacto legacy y no participa en esta ruta.

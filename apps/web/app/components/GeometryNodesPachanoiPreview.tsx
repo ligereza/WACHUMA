@@ -6,10 +6,85 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const FRAME_NUMBERS = [1, 24, 48, 72, 96, 118, 130, 145, 160, 180] as const;
-const FRAME_URLS = FRAME_NUMBERS.map(
-  (frame) => `/models/pachanoi-sequence/frame-${String(frame).padStart(3, "0")}.glb`,
+const DEFAULT_FRAME_NUMBERS = [
+  1, 24, 48, 72, 96, 118, 130, 145, 160, 180,
+] as const;
+const SEQUENCE_MANIFEST_URL =
+  "/models/pachanoi-sequence/sequence.manifest.json";
+
+type SequenceFrame = {
+  frame: number;
+  url: string;
+};
+
+type SequenceManifest = {
+  generatorVersion?: string;
+  frames?: Array<{
+    asset?: unknown;
+    frame?: unknown;
+  }>;
+};
+
+const DEFAULT_SEQUENCE_FRAMES: SequenceFrame[] = DEFAULT_FRAME_NUMBERS.map(
+  (frame) => ({
+    frame,
+    url: `/models/pachanoi-sequence/frame-${String(frame).padStart(3, "0")}.glb`,
+  }),
 );
+
+function sequenceAssetUrl(asset: unknown) {
+  if (typeof asset !== "string" || !/^[a-zA-Z0-9._-]+\.glb$/.test(asset)) {
+    return undefined;
+  }
+  return `/models/pachanoi-sequence/${asset}`;
+}
+
+function useSequenceManifest() {
+  const [frames, setFrames] = useState<SequenceFrame[]>(
+    DEFAULT_SEQUENCE_FRAMES,
+  );
+  const [manifestStatus, setManifestStatus] = useState<
+    "loading" | "loaded" | "fallback"
+  >("loading");
+  const [generatorVersion, setGeneratorVersion] = useState<string>();
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(SEQUENCE_MANIFEST_URL, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error(`manifest HTTP ${response.status}`);
+        return response.json() as Promise<SequenceManifest>;
+      })
+      .then((manifest) => {
+        const manifestFrames = (manifest.frames ?? [])
+          .map((entry) => {
+            const frame =
+              typeof entry.frame === "number" && Number.isInteger(entry.frame)
+                ? entry.frame
+                : undefined;
+            const url = sequenceAssetUrl(entry.asset);
+            return frame !== undefined && url ? { frame, url } : undefined;
+          })
+          .filter((entry): entry is SequenceFrame => entry !== undefined)
+          .sort((left, right) => left.frame - right.frame);
+        if (manifestFrames.length === 0) {
+          throw new Error("manifest has no valid frame assets");
+        }
+        if (cancelled) return;
+        setFrames(manifestFrames);
+        setGeneratorVersion(manifest.generatorVersion);
+        setManifestStatus("loaded");
+      })
+      .catch(() => {
+        if (!cancelled) setManifestStatus("fallback");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { frames, generatorVersion, manifestStatus };
+}
 
 type PreviewControls = {
   innerRoundness: number;
@@ -99,7 +174,15 @@ function patchWachumaMaterial(
   shaderMaterial.needsUpdate = true;
 }
 
-function PachanoiFrame({ url, visible, controls }: { url: string; visible: boolean; controls: PreviewControls }) {
+function PachanoiFrame({
+  url,
+  visible,
+  controls,
+}: {
+  url: string;
+  visible: boolean;
+  controls: PreviewControls;
+}) {
   const { scene } = useGLTF(url);
   const interactiveScene = useMemo(() => {
     const cloned = scene.clone(true);
@@ -118,32 +201,43 @@ function PachanoiFrame({ url, visible, controls }: { url: string; visible: boole
   useEffect(() => {
     interactiveScene.traverse((object) => {
       if (!(object instanceof THREE.Mesh)) return;
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      const materials = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
       materials.forEach((material) => {
-        if (material.name === "WACHUMA rib interior texture") patchWachumaMaterial(material, "pulp", controls);
-        if (material.name === "WACHUMA spines") patchWachumaMaterial(material, "spines", controls);
+        if (material.name === "WACHUMA rib interior texture")
+          patchWachumaMaterial(material, "pulp", controls);
+        if (material.name === "WACHUMA spines")
+          patchWachumaMaterial(material, "spines", controls);
       });
     });
   }, [controls, interactiveScene]);
 
-  useEffect(() => () => {
-    interactiveScene.traverse((object) => {
-      if (!(object instanceof THREE.Mesh)) return;
-      object.geometry.dispose();
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
-      materials.forEach((material) => material.dispose());
-    });
-  }, [interactiveScene]);
+  useEffect(
+    () => () => {
+      interactiveScene.traverse((object) => {
+        if (!(object instanceof THREE.Mesh)) return;
+        object.geometry.dispose();
+        const materials = Array.isArray(object.material)
+          ? object.material
+          : [object.material];
+        materials.forEach((material) => material.dispose());
+      });
+    },
+    [interactiveScene],
+  );
 
   return <primitive object={interactiveScene} visible={visible} />;
 }
 
 function PachanoiSequence({
+  frames,
   frameIndex,
   playing,
   onFrame,
   controls,
 }: {
+  frames: SequenceFrame[];
   frameIndex: number;
   playing: boolean;
   onFrame: (index: number) => void;
@@ -155,29 +249,40 @@ function PachanoiSequence({
     elapsed.current += delta;
     if (elapsed.current >= 0.18) {
       elapsed.current = 0;
-      onFrame((frameIndex + 1) % FRAME_URLS.length);
+      onFrame((frameIndex + 1) % frames.length);
     }
   });
 
   return (
     <>
-      {FRAME_URLS.map((url, index) => (
-        <PachanoiFrame key={url} url={url} visible={index === frameIndex} controls={controls} />
+      {frames.map(({ url }, index) => (
+        <PachanoiFrame
+          key={url}
+          url={url}
+          visible={index === frameIndex}
+          controls={controls}
+        />
       ))}
     </>
   );
 }
 
-FRAME_URLS.forEach((url) => useGLTF.preload(url));
+DEFAULT_SEQUENCE_FRAMES.forEach(({ url }) => useGLTF.preload(url));
 
 export function GeometryNodesPachanoiPreview() {
-  const [frameIndex, setFrameIndex] = useState(FRAME_URLS.length - 1);
+  const { frames, generatorVersion, manifestStatus } = useSequenceManifest();
+  const [frameIndex, setFrameIndex] = useState(
+    DEFAULT_SEQUENCE_FRAMES.length - 1,
+  );
   const [playing, setPlaying] = useState(true);
   const [innerRoundness, setInnerRoundness] = useState(0.35);
   const [pulpCoreRadius, setPulpCoreRadius] = useState(0.46);
   const [pulpContrast, setPulpContrast] = useState(0.78);
   const [spineScale, setSpineScale] = useState(1.0);
-  const frame = FRAME_NUMBERS[frameIndex];
+  useEffect(() => {
+    setFrameIndex((current) => Math.min(current, frames.length - 1));
+  }, [frames.length]);
+  const frame = frames[frameIndex]?.frame ?? DEFAULT_FRAME_NUMBERS[0];
   const branchBorn = false;
   const controls = useMemo(
     () => ({ innerRoundness, pulpCoreRadius, pulpContrast, spineScale }),
@@ -185,7 +290,10 @@ export function GeometryNodesPachanoiPreview() {
   );
 
   return (
-    <section className="svg-loft-preview gn-pachanoi-project" aria-label="Pachanoi generado con Blender Geometry Nodes">
+    <section
+      className="svg-loft-preview gn-pachanoi-project"
+      aria-label="Pachanoi generado con Blender Geometry Nodes"
+    >
       <div className="svg-loft-preview-stage gn-pachanoi-project-stage">
         <Canvas
           shadows
@@ -195,23 +303,45 @@ export function GeometryNodesPachanoiPreview() {
           <color attach="background" args={["#101a15"]} />
           <ambientLight intensity={0.65} />
           <hemisphereLight args={["#d9e7ce", "#173226", 1.1]} />
-          <directionalLight castShadow intensity={3.2} position={[3.5, 4.5, 3.2]} />
+          <directionalLight
+            castShadow
+            intensity={3.2}
+            position={[3.5, 4.5, 3.2]}
+          />
           <directionalLight intensity={0.5} position={[-2.5, 2.5, -3]} />
           <Suspense fallback={null}>
-            <PachanoiSequence frameIndex={frameIndex} playing={playing} onFrame={setFrameIndex} controls={controls} />
+            <PachanoiSequence
+              frames={frames}
+              frameIndex={frameIndex}
+              playing={playing}
+              onFrame={setFrameIndex}
+              controls={controls}
+            />
           </Suspense>
-          <gridHelper args={[3, 12, "#365646", "#1a3025"]} position={[0, -0.03, 0]} />
-          <OrbitControls makeDefault enableDamping minDistance={1.2} maxDistance={5.2} target={[0, 1.3, 0]} />
+          <gridHelper
+            args={[3, 12, "#365646", "#1a3025"]}
+            position={[0, -0.03, 0]}
+          />
+          <OrbitControls
+            makeDefault
+            enableDamping
+            minDistance={1.2}
+            maxDistance={5.2}
+            target={[0, 1.3, 0]}
+          />
         </Canvas>
       </div>
       <div className="svg-loft-preview-panel gn-pachanoi-project-panel">
         <p className="eyebrow">Blender 4.5.4 · Geometry Nodes · GLB horneado</p>
         <h1>Pachanoi: módulos de costilla</h1>
         <p>
-          El volumen no se deforma desde un tubo. Geometry Nodes instancia la misma costilla paramétrica
-          <code>M_i(s,u)</code> alrededor del eje; la retícula de areolas y las espinas se evalúa sobre esa
-          superficie y el meristemo prolonga el crecimiento apical. El preview reproduce snapshots evaluados
-          del mismo `.blend`, porque el exportador glTF no conserva el modificador Geometry Nodes animado.
+          El volumen no se deforma desde un tubo. Geometry Nodes instancia la
+          misma costilla paramétrica
+          <code>M_i(s,u)</code> alrededor del eje; la retícula de areolas y las
+          espinas se evalúa sobre esa superficie y el meristemo prolonga el
+          crecimiento apical. El preview reproduce snapshots evaluados del mismo
+          `.blend`, porque el exportador glTF no conserva el modificador
+          Geometry Nodes animado.
         </p>
         <div className="gn-control-group" aria-label="Controles de desarrollo">
           <p className="eyebrow">Desarrollo apical</p>
@@ -222,7 +352,7 @@ export function GeometryNodesPachanoiPreview() {
             <input
               type="range"
               min={0}
-              max={FRAME_URLS.length - 1}
+              max={frames.length - 1}
               step={1}
               value={frameIndex}
               onChange={(event) => {
@@ -234,18 +364,72 @@ export function GeometryNodesPachanoiPreview() {
             <span>frame {frame}</span>
           </div>
         </div>
-        <div className="gn-control-group" aria-label="Controles de forma de costilla">
+        <div
+          className="gn-control-group"
+          aria-label="Controles de forma de costilla"
+        >
           <p className="eyebrow">Forma de costilla</p>
-          <label className="svg-loft-control"><span>redondeo interno · {(innerRoundness * 100).toFixed(0)}%</span><input type="range" min={0} max={1} step={0.01} value={innerRoundness} onChange={(event) => setInnerRoundness(Number(event.target.value))} /></label>
+          <label className="svg-loft-control">
+            <span>redondeo interno · {(innerRoundness * 100).toFixed(0)}%</span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={innerRoundness}
+              onChange={(event) =>
+                setInnerRoundness(Number(event.target.value))
+              }
+            />
+          </label>
         </div>
         <div className="gn-control-group" aria-label="Controles de pulpa SVG">
           <p className="eyebrow">Pulpa inspirada en SVG</p>
-          <label className="svg-loft-control"><span>radio de pulpa clara · {(pulpCoreRadius * 100).toFixed(0)}%</span><input type="range" min={0.18} max={0.9} step={0.01} value={pulpCoreRadius} onChange={(event) => setPulpCoreRadius(Number(event.target.value))} /></label>
-          <label className="svg-loft-control"><span>contraste claro → oscuro · {(pulpContrast * 100).toFixed(0)}%</span><input type="range" min={0} max={1} step={0.01} value={pulpContrast} onChange={(event) => setPulpContrast(Number(event.target.value))} /></label>
+          <label className="svg-loft-control">
+            <span>
+              radio de pulpa clara · {(pulpCoreRadius * 100).toFixed(0)}%
+            </span>
+            <input
+              type="range"
+              min={0.18}
+              max={0.9}
+              step={0.01}
+              value={pulpCoreRadius}
+              onChange={(event) =>
+                setPulpCoreRadius(Number(event.target.value))
+              }
+            />
+          </label>
+          <label className="svg-loft-control">
+            <span>
+              contraste claro → oscuro · {(pulpContrast * 100).toFixed(0)}%
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={pulpContrast}
+              onChange={(event) => setPulpContrast(Number(event.target.value))}
+            />
+          </label>
         </div>
-        <div className="gn-control-group" aria-label="Controles de areolas y espinas">
+        <div
+          className="gn-control-group"
+          aria-label="Controles de areolas y espinas"
+        >
           <p className="eyebrow">Areolas y espinas</p>
-          <label className="svg-loft-control"><span>longitud de espinas · {(spineScale * 100).toFixed(0)}%</span><input type="range" min={0} max={2} step={0.01} value={spineScale} onChange={(event) => setSpineScale(Number(event.target.value))} /></label>
+          <label className="svg-loft-control">
+            <span>longitud de espinas · {(spineScale * 100).toFixed(0)}%</span>
+            <input
+              type="range"
+              min={0}
+              max={2}
+              step={0.01}
+              value={spineScale}
+              onChange={(event) => setSpineScale(Number(event.target.value))}
+            />
+          </label>
         </div>
         <div className="svg-loft-metrics">
           <span>n=7 módulos</span>
@@ -253,14 +437,25 @@ export function GeometryNodesPachanoiPreview() {
           <span>7 espinas Bézier / areola</span>
           <span>pulpa clara central → verde oscuro</span>
           <span>meristemo finito</span>
-          <span>{branchBorn ? "rama nacida desde areola" : "brazo desactivado en la base aprobada"}</span>
+          <span>
+            manifest {manifestStatus}
+            {generatorVersion ? ` · ${generatorVersion}` : ""}
+          </span>
+          <span>
+            {branchBorn
+              ? "rama nacida desde areola"
+              : "brazo desactivado en la base aprobada"}
+          </span>
         </div>
         <p className="svg-loft-metadata">
-          `echinopsis-rib-progression.svg` se conserva como referencia visual de la textura interior únicamente;
-          no define frames ni tiempo de crecimiento. La fuente editable y animada es
-          `integrations/blender/projects/wachuma-pachanoi-geometry-nodes.blend`; la secuencia web son snapshots
-          evaluados de ese mismo árbol Geometry Nodes. Los cuatro controles superiores se aplican en tiempo real
-          al material y a la deformación de vértices del preview; sus equivalentes quedan expuestos en el grupo GN.
+          `echinopsis-rib-progression.svg` se conserva como referencia visual de
+          la textura interior únicamente; no define frames ni tiempo de
+          crecimiento. La fuente editable y animada es
+          `integrations/blender/projects/wachuma-pachanoi-geometry-nodes.blend`;
+          la secuencia web son snapshots evaluados de ese mismo árbol Geometry
+          Nodes. Los cuatro controles superiores se aplican en tiempo real al
+          material y a la deformación de vértices del preview; sus equivalentes
+          quedan expuestos en el grupo GN.
         </p>
       </div>
     </section>

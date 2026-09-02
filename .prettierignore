@@ -1,0 +1,4 @@
+.local/
+.remember/
+integrations/.local/
+apps/web/public/models/**/*.manifest.json

@@ -13,6 +13,7 @@ postgres-data/
 uploads/
 secrets/
 .local/gbif-snapshots/
+.local/source-harvest/
 .local/blender-run/
 .local/release/
 .local/*.cdx.json

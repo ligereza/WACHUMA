@@ -147,6 +147,19 @@ const ids = {
   sourceRecordGbifOpuntiaMedia: "00000000-0000-4000-8000-000000000202",
   sourceRecordLineageDemo: "00000000-0000-4000-8000-000000000205",
   sourceMaterialFixture: "00000000-0000-4000-8000-000000000206",
+  dataSourceWebPages: "00000000-0000-4000-8000-000000000207",
+  sourceRecordUtn: "00000000-0000-4000-8000-000000000208",
+  sourceRecordUnprg: "00000000-0000-4000-8000-000000000209",
+  sourceRecordUntumbes: "00000000-0000-4000-8000-000000000210",
+  sourceRecordScielo: "00000000-0000-4000-8000-000000000211",
+  sourceUtn: "00000000-0000-4000-8000-000000000212",
+  sourceUnprg: "00000000-0000-4000-8000-000000000213",
+  sourceUntumbes: "00000000-0000-4000-8000-000000000214",
+  sourceScielo: "00000000-0000-4000-8000-000000000215",
+  claimUtn: "00000000-0000-4000-8000-000000000216",
+  claimUnprg: "00000000-0000-4000-8000-000000000217",
+  claimScielo: "00000000-0000-4000-8000-000000000218",
+  claimUntumbes: "00000000-0000-4000-8000-000000000219",
   observationGbifOpuntia: "00000000-0000-4000-8000-000000000203",
   mediaGbifOpuntia: "00000000-0000-4000-8000-000000000204",
   communityDemo: "00000000-0000-4000-8000-000000000123",
@@ -245,6 +258,10 @@ const editorialCulturalRelationIdByPublicId = new Map([
 
 const sourceIdByPublicId = new Map([
   ["source-wachuma-demo-editorial", ids.source],
+  ["source-utn-echinopsis-pachanoi-habitat-2017", ids.sourceUtn],
+  ["source-unprg-echinopsis-pachanoi-rhizosphere-2023", ids.sourceUnprg],
+  ["source-untumbes-echinopsis-metabolomics-2020", ids.sourceUntumbes],
+  ["source-scielo-echinopsis-pachanoi-rhizosphere-2025", ids.sourceScielo],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
   ["source-rhs-opuntia-ficus-indica", ids.sourceRhsOpuntia],
   [
@@ -255,6 +272,10 @@ const sourceIdByPublicId = new Map([
 
 const seedSourceIdByPublicId = new Map([
   ["source-wachuma-demo-editorial", ids.source],
+  ["source-utn-echinopsis-pachanoi-habitat-2017", ids.sourceUtn],
+  ["source-unprg-echinopsis-pachanoi-rhizosphere-2023", ids.sourceUnprg],
+  ["source-untumbes-echinopsis-metabolomics-2020", ids.sourceUntumbes],
+  ["source-scielo-echinopsis-pachanoi-rhizosphere-2025", ids.sourceScielo],
   ["source-powo-echinopsis-pachanoi", ids.sourcePowo],
   ["source-gbif-echinopsis-pachanoi", ids.sourceGbif],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
@@ -277,6 +298,10 @@ const editorialTaxonIdBySpeciesPublicId = new Map([
 ]);
 
 const editorialClaimIdByPublicId = new Map([
+  ["claim-utn-echinopsis-pachanoi-habitat-model-2017", ids.claimUtn],
+  ["claim-unprg-echinopsis-pachanoi-rhizosphere-2023", ids.claimUnprg],
+  ["claim-scielo-echinopsis-pachanoi-rhizosphere-2025", ids.claimScielo],
+  ["claim-untumbes-echinopsis-metabolomics-2020", ids.claimUntumbes],
   ["claim-powo-echinopsis-pachanoi-accepted", ids.claimPowo],
   ["claim-gbif-echinopsis-pachanoi-name-match", ids.claimGbif],
   [
@@ -294,6 +319,13 @@ const editorialClaimIdByPublicId = new Map([
 ]);
 
 const editorialSourceRecordIdByProviderRecordId = new Map([
+  ["utn-handle:123456789/7458", ids.sourceRecordUtn],
+  ["unprg-handle:20.500.12893/11487", ids.sourceRecordUnprg],
+  [
+    "untumbes-item:b377be19-82a8-4a6b-bba6-c3f77c7b5ec9",
+    ids.sourceRecordUntumbes,
+  ],
+  ["scielo-pid:S0187-57792025000100601", ids.sourceRecordScielo],
   ["taxon:88444-2", ids.sourceRecordPowo],
   ["species:5622352", ids.sourceRecordGbif],
   ["taxon:1151735-2", ids.sourceRecordPowoOpuntia],
@@ -945,6 +977,104 @@ try {
         terms_url = EXCLUDED.terms_url,
         default_license_uri = EXCLUDED.default_license_uri
     `;
+
+    await transaction`
+      INSERT INTO data_sources (
+        id, provider_key, name, source_type, base_url, terms_url,
+        default_license_uri
+      ) VALUES (
+        ${ids.dataSourceWebPages},
+        'web-page',
+        'WACHUMA · cosecha allowlist de páginas sobre Echinopsis pachanoi',
+        'external_dataset',
+        'https://github.com/ligereza/WACHUMA',
+        'https://github.com/ligereza/WACHUMA/blob/main/docs/data/pachanoi-source-harvest-2026-08-27.md',
+        'per-record-review'
+      )
+      ON CONFLICT (id) DO UPDATE SET
+        provider_key = EXCLUDED.provider_key,
+        name = EXCLUDED.name,
+        source_type = EXCLUDED.source_type,
+        base_url = EXCLUDED.base_url,
+        terms_url = EXCLUDED.terms_url,
+        default_license_uri = EXCLUDED.default_license_uri
+    `;
+
+    const pachanoiPageSourceRecords = [
+      {
+        id: ids.sourceRecordUtn,
+        sourcePublicId: "source-utn-echinopsis-pachanoi-habitat-2017",
+        sourceRecordId: "utn-handle:123456789/7458",
+      },
+      {
+        id: ids.sourceRecordUnprg,
+        sourcePublicId: "source-unprg-echinopsis-pachanoi-rhizosphere-2023",
+        sourceRecordId: "unprg-handle:20.500.12893/11487",
+      },
+      {
+        id: ids.sourceRecordUntumbes,
+        sourcePublicId: "source-untumbes-echinopsis-metabolomics-2020",
+        sourceRecordId: "untumbes-item:b377be19-82a8-4a6b-bba6-c3f77c7b5ec9",
+      },
+      {
+        id: ids.sourceRecordScielo,
+        sourcePublicId: "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
+        sourceRecordId: "scielo-pid:S0187-57792025000100601",
+      },
+    ] as const;
+    for (const pageRecord of pachanoiPageSourceRecords) {
+      const editorialSource = editorialContent.sources.find(
+        (source) => source.publicId === pageRecord.sourcePublicId,
+      );
+      if (!editorialSource?.url || !editorialSource.accessedAt) {
+        throw new Error(
+          `Editorial page source ${pageRecord.sourcePublicId} needs URL and accessedAt`,
+        );
+      }
+      const rawPayload = {
+        sourcePublicId: pageRecord.sourcePublicId,
+        sourceRecordId: pageRecord.sourceRecordId,
+        sourceUrl: editorialSource.url,
+        retrievedAt: editorialSource.accessedAt,
+        accessStatus: "fetched-metadata",
+        metadataOnly: true,
+        rawContentStored: false,
+        imagesDownloaded: false,
+        importer: "pachanoi-page-harvester-v0.2.1",
+      };
+      await transaction`
+        INSERT INTO source_records (
+          id, data_source_id, source_record_id, source_url, retrieved_at,
+          license_uri, attribution, assertion_type, raw_payload, raw_checksum,
+          importer_version, status
+        ) VALUES (
+          ${pageRecord.id},
+          ${ids.dataSourceWebPages},
+          ${pageRecord.sourceRecordId},
+          ${editorialSource.url},
+          ${editorialSource.accessedAt},
+          ${editorialSource.license},
+          ${editorialSource.attribution},
+          'academic_publication',
+          ${json(rawPayload)},
+          ${payloadChecksum(rawPayload)},
+          'pachanoi-page-harvester-v0.2.1',
+          'pending'
+        )
+        ON CONFLICT (id) DO UPDATE SET
+          data_source_id = EXCLUDED.data_source_id,
+          source_record_id = EXCLUDED.source_record_id,
+          source_url = EXCLUDED.source_url,
+          retrieved_at = EXCLUDED.retrieved_at,
+          license_uri = EXCLUDED.license_uri,
+          attribution = EXCLUDED.attribution,
+          assertion_type = EXCLUDED.assertion_type,
+          raw_payload = EXCLUDED.raw_payload,
+          raw_checksum = EXCLUDED.raw_checksum,
+          importer_version = EXCLUDED.importer_version,
+          status = EXCLUDED.status
+      `;
+    }
 
     await transaction`
       INSERT INTO source_records (

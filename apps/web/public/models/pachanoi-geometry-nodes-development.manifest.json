@@ -3,16 +3,19 @@
   "schemaVersion": "1.0",
   "asset": "pachanoi-geometry-nodes-development.glb",
   "format": "glb",
-  "contentHash": "245851df7d6e0434af176ee4b20cc2c2a268c43f8975db4bb526f43ee6e3b375",
+  "contentHash": "06d4b98f2ca109e7ab60e34f03ba95e0fac720982d8e7bddf5a39e42661aef50",
   "origin": "procedural",
   "representationType": "procedural-interpretation",
   "generator": {
     "algorithm": "pachanoi-geometry-nodes-modular-rib-development",
-    "algorithmVersion": "0.3.2-controls-and-svg-pulp",
+    "algorithmVersion": "0.3.4-cyclic-body-closure",
     "runtime": "Blender 4.5.4 Geometry Nodes",
     "license": "MIT",
     "attribution": "WACHUMA"
   },
+  "generatorVersion": "0.3.4-cyclic-body-closure",
+  "generatorHash": "b0230166c05218bb405e72286e5fef6f7829b37e3c48604f37f0e35483b4745a",
+  "blendHash": "fdff5788ddf952e4d0d3c32baf10b6f0de11f63f3c03259a9fd76f957e8fdc38",
   "adapterBoundary": "external-process",
   "seed": 0,
   "license": "MIT",
@@ -66,6 +69,26 @@
       "cell division simulation",
       "universal phyllotaxis"
     ]
+  },
+  "identity": {
+    "schemaVersion": "0.1",
+    "fields": [
+      "rib_id",
+      "areole_id",
+      "u",
+      "delta_theta",
+      "local_s",
+      "birth_frame"
+    ],
+    "encoding": "not encoded in GLB; sequence manifest is the current sidecar",
+    "correspondence": "not proven at vertex level"
+  },
+  "validation": {
+    "export": "passed",
+    "nonEmpty": true,
+    "gltfValidator": "run by release gate",
+    "bodyTopology": "run by .local/audit/implementation-audit-2026-08-28.json",
+    "vertexIdentity": "not encoded in GLB"
   },
   "taxonomicClaim": false
 }

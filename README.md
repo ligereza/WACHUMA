@@ -90,6 +90,12 @@ sintéticos a las rutas públicas. El perfil `verification` se reserva para
 `pnpm db:verify`; la compuerta `pnpm quality:public-corpus` comprueba esta
 separación antes del smoke test web.
 
+Para actualizar el staging de fuentes sobre _Echinopsis pachanoi_, ejecuta
+`pnpm harvest:pachanoi:pages`. La cosecha es una allowlist metadata-only:
+respeta `robots.txt`, no guarda cuerpos ni imágenes y deja todo en cuarentena.
+Con PostgreSQL disponible, `pnpm import:pachanoi:page-harvest` persiste esos
+`source_records` como `pending`; nunca los publica automáticamente.
+
 ## Principios
 
 1. La taxonomía, la observación, la historia, la arqueología, la publicación

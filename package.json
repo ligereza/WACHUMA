@@ -22,6 +22,9 @@
     "db:verify": "node scripts/verify-db.mjs",
     "verify:public-web": "node scripts/verify-public-web.mjs",
     "import:gbif:snapshot": "pnpm --filter @wachuma/importer-gbif build && node scripts/fetch-gbif-snapshot.mjs",
+    "harvest:pachanoi:pages": "node scripts/harvest-pachanoi-pages.mjs",
+    "quality:harvest:pachanoi": "node --test scripts/harvest-pachanoi-pages.test.mjs",
+    "import:pachanoi:page-harvest": "pnpm --filter @wachuma/db build && node scripts/import-pachanoi-page-harvest.mjs",
     "import:garden:ledger": "pnpm --filter @wachuma/importer-garden build && node scripts/import-garden-ledger.mjs",
     "quality:content": "node scripts/validate-content.mjs",
     "quality:content-manifest": "node --test scripts/editorial-content.test.mjs",
@@ -34,6 +37,7 @@
     "quality:release-policy": "node scripts/validate-release-policy.mjs",
     "quality:migrations": "node scripts/validate-migrations.mjs",
     "quality:procedural": "node scripts/validate-procedural-adapter.mjs",
+    "quality:source-map": "node scripts/validate-procedural-source-map.mjs",
     "validate:glb": "node scripts/validate-glb.mjs",
     "verify:release": "node scripts/verify-release.mjs"
   },

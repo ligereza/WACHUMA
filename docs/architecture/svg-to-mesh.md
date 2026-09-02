@@ -1,4 +1,10 @@
-# Malla modular de costillas, valles y meristemo terminal
+# Malla modular de costillas, valles y meristemo terminal (legacy)
+
+> **Estado:** documento histórico y herramienta de comparación. No es el
+> flujo activo de `/preview/svg-loft`. La fuente canónica actual es
+> `integrations/blender/generate_pachanoi_geometry_nodes.py`, su proyecto
+> `.blend` y la secuencia `pachanoi-sequence/`. Consulta el [mapa de fuente
+> procedural](procedural-asset-source-map.md) antes de modificar geometría.
 
 `echinopsis-rib-progression.svg` es una referencia transversal. El SVG se usa
 para estimar `R`, `A` y una fase inicial; no se extruye directamente y tampoco
@@ -102,7 +108,11 @@ tratarse como medidos, ajustables o hipotéticos según su procedencia. Una
 fotografía no valida profundidad 3D, volumen, mecánica tisular ni una regla
 fisiológica de crecimiento.
 
-## Validación y exportación
+## Validación y exportación histórica
+
+Los comandos siguientes conservan el experimento SVG reproducible, pero no
+regeneran los GLB usados por la ruta web activa. No deben utilizarse para
+afirmar que se corrigió el generador Geometry Nodes.
 
 Validar sin Blender:
 

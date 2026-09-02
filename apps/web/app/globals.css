@@ -1465,7 +1465,9 @@ footer {
   min-height: inherit;
   place-items: center;
   color: #d8e4c4;
-  font: 0.9rem/1.4 system-ui, sans-serif;
+  font:
+    0.9rem/1.4 system-ui,
+    sans-serif;
 }
 .svg-loft-preview-rendering {
   position: absolute;
@@ -1475,7 +1477,9 @@ footer {
   pointer-events: none;
   color: #d8e4c4;
   background: rgba(17, 26, 21, 0.92);
-  font: 0.78rem/1.4 system-ui, sans-serif;
+  font:
+    0.78rem/1.4 system-ui,
+    sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1584,7 +1588,9 @@ footer {
 .svg-loft-metadata {
   max-width: 28rem;
   color: var(--muted);
-  font: 0.7rem/1.45 system-ui, sans-serif;
+  font:
+    0.7rem/1.45 system-ui,
+    sans-serif;
 }
 .svg-loft-debug-toggle {
   display: flex;
@@ -1608,7 +1614,11 @@ footer {
   padding: 0.75rem 0;
   border-block: 1px solid rgba(73, 107, 80, 0.22);
   color: var(--muted);
-  font: 0.7rem/1.35 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font:
+    0.7rem/1.35 ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
 }
 .svg-loft-debug-join,
 .svg-loft-debug-table {
@@ -1659,7 +1669,11 @@ footer {
   display: grid;
   gap: 0.55rem;
   color: var(--muted);
-  font: 0.7rem/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font:
+    0.7rem/1.4 ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
 }
 .gn-pachanoi-source img {
   width: min(100%, 220px);

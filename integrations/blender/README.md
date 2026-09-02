@@ -22,7 +22,7 @@ Blender y cualquier código GPL/CeCILL conservan sus licencias originales. Este
 repositorio no copia addons, módulos ni datasets de Blender, OpenAlea/L-Py,
 Arbaro o Sverchok.
 
-## SVG de costillas a malla cerrada
+## SVG de costillas a malla cerrada (legacy, no activo en la ruta web)
 
 [`svg_to_cactus_mesh.py`](svg_to_cactus_mesh.py) usa el SVG sólo como referencia
 transversal y construye `n` módulos de costilla, `n` módulos de valle y una
@@ -50,8 +50,9 @@ generada en una observación botánica.
 ## Proyecto modular paramétrico en Geometry Nodes 4.5 (referencia)
 
 [`generate_pachanoi_geometry_nodes.py`](generate_pachanoi_geometry_nodes.py)
-conserva la versión paramétrica anterior para comparación. No lee el SVG ni lo convierte en una falsa
-secuencia de crecimiento. La unidad geométrica es una costilla paramétrica:
+es la fuente canónica de la ruta Geometry Nodes. No lee el SVG ni lo convierte
+en una falsa secuencia de crecimiento. La unidad geométrica es una costilla
+paramétrica:
 
 ```text
 M_i(s,u) = rotate_y(i * 2*pi/n) M_0(s,u)
@@ -59,7 +60,8 @@ u in [-1,1], s in [0,1]
 ```
 
 El árbol crea un `Mesh Grid` como dominio material de una costilla, lo evalúa
-con las ecuaciones de `SvgLoftPreview.tsx`, instancia `n` módulos con
+con el campo modular implementado en
+[`generate_pachanoi_geometry_nodes.py`](generate_pachanoi_geometry_nodes.py), instancia `n` módulos con
 `Instance on Points`, y usa la misma evaluación para areolas y siete slots de
 espina por nodo —con longitudes muy diferentes—. El socket experimental de
 brote lateral permanece en el árbol para no romper compatibilidad, pero la
@@ -105,7 +107,7 @@ La implementación paramétrica usa los nodos documentados por Blender 4.5:
 [Instance on Points](https://docs.blender.org/manual/uk/4.5/modeling/geometry_nodes/instances/instance_on_points.html)
 y [Mesh Grid](https://docs.blender.org/UATEST/manual/en/4.5/modeling/geometry_nodes/mesh/primitives/grid.html).
 
-## Experimento generativo con estado persistente (no usado en el preview)
+## Experimento generativo con estado persistente (legacy, no usado en el preview)
 
 [`generate_pachanoi_growth_simulation.py`](generate_pachanoi_growth_simulation.py)
 es un experimento separado para estudiar estado persistente. No es la base
