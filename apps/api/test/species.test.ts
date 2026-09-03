@@ -66,7 +66,11 @@ test("species detail keeps cultural names contextualized and sourced", async () 
   assert.deepEqual(
     body.sources.map((source) => source.publicId),
     [
+      "source-utn-echinopsis-pachanoi-habitat-2017",
       "source-wachuma-demo-editorial",
+      "source-unprg-echinopsis-pachanoi-rhizosphere-2023",
+      "source-untumbes-echinopsis-metabolomics-2020",
+      "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
       "source-powo-echinopsis-pachanoi",
       "source-gbif-echinopsis-pachanoi",
       "source-armijos-saraguro-yachakkuna-2014",

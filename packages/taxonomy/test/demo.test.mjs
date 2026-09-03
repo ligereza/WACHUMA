@@ -19,10 +19,11 @@ test("executable species fixture preserves canonical content guardrails", async 
     demoSpeciesDocument.vernacularNames.map((item) => item.term),
     content.vernacularNames.map((item) => item.term),
   );
-  assert.deepEqual(
-    demoSpeciesDocument.sources.map((source) => source.publicId),
-    content.sources.map((source) => source.publicId),
-  );
+  // Full objects, not just publicIds: commit eff8048 added four academic
+  // sources to the content document and left this fixture behind, and the
+  // surviving five had silently lost doi/publishedOn/accessedAt/assertionType
+  // because only the identifiers were compared.
+  assert.deepEqual(demoSpeciesDocument.sources, content.sources);
   assert.deepEqual(demoSpeciesDocument.ecology, content.ecology);
   assert.deepEqual(demoSpeciesDocument.distribution, content.distribution);
   assert.deepEqual(demoSpeciesDocument.cultivation, content.cultivation);
