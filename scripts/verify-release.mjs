@@ -8,6 +8,7 @@ const commands = [
   ["typecheck"],
   ["test"],
   ["build"],
+  ["quality:taxonomy-fixture"],
   ["quality:content"],
   ["quality:content-manifest"],
   ["quality:licenses"],

@@ -26,6 +26,8 @@
     "quality:harvest:pachanoi": "node --test scripts/harvest-pachanoi-pages.test.mjs",
     "import:pachanoi:page-harvest": "pnpm --filter @wachuma/db build && node scripts/import-pachanoi-page-harvest.mjs",
     "import:garden:ledger": "pnpm --filter @wachuma/importer-garden build && node scripts/import-garden-ledger.mjs",
+    "content:taxonomy-fixture": "node scripts/generate-taxonomy-fixture.mjs",
+    "quality:taxonomy-fixture": "node scripts/generate-taxonomy-fixture.mjs --check",
     "quality:content": "node scripts/validate-content.mjs",
     "quality:content-manifest": "node --test scripts/editorial-content.test.mjs",
     "content:manifest": "node scripts/print-content-manifest.mjs",
