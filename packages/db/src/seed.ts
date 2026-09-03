@@ -1070,6 +1070,59 @@ try {
     }
 
     await transaction`
+      INSERT INTO external_identifiers (
+        namespace, identifier, canonical_url, retrieved_at, license_uri, taxon_id
+      ) VALUES
+        ('ipni', '88444-2', 'https://www.ipni.org/n/88444-2', '2026-08-23T00:00:00Z', 'CC BY 3.0', ${ids.taxon}),
+        ('gbif', '5622352', 'https://www.gbif.org/species/5622352', '2026-08-23T00:00:00Z', 'CC BY 4.0', ${ids.taxon}),
+        ('gbif', '11093098', 'https://www.gbif.org/species/11093098', '2026-08-23T00:00:00Z', 'CC BY 4.0', ${ids.taxon})
+      ON CONFLICT (namespace, identifier) DO UPDATE SET
+        canonical_url = EXCLUDED.canonical_url,
+        retrieved_at = EXCLUDED.retrieved_at,
+        license_uri = EXCLUDED.license_uri,
+        taxon_id = EXCLUDED.taxon_id
+    `;
+
+    await transaction`
+      INSERT INTO record_provenance (
+        source_record_id, external_identifier_id, source_id, assertion_type
+      )
+        SELECT
+          mapping.source_record_id::uuid,
+          external_identifier.id,
+          mapping.source_id::uuid,
+          'taxonomic_fact'
+      FROM (
+        VALUES
+          (${ids.sourceRecordPowo}, 'ipni', '88444-2', ${ids.sourcePowo}),
+          (${ids.sourceRecordGbif}, 'gbif', '5622352', ${ids.sourceGbif}),
+          (${ids.sourceRecordGbif}, 'gbif', '11093098', ${ids.sourceGbif})
+      ) AS mapping(source_record_id, namespace, identifier, source_id)
+      JOIN external_identifiers AS external_identifier
+        ON external_identifier.namespace = mapping.namespace
+       AND external_identifier.identifier = mapping.identifier
+      ON CONFLICT DO NOTHING
+    `;
+
+    await transaction`
+      INSERT INTO record_provenance (
+        source_record_id, taxon_id, assertion_type
+      ) VALUES
+        (${ids.sourceRecordPowo}, ${ids.taxon}, 'taxonomic_fact'),
+        (${ids.sourceRecordGbif}, ${ids.taxon}, 'taxonomic_fact')
+      ON CONFLICT DO NOTHING
+    `;
+
+    await transaction`
+      INSERT INTO record_provenance (
+        source_record_id, biological_entity_id, assertion_type
+      ) VALUES
+        (${ids.sourceRecordPowo}, ${ids.biologicalEntity}, 'taxonomic_fact'),
+        (${ids.sourceRecordGbif}, ${ids.biologicalEntity}, 'taxonomic_fact')
+      ON CONFLICT DO NOTHING
+    `;
+
+    await transaction`
       INSERT INTO claims (
         id, public_id, subject_type, subject_id, predicate, object_text,
         assertion_type, evidence_level, source_id, source_record_id,
