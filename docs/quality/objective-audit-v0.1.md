@@ -74,6 +74,7 @@ que exista autorización cultural o jurídica para distribuirlo ampliamente.
 | Un FungalTraits pendiente podía aceptarse desde la bandeja genérica             | El repositorio bloquea cualquier aceptación hasta resolver licencia y mapeo de taxón/trait; la respuesta conserva los blockers                                                                      | La integración API exige `409`, comprueba `license_required` y confirma que el `source_record` permanece `pending`.                                                                                       |
 | El seed limpio duplicaba relaciones culturales editoriales                      | Se eliminaron las inserciones hardcodeadas duplicadas; `content/cultures` es la única fuente de ambas relaciones y la procedencia resuelve por `publicId`                                           | `db:verify` reproduce seed → integración → seed en PostgreSQL sin violar `cultural_relations_public_id_idx`.                                                                                              |
 | La eliminación de fixtures cambió un UUID editorial esperado por la regresión   | El único seed editorial conserva los UUID legacy `...0128` y `...0187`; la procedencia continúa buscando por `publicId`                                                                             | La integración API verifica la arista Saraguro con `...0187`; `db:verify` pasa en una base local sembrada.                                                                                                |
+| La búsqueda pública indexaba 9 de las 37 columnas que consulta con `ILIKE`      | Migración `0023` sobre las columnas de las tablas que crecen con el corpus revisado, más un banco de pruebas reproducible que escala un esquema desechable                                          | `pnpm bench:search-indexes` vuelve a medir el costo con y sin índice; `quality:migrations` conserva la migración en la secuencia                                                                          |
 | El fixture de desarrollo restataba a mano el documento editorial                | `packages/taxonomy` deriva el fixture del documento editorial mediante un módulo generado; la proyección declara en un solo lugar las diferencias entre el contrato de contenido y el DTO de la API | `quality:taxonomy-fixture` regenera y compara; el test de taxonomía compara objetos de fuente completos, no sólo `publicId`                                                                               |
 | La entrada manual no escalaba a una colección real sin perder trazabilidad      | Ledger JSON versionado, normalización compartida con el intake, modo validate-only y aplicación explícita con token                                                                                 | 6 tests del importador cubren privacidad, duplicados, payload restringido y POST al endpoint protegido.                                                                                                   |
 
@@ -92,9 +93,12 @@ que exista autorización cultural o jurídica para distribuirlo ampliamente.
 5. Obtener asesoría jurídica sobre las combinaciones de licencias antes de una
    release pública amplia.
 6. Diseñar una edición de contenido mantenible para crecer el atlas sin
-   reintroducir fixtures presentados como hechos; la búsqueda pública ya tiene
-   un índice relacional inicial, pero requiere observar su rendimiento cuando
-   el corpus deje de ser pequeño.
+   reintroducir fixtures presentados como hechos. El rendimiento de la búsqueda
+   pública ya fue observado: `pnpm bench:search-indexes --rows 200000` mide el
+   mismo predicado `ILIKE` sobre un esquema desechable y reporta 194,32 ms de
+   recorrido secuencial contra 0,34 ms con índice trigram. La migración `0023`
+   completa la cobertura que la `0016` dejó a medias, y deja fuera a propósito
+   las columnas de baja cardinalidad y las tablas de referencia pequeñas.
 7. Revisar el source record Wikidata de `Q133426` y decidir si cada
    identificador externo debe conservarse, corregirse o rechazarse; una licencia
    CC0 no sustituye la revisión de exactitud taxonómica.
