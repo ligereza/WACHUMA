@@ -1,0 +1,20 @@
+// Flat config replacing `next lint`, which Next 15 deprecates and Next 16
+// removes. Without a config of its own that command dropped into an
+// interactive setup prompt, so `pnpm lint` could not run unattended.
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { FlatCompat } from "@eslint/eslintrc";
+
+const compat = new FlatCompat({
+  baseDirectory: dirname(fileURLToPath(import.meta.url)),
+});
+
+const config = [
+  {
+    ignores: [".next/**", "out/**", "next-env.d.ts", "public/**"],
+  },
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+];
+
+export default config;

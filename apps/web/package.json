@@ -7,27 +7,30 @@
     "build": "next build",
     "start": "next start",
     "generate:demo-model": "tsx scripts/generate-demo-glb.ts",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "node --test",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
     "@react-three/fiber": "^9.7.0",
-    "@wachuma/procgen": "workspace:*",
-    "@wachuma/shared": "workspace:*",
-    "@wachuma/taxonomy": "workspace:*",
     "@wachuma/cultivation": "workspace:*",
     "@wachuma/culture": "workspace:*",
     "@wachuma/garden": "workspace:*",
     "@wachuma/lineage": "workspace:*",
     "@wachuma/maps": "workspace:*",
+    "@wachuma/procgen": "workspace:*",
+    "@wachuma/shared": "workspace:*",
+    "@wachuma/taxonomy": "workspace:*",
     "next": "^15.5.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "three": "^0.185.1"
   },
   "devDependencies": {
-    "@types/three": "^0.185.0"
+    "@eslint/eslintrc": "^3.3.7",
+    "@types/three": "^0.185.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.25"
   }
 }

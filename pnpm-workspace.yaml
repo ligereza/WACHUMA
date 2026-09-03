@@ -5,3 +5,5 @@ packages:
 allowBuilds:
   esbuild: true
   sharp: true
+  # Native resolver used by the ESLint import plugin in eslint-config-next.
+  unrs-resolver: true
