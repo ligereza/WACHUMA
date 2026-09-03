@@ -230,6 +230,11 @@ function SourceRecordCard({
                 {target.kind === "media" && target.uri ? (
                   <a href={target.uri} target="_blank" rel="noreferrer">
                     {target.mediaType?.startsWith("image/") ? (
+                      // The reviewer must see the provider's own bytes to
+                      // decide on them. next/image would re-encode and re-serve
+                      // them from this origin, which is the redistribution this
+                      // inbox has not authorised yet.
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         className="review-media-preview"
                         src={target.uri}

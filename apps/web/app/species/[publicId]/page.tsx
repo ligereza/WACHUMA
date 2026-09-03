@@ -85,7 +85,6 @@ export default async function SpeciesDetailPage({
   const speciesObservations = observations.filter(
     (observation) => observation.subjectPublicId === publicId,
   );
-  const specimenLineage = speciesLineage;
   const ecologyClaims = claims.filter((claim) =>
     ["nativeRange", "ecologicalContext", "biome"].includes(claim.predicate),
   );
@@ -493,6 +492,11 @@ export default async function SpeciesDetailPage({
               <article className="source-row" key={media.uri}>
                 <h2>{media.title ?? "Medio asociado"}</h2>
                 {media.mediaType === "image" ? (
+                  // Third-party media stays hot-linked. next/image would fetch
+                  // it, re-encode it and serve the bytes from this origin,
+                  // which turns a link into redistribution — the one thing the
+                  // license review exists to decide, per record.
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     className="species-media"
                     src={media.uri}
