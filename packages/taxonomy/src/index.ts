@@ -70,13 +70,76 @@ export const demoSpeciesDocument = {
   ],
   sources: [
     {
+      publicId: "source-utn-echinopsis-pachanoi-habitat-2017",
+      title:
+        "Modelación de la distribución geográfica del hábitat del cactus Echinopsis pachanoi en el norte de los Andes Ecuatorianos",
+      citation:
+        "Tituaña Armas, M. L. (2017). Modelación de la distribución geográfica del hábitat del cactus Echinopsis pachanoi (Britton y Rose) Friedrich y G.D. Rowley, en el norte de los Andes Ecuatorianos. Tesis de maestría, Universidad Técnica del Norte. Publicada el 13 de noviembre de 2017.",
+      url: "https://repositorio.utn.edu.ec/handle/123456789/7458?locale=es",
+      sourceType: "scientific_publication",
+      license: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      attribution:
+        "Tituaña Armas, Magaly Lisseth; Universidad Técnica del Norte",
+      publishedOn: "2017-11-13",
+      accessedAt: "2026-08-27T23:33:16.979Z",
+      assertionType: "academic_publication",
+    },
+    {
       publicId: "source-wachuma-demo-editorial",
-      title: "WACHUMA · ficha de demostración",
-      citation: "Contenido editorial de demostración del repositorio WACHUMA",
+      title: "WACHUMA · fixture de verificación",
+      citation:
+        "Fixture interno de verificación del repositorio WACHUMA; no forma parte del corpus público.",
       url: "https://github.com/ligereza/WACHUMA",
       sourceType: "editorial",
       license: "WACHUMA-PROJECT",
-      attribution: "WACHUMA",
+      attribution: "WACHUMA; fixture no publicable",
+      accessedAt: "2026-08-23T00:00:00Z",
+      assertionType: "editorial_interpretation",
+    },
+    {
+      publicId: "source-unprg-echinopsis-pachanoi-rhizosphere-2023",
+      title:
+        "Bacillus spp. y Pseudomonas spp. aisladas de la rizósfera de Echinopsis pachanoi “San Pedro hembra” en Lambayeque",
+      citation:
+        "Núñez Montenegro, A. T. (2023). Bacillus spp. y Pseudomonas spp. aisladas de la rizósfera de Echinopsis pachanoi “San Pedro hembra” en Lambayeque como potenciales promotores de crecimiento de Solanum lycopersicum L. bajo estrés hídrico. Tesis, Universidad Nacional Pedro Ruiz Gallo.",
+      url: "https://repositorio.unprg.edu.pe/handle/20.500.12893/11487?show=full",
+      sourceType: "scientific_publication",
+      license: "https://creativecommons.org/licenses/by-sa/4.0/",
+      attribution:
+        "Núñez Montenegro, Angiela Tatiana; Universidad Nacional Pedro Ruiz Gallo",
+      publishedOn: "2023-06-05",
+      accessedAt: "2026-08-27T23:33:16.979Z",
+      assertionType: "academic_publication",
+    },
+    {
+      publicId: "source-untumbes-echinopsis-metabolomics-2020",
+      title:
+        "Caracterización genómica, proteómica y metabolómica de Hylocereus spp y Echinopsis spp (Cactaceae)",
+      citation:
+        "Chang Coronado, R. M. (2020). Caracterización genómica, proteómica y metabolómica de Hylocereus spp y Echinopsis spp (Cactaceae). Tesis, Universidad Nacional de Tumbes.",
+      url: "https://repositorio.untumbes.edu.pe/items/b377be19-82a8-4a6b-bba6-c3f77c7b5ec9",
+      sourceType: "scientific_publication",
+      license: "https://creativecommons.org/licenses/by/4.0/",
+      attribution:
+        "Chang Coronado, Rosita Mercedes; Universidad Nacional de Tumbes",
+      accessedAt: "2026-08-27T23:33:16.979Z",
+      assertionType: "academic_publication",
+    },
+    {
+      publicId: "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
+      title:
+        "Consorcios Bacterianos con Actividad Promotora del Crecimiento Asociados a la Rizosfera de Echinopsis pachanoi",
+      citation:
+        "Cedeño-Moreira, A. V., Arellano-Ibarra, K. V., Álvarez-Sánchez, A. R., Espinoza-Guerra, Í. F., Acosta-Farias, J. M. & Pico-Saltos, R. B. (2025). Consorcios Bacterianos con Actividad Promotora del Crecimiento Asociados a la Rizosfera de Echinopsis pachanoi. Terra Latinoamericana, 43. DOI: 10.28940/terra.v43i.1976.",
+      url: "https://www.scielo.org.mx/scielo.php?lng=es&nrm=iso&pid=S0187-57792025000100601&script=sci_arttext",
+      sourceType: "scientific_publication",
+      license: "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es",
+      attribution:
+        "Cedeño-Moreira, Arellano-Ibarra, Álvarez-Sánchez, Espinoza-Guerra, Acosta-Farias y Pico-Saltos; Terra Latinoamericana",
+      doi: "10.28940/terra.v43i.1976",
+      publishedOn: "2025-12-01",
+      accessedAt: "2026-08-27T23:33:16.979Z",
+      assertionType: "academic_publication",
     },
     {
       publicId: "source-powo-echinopsis-pachanoi",
@@ -87,6 +150,8 @@ export const demoSpeciesDocument = {
       sourceType: "external_dataset",
       license: "CC BY 3.0",
       attribution: "Plants of the World Online; Royal Botanic Gardens, Kew",
+      accessedAt: "2026-08-23T00:00:00Z",
+      assertionType: "taxonomic_fact",
     },
     {
       publicId: "source-gbif-echinopsis-pachanoi",
@@ -97,6 +162,8 @@ export const demoSpeciesDocument = {
       sourceType: "external_dataset",
       license: "CC BY 4.0",
       attribution: "GBIF Secretariat; GBIF Backbone Taxonomy",
+      accessedAt: "2026-08-23T00:00:00Z",
+      assertionType: "taxonomic_fact",
     },
     {
       publicId: "source-armijos-saraguro-yachakkuna-2014",
@@ -108,6 +175,10 @@ export const demoSpeciesDocument = {
       license: "CC BY 2.0",
       attribution:
         "Armijos, C.; Cota, I.; González, S.; licenciatario BioMed Central",
+      doi: "10.1186/1746-4269-10-26",
+      publishedOn: "2014-02-24",
+      accessedAt: "2026-08-23T00:00:00Z",
+      assertionType: "academic_publication",
     },
     {
       publicId: "source-rhs-cacti-succulents-guide",
@@ -119,6 +190,8 @@ export const demoSpeciesDocument = {
       license: "RHS-TERMS",
       attribution:
         "Royal Horticultural Society; WACHUMA cita esta guía como orientación general para cactáceas y conserva su alcance institucional.",
+      accessedAt: "2026-08-23T00:00:00Z",
+      assertionType: "horticultural_guidance",
     },
   ],
   relatedSpecies: [],
