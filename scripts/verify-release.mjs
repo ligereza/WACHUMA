@@ -6,6 +6,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const packageManager = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 const commands = [
   ["typecheck"],
+  ["lint"],
   ["test"],
   ["build"],
   ["quality:taxonomy-fixture"],
