@@ -24,9 +24,11 @@ como interpretación editorial de contexto taxonómico, con GBIF como fuente
 trazada. Los nombres culturales sin una fuente y contexto específicos no se
 publican; la relación `San Pedro` permanece restringida y bajo revisión.
 
-Las imágenes no son requisito del corpus: la observación GBIF de _Opuntia
-ficus-indica_ conserva una media externa atribuida porque su registro fue
-revisado individualmente, mientras que la representación procedural 3D se
-mantiene como escena artística separada y no como medio taxonómico. El GLB de
+Las imágenes no son requisito del corpus. La única observación GBIF que había
+sido revisada y publicada individualmente, con su media atribuida, era de
+_Opuntia ficus-indica_, y salió junto con esa especie: el corpus público vuelve
+a quedar sin observaciones externas publicadas hasta que se revise una de
+_Echinopsis pachanoi_. La representación procedural 3D se mantiene como escena
+artística separada y no como medio taxonómico. El GLB de
 verificación y los ejemplares del jardín siguen restringidos; el estudio
 material no los presenta como observaciones de organismos concretos.

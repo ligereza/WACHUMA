@@ -98,31 +98,6 @@ const ids = {
   guideClaimRhsWinter: "00000000-0000-4000-8000-000000000152",
   claimPowoRange: "00000000-0000-4000-8000-000000000153",
   claimPowoBiome: "00000000-0000-4000-8000-000000000154",
-  taxonOpuntia: "00000000-0000-4000-8000-000000000155",
-  biologicalEntityOpuntia: "00000000-0000-4000-8000-000000000156",
-  sourceRecordPowoOpuntia: "00000000-0000-4000-8000-000000000157",
-  sourceRecordGbifOpuntia: "00000000-0000-4000-8000-000000000158",
-  sourcePowoOpuntia: "00000000-0000-4000-8000-000000000159",
-  sourceGbifOpuntia: "00000000-0000-4000-8000-000000000160",
-  claimPowoOpuntiaStatus: "00000000-0000-4000-8000-000000000161",
-  claimPowoOpuntiaRange: "00000000-0000-4000-8000-000000000162",
-  claimPowoOpuntiaBiome: "00000000-0000-4000-8000-000000000163",
-  claimGbifOpuntiaMatch: "00000000-0000-4000-8000-000000000164",
-  sourceRhsOpuntia: "00000000-0000-4000-8000-000000000165",
-  guideRhsOpuntia: "00000000-0000-4000-8000-000000000166",
-  guideClaimOpuntiaLight: "00000000-0000-4000-8000-000000000167",
-  guideClaimOpuntiaSubstrate: "00000000-0000-4000-8000-000000000168",
-  guideClaimOpuntiaWatering: "00000000-0000-4000-8000-000000000169",
-  guideClaimOpuntiaNutrition: "00000000-0000-4000-8000-000000000170",
-  guideClaimOpuntiaPropagation: "00000000-0000-4000-8000-000000000171",
-  guideClaimOpuntiaPests: "00000000-0000-4000-8000-000000000172",
-  guideClaimOpuntiaDiseases: "00000000-0000-4000-8000-000000000173",
-  taxonPleurotus: "00000000-0000-4000-8000-000000000174",
-  biologicalEntityPleurotus: "00000000-0000-4000-8000-000000000175",
-  sourceRecordGbifPleurotus: "00000000-0000-4000-8000-000000000176",
-  sourceGbifPleurotus: "00000000-0000-4000-8000-000000000177",
-  claimGbifPleurotusStatus: "00000000-0000-4000-8000-000000000178",
-  claimGbifPleurotusMatch: "00000000-0000-4000-8000-000000000179",
   dataSourceSaraguro: "00000000-0000-4000-8000-000000000180",
   sourceRecordSaraguro: "00000000-0000-4000-8000-000000000181",
   sourceSaraguro: "00000000-0000-4000-8000-000000000182",
@@ -131,20 +106,9 @@ const ids = {
   placeSaraguro: "00000000-0000-4000-8000-000000000185",
   agentSaraguroStudy: "00000000-0000-4000-8000-000000000186",
   dataSourceFrontiers: "00000000-0000-4000-8000-000000000188",
-  sourceRecordPleurotusCultivation: "00000000-0000-4000-8000-000000000189",
-  sourcePleurotusCultivation: "00000000-0000-4000-8000-000000000190",
-  guidePleurotusCultivation: "00000000-0000-4000-8000-000000000191",
-  guideClaimPleurotusSubstrate: "00000000-0000-4000-8000-000000000192",
-  guideClaimPleurotusInoculation: "00000000-0000-4000-8000-000000000193",
-  guideClaimPleurotusTemperature: "00000000-0000-4000-8000-000000000194",
-  guideClaimPleurotusLight: "00000000-0000-4000-8000-000000000195",
-  guideClaimPleurotusFruiting: "00000000-0000-4000-8000-000000000196",
-  guideClaimPleurotusScope: "00000000-0000-4000-8000-000000000197",
   dataSourceGarden: "00000000-0000-4000-8000-000000000198",
   sourceGarden: "00000000-0000-4000-8000-000000000199",
   sourceGbifOccurrence: "00000000-0000-4000-8000-000000000200",
-  sourceRecordGbifOpuntiaOccurrence: "00000000-0000-4000-8000-000000000201",
-  sourceRecordGbifOpuntiaMedia: "00000000-0000-4000-8000-000000000202",
   sourceRecordLineageDemo: "00000000-0000-4000-8000-000000000205",
   sourceMaterialFixture: "00000000-0000-4000-8000-000000000206",
   dataSourceWebPages: "00000000-0000-4000-8000-000000000207",
@@ -160,8 +124,6 @@ const ids = {
   claimUnprg: "00000000-0000-4000-8000-000000000217",
   claimScielo: "00000000-0000-4000-8000-000000000218",
   claimUntumbes: "00000000-0000-4000-8000-000000000219",
-  observationGbifOpuntia: "00000000-0000-4000-8000-000000000203",
-  mediaGbifOpuntia: "00000000-0000-4000-8000-000000000204",
   communityDemo: "00000000-0000-4000-8000-000000000123",
   locationPublic: "00000000-0000-4000-8000-000000000117",
   placePublic: "00000000-0000-4000-8000-000000000118",
@@ -189,8 +151,6 @@ const ids = {
 const guideIdByPublicId = new Map([
   ["guide-echinopsis-pachanoi-demo-v1", ids.guide],
   ["guide-echinopsis-pachanoi-general-cacti-v1", ids.guideRhs],
-  ["guide-opuntia-ficus-indica-rhs-v1", ids.guideRhsOpuntia],
-  ["guide-pleurotus-ostreatus-debonis-2026-v1", ids.guidePleurotusCultivation],
 ]);
 
 const guideCoverageById = new Map(
@@ -223,29 +183,6 @@ const guideClaimIdsByPublicId = new Map<string, readonly string[]>([
       ids.guideClaimRhsWinter,
     ],
   ],
-  [
-    "guide-opuntia-ficus-indica-rhs-v1",
-    [
-      ids.guideClaimOpuntiaLight,
-      ids.guideClaimOpuntiaSubstrate,
-      ids.guideClaimOpuntiaWatering,
-      ids.guideClaimOpuntiaNutrition,
-      ids.guideClaimOpuntiaPropagation,
-      ids.guideClaimOpuntiaPests,
-      ids.guideClaimOpuntiaDiseases,
-    ],
-  ],
-  [
-    "guide-pleurotus-ostreatus-debonis-2026-v1",
-    [
-      ids.guideClaimPleurotusSubstrate,
-      ids.guideClaimPleurotusInoculation,
-      ids.guideClaimPleurotusTemperature,
-      ids.guideClaimPleurotusLight,
-      ids.guideClaimPleurotusFruiting,
-      ids.guideClaimPleurotusScope,
-    ],
-  ],
 ]);
 
 const editorialCulturalRelationIdByPublicId = new Map([
@@ -263,11 +200,6 @@ const sourceIdByPublicId = new Map([
   ["source-untumbes-echinopsis-metabolomics-2020", ids.sourceUntumbes],
   ["source-scielo-echinopsis-pachanoi-rhizosphere-2025", ids.sourceScielo],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
-  ["source-rhs-opuntia-ficus-indica", ids.sourceRhsOpuntia],
-  [
-    "source-debonis-pleurotus-light-substrate-2026",
-    ids.sourcePleurotusCultivation,
-  ],
 ]);
 
 const seedSourceIdByPublicId = new Map([
@@ -279,22 +211,12 @@ const seedSourceIdByPublicId = new Map([
   ["source-powo-echinopsis-pachanoi", ids.sourcePowo],
   ["source-gbif-echinopsis-pachanoi", ids.sourceGbif],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
-  ["source-powo-opuntia-ficus-indica", ids.sourcePowoOpuntia],
-  ["source-gbif-opuntia-ficus-indica", ids.sourceGbifOpuntia],
-  ["source-rhs-opuntia-ficus-indica", ids.sourceRhsOpuntia],
-  ["source-gbif-pleurotus-ostreatus", ids.sourceGbifPleurotus],
   ["source-armijos-saraguro-yachakkuna-2014", ids.sourceSaraguro],
-  [
-    "source-debonis-pleurotus-light-substrate-2026",
-    ids.sourcePleurotusCultivation,
-  ],
   ["source-gbif", ids.sourceGbifOccurrence],
 ]);
 
 const editorialTaxonIdBySpeciesPublicId = new Map([
   ["biological-entity-echinopsis-pachanoi", ids.taxon],
-  ["biological-entity-opuntia-ficus-indica", ids.taxonOpuntia],
-  ["biological-entity-pleurotus-ostreatus", ids.taxonPleurotus],
 ]);
 
 const editorialClaimIdByPublicId = new Map([
@@ -310,12 +232,6 @@ const editorialClaimIdByPublicId = new Map([
   ],
   ["claim-powo-echinopsis-pachanoi-native-range", ids.claimPowoRange],
   ["claim-powo-echinopsis-pachanoi-biome", ids.claimPowoBiome],
-  ["claim-powo-opuntia-ficus-indica-accepted", ids.claimPowoOpuntiaStatus],
-  ["claim-powo-opuntia-ficus-indica-native-range", ids.claimPowoOpuntiaRange],
-  ["claim-powo-opuntia-ficus-indica-biome", ids.claimPowoOpuntiaBiome],
-  ["claim-gbif-opuntia-ficus-indica-name-match", ids.claimGbifOpuntiaMatch],
-  ["claim-gbif-pleurotus-ostreatus-accepted", ids.claimGbifPleurotusStatus],
-  ["claim-gbif-pleurotus-ostreatus-name-match", ids.claimGbifPleurotusMatch],
 ]);
 
 const editorialSourceRecordIdByProviderRecordId = new Map([
@@ -328,9 +244,6 @@ const editorialSourceRecordIdByProviderRecordId = new Map([
   ["scielo-pid:S0187-57792025000100601", ids.sourceRecordScielo],
   ["taxon:88444-2", ids.sourceRecordPowo],
   ["species:5622352", ids.sourceRecordGbif],
-  ["taxon:1151735-2", ids.sourceRecordPowoOpuntia],
-  ["species:5384064", ids.sourceRecordGbifOpuntia],
-  ["species:2526530", ids.sourceRecordGbifPleurotus],
 ]);
 
 function resolveSeedSourceId(publicId: string): string {
@@ -462,129 +375,8 @@ const materialFixtureSeeds = [
       },
     ],
   },
-  {
-    publicId: "material-study-opuntia-ficus-indica",
-    biologicalEntityId: ids.biologicalEntityOpuntia,
-    growthStage: "cladodio adulto · lectura editorial de forma y cultivo",
-    material: {
-      baseColor: "#91a965",
-      roughness: 0.74,
-      metallic: 0,
-      transmission: 0.03,
-      ior: 1.37,
-      emissiveColor: "#dce9b3",
-      emissiveStrength: 0.08,
-    },
-    notes:
-      "Estudio material procedural. El color y la rugosidad son decisiones de visualización, no propiedades químicas inferidas.",
-    bindings: [
-      {
-        publicId: "material-binding-opuntia-morphology",
-        layer: "morphology",
-        target: "geometry",
-        interpretation: "symbolic",
-        notes:
-          "La forma visual alude a cladodios; no es una medición morfológica ni una imagen de la ocurrencia GBIF.",
-      },
-      {
-        publicId: "material-binding-opuntia-cultivation",
-        layer: "cultivation",
-        target: "roughness",
-        interpretation: "symbolic",
-        notes:
-          "La rugosidad forma parte de la puesta en escena y no codifica humedad, cutícula o estado fisiológico medido.",
-      },
-    ],
-  },
-  {
-    publicId: "material-study-pleurotus-ostreatus",
-    biologicalEntityId: ids.biologicalEntityPleurotus,
-    growthStage: "cuerpo fructífero · lectura editorial de forma y cultivo",
-    material: {
-      baseColor: "#c5bcae",
-      roughness: 0.56,
-      metallic: 0,
-      transmission: 0.12,
-      ior: 1.34,
-      emissiveColor: "#f0dfbd",
-      emissiveStrength: 0.1,
-    },
-    notes:
-      "Estudio material procedural. No contiene una afirmación sobre metabolitos ni usa la luz como sustituto de un ensayo.",
-    bindings: [
-      {
-        publicId: "material-binding-pleurotus-morphology",
-        layer: "morphology",
-        target: "geometry",
-        interpretation: "symbolic",
-        notes:
-          "La forma visual evoca un cuerpo fructífero lamelado; no presenta una identificación de muestra.",
-      },
-      {
-        publicId: "material-binding-pleurotus-cultivation",
-        layer: "cultivation",
-        target: "transmission",
-        interpretation: "symbolic",
-        notes:
-          "La transmisión es una decisión de iluminación para sugerir humedad ambiental, no una medición del cultivo.",
-      },
-    ],
-  },
 ] as const;
 
-// This is one deliberately selected, record-level GBIF occurrence. The
-// complete provider payload is reduced only to the fields used by the public
-// projection; the exact coordinates and individual media rights remain in the
-// source record JSONB and are never exposed by public repositories.
-const gbifPublicOccurrencePayload = {
-  key: 6130799370,
-  gbifID: "6130799370",
-  datasetKey: "50c9509d-22c7-4a22-a47d-8c48425ef4a7",
-  taxonKey: 5384064,
-  speciesKey: 5384064,
-  scientificName: "Opuntia ficus-indica (L.) Mill.",
-  acceptedScientificName: "Opuntia ficus-indica (L.) Mill.",
-  taxonomicStatus: "ACCEPTED",
-  basisOfRecord: "HUMAN_OBSERVATION",
-  occurrenceStatus: "PRESENT",
-  decimalLatitude: -33.745195,
-  decimalLongitude: -71.308512,
-  coordinateUncertaintyInMeters: 8,
-  countryCode: "CL",
-  country: "Chile",
-  stateProvince: "Región Metropolitana de Santiago",
-  verbatimLocality: "Codigua, Melipilla, Santiago Metropolitan Region, CL",
-  eventDate: "2026-01-20T20:14:51",
-  year: 2026,
-  month: 1,
-  day: 20,
-  datasetName: "iNaturalist research-grade observations",
-  recordedBy: "Andy Jordan",
-  identifiedBy: "Andy Jordan",
-  rightsHolder: "Andy Jordan",
-  license: "http://creativecommons.org/licenses/by/4.0/legalcode",
-  references: "https://www.inaturalist.org/observations/335538816",
-  occurrenceID: "https://www.inaturalist.org/observations/335538816",
-  media: [
-    {
-      type: "StillImage",
-      format: "image/jpeg",
-      references: "https://www.inaturalist.org/photos/609573877",
-      created: "2026-01-20T20:14:51-03:00",
-      creator: "Andy Jordan",
-      publisher: "iNaturalist",
-      license: "http://creativecommons.org/licenses/by/4.0/",
-      rightsHolder: "Andy Jordan",
-      identifier:
-        "https://inaturalist-open-data.s3.amazonaws.com/photos/609573877/original.jpg",
-    },
-  ],
-} as const;
-
-const gbifPublicMediaPayload = {
-  occurrenceId: "6130799370",
-  media: gbifPublicOccurrencePayload.media[0],
-} as const;
 const databaseUrl = process.env.DATABASE_URL;
 const includeSyntheticDemoData =
   process.env.WACHUMA_SEED_PROFILE === "verification" ||
@@ -631,84 +423,6 @@ try {
         'Echinopsis pachanoi',
         ${ids.taxon},
         'Entidad editorial anclada a fuentes taxonómicas externas; no equipara nombres culturales con el taxón.',
-        'public'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        display_name = EXCLUDED.display_name,
-        taxon_id = EXCLUDED.taxon_id,
-        authority_note = EXCLUDED.authority_note,
-        visibility = EXCLUDED.visibility,
-        updated_at = now()
-    `;
-
-    await transaction`
-      INSERT INTO taxa (
-        id, public_id, scientific_name, rank, taxonomic_status, description
-      ) VALUES (
-        ${ids.taxonOpuntia},
-        'taxon-opuntia-ficus-indica',
-        'Opuntia ficus-indica',
-        'species',
-        'accepted',
-        'Opuntia ficus-indica (L.) Mill. POWO la trata como especie aceptada; indica un rango nativo en México (Oaxaca) y un bioma tropical estacionalmente seco. La representación 3D de Echinopsis no se reutiliza como evidencia de esta entidad.'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        scientific_name = EXCLUDED.scientific_name,
-        rank = EXCLUDED.rank,
-        taxonomic_status = EXCLUDED.taxonomic_status,
-        description = EXCLUDED.description,
-        updated_at = now()
-    `;
-
-    await transaction`
-      INSERT INTO biological_entities (
-        id, public_id, entity_type, display_name, taxon_id, authority_note, visibility
-      ) VALUES (
-        ${ids.biologicalEntityOpuntia},
-        'biological-entity-opuntia-ficus-indica',
-        'species',
-        'Opuntia ficus-indica',
-        ${ids.taxonOpuntia},
-        'Entidad editorial independiente del primer cactus; sus claims y fuentes no heredan datos de Echinopsis pachanoi.',
-        'public'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        display_name = EXCLUDED.display_name,
-        taxon_id = EXCLUDED.taxon_id,
-        authority_note = EXCLUDED.authority_note,
-        visibility = EXCLUDED.visibility,
-        updated_at = now()
-    `;
-
-    await transaction`
-      INSERT INTO taxa (
-        id, public_id, scientific_name, rank, taxonomic_status, description
-      ) VALUES (
-        ${ids.taxonPleurotus},
-        'taxon-pleurotus-ostreatus',
-        'Pleurotus ostreatus',
-        'species',
-        'accepted',
-        'Pleurotus ostreatus (Jacq.) P.Kumm. aparece como especie aceptada en GBIF Backbone. El corpus añade una guía de cultivo experimental de fuente abierta, con condiciones y límites explícitos; no representa un protocolo universal ni completa la ecología funcional de la especie.'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        scientific_name = EXCLUDED.scientific_name,
-        rank = EXCLUDED.rank,
-        taxonomic_status = EXCLUDED.taxonomic_status,
-        description = EXCLUDED.description,
-        updated_at = now()
-    `;
-
-    await transaction`
-      INSERT INTO biological_entities (
-        id, public_id, entity_type, display_name, taxon_id, authority_note, visibility
-      ) VALUES (
-        ${ids.biologicalEntityPleurotus},
-        'biological-entity-pleurotus-ostreatus',
-        'species',
-        'Pleurotus ostreatus',
-        ${ids.taxonPleurotus},
-        'Primera entidad fúngica del corpus; cuenta con una guía experimental de cultivo atribuida, mientras sus traits y relaciones culturales requieren fuentes y revisión propias.',
         'public'
       )
       ON CONFLICT (id) DO UPDATE SET
@@ -924,28 +638,6 @@ try {
         'https://link.springer.com/article/10.1186/1746-4269-10-26',
         'https://creativecommons.org/licenses/by/2.0/',
         'CC BY 2.0'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        provider_key = EXCLUDED.provider_key,
-        name = EXCLUDED.name,
-        source_type = EXCLUDED.source_type,
-        base_url = EXCLUDED.base_url,
-        terms_url = EXCLUDED.terms_url,
-        default_license_uri = EXCLUDED.default_license_uri
-    `;
-
-    await transaction`
-      INSERT INTO data_sources (
-        id, provider_key, name, source_type, base_url, terms_url,
-        default_license_uri
-      ) VALUES (
-        ${ids.dataSourceFrontiers},
-        'frontiers-horticulture',
-        'Frontiers in Horticulture · Pleurotus ostreatus cultivation study',
-        'academic_publication',
-        'https://www.frontiersin.org/journals/horticulture',
-        'https://creativecommons.org/licenses/by/4.0/',
-        'CC BY 4.0'
       )
       ON CONFLICT (id) DO UPDATE SET
         provider_key = EXCLUDED.provider_key,
@@ -1201,131 +893,6 @@ try {
         license_uri, attribution, assertion_type, raw_payload, raw_checksum,
         importer_version, status
       ) VALUES (
-        ${ids.sourceRecordPowoOpuntia},
-        ${ids.dataSourcePowo},
-        'taxon:1151735-2',
-        'https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1151735-2/general-information',
-        '2026-08-23T00:00:00Z',
-        'CC BY 3.0',
-        'Plants of the World Online; Royal Botanic Gardens, Kew.',
-        'taxonomic_fact',
-        ${json({
-          scientificName: "Opuntia ficus-indica (L.) Mill.",
-          accepted: true,
-          nativeRange: "Mexico (Oaxaca)",
-          biome: "seasonally dry tropical biome",
-          uses: ["animal food", "medicine", "fuel", "food"],
-          ipniNameId: "1151735-2",
-        })},
-        'sha256:seed-powo-opuntia-ficus-indica-2026-08-23',
-        'powo-manual-review-0.1.0',
-        'accepted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        data_source_id = EXCLUDED.data_source_id,
-        source_record_id = EXCLUDED.source_record_id,
-        source_url = EXCLUDED.source_url,
-        retrieved_at = EXCLUDED.retrieved_at,
-        license_uri = EXCLUDED.license_uri,
-        attribution = EXCLUDED.attribution,
-        assertion_type = EXCLUDED.assertion_type,
-        raw_payload = EXCLUDED.raw_payload,
-        raw_checksum = EXCLUDED.raw_checksum,
-        importer_version = EXCLUDED.importer_version,
-        status = EXCLUDED.status
-    `;
-
-    await transaction`
-      INSERT INTO source_records (
-        id, data_source_id, source_record_id, source_url, retrieved_at,
-        license_uri, attribution, assertion_type, raw_payload, raw_checksum,
-        importer_version, status
-      ) VALUES (
-        ${ids.sourceRecordGbifOpuntia},
-        ${ids.dataSourceGbif},
-        'species:5384064',
-        'https://www.gbif.org/species/5384064',
-        '2026-08-23T00:00:00Z',
-        'CC BY 4.0',
-        'GBIF Secretariat; GBIF Backbone Taxonomy.',
-        'taxonomic_fact',
-        ${json({
-          requestedName: "Opuntia ficus-indica",
-          usageKey: 5384064,
-          scientificName: "Opuntia ficus-indica (L.) Mill.",
-          status: "ACCEPTED",
-          matchType: "EXACT",
-          confidence: 98,
-        })},
-        'sha256:seed-gbif-opuntia-ficus-indica-2026-08-23',
-        'gbif-manual-review-0.1.0',
-        'accepted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        data_source_id = EXCLUDED.data_source_id,
-        source_record_id = EXCLUDED.source_record_id,
-        source_url = EXCLUDED.source_url,
-        retrieved_at = EXCLUDED.retrieved_at,
-        license_uri = EXCLUDED.license_uri,
-        attribution = EXCLUDED.attribution,
-        assertion_type = EXCLUDED.assertion_type,
-        raw_payload = EXCLUDED.raw_payload,
-        raw_checksum = EXCLUDED.raw_checksum,
-        importer_version = EXCLUDED.importer_version,
-        status = EXCLUDED.status
-    `;
-
-    await transaction`
-      INSERT INTO source_records (
-        id, data_source_id, source_record_id, source_url, retrieved_at,
-        license_uri, attribution, assertion_type, raw_payload, raw_checksum,
-        importer_version, status
-      ) VALUES (
-        ${ids.sourceRecordGbifPleurotus},
-        ${ids.dataSourceGbif},
-        'species:2526530',
-        'https://www.gbif.org/species/2526530',
-        '2026-08-23T00:00:00Z',
-        'CC BY 4.0',
-        'GBIF Secretariat; GBIF Backbone Taxonomy.',
-        'taxonomic_fact',
-        ${json({
-          requestedName: "Pleurotus ostreatus",
-          usageKey: 2526530,
-          scientificName: "Pleurotus ostreatus (Jacq.) P.Kumm.",
-          status: "ACCEPTED",
-          matchType: "EXACT",
-          confidence: 99,
-          kingdom: "Fungi",
-          phylum: "Basidiomycota",
-          class: "Agaricomycetes",
-          order: "Agaricales",
-          family: "Pleurotaceae",
-        })},
-        'sha256:seed-gbif-pleurotus-ostreatus-2026-08-23',
-        'gbif-manual-review-0.1.0',
-        'accepted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        data_source_id = EXCLUDED.data_source_id,
-        source_record_id = EXCLUDED.source_record_id,
-        source_url = EXCLUDED.source_url,
-        retrieved_at = EXCLUDED.retrieved_at,
-        license_uri = EXCLUDED.license_uri,
-        attribution = EXCLUDED.attribution,
-        assertion_type = EXCLUDED.assertion_type,
-        raw_payload = EXCLUDED.raw_payload,
-        raw_checksum = EXCLUDED.raw_checksum,
-        importer_version = EXCLUDED.importer_version,
-        status = EXCLUDED.status
-    `;
-
-    await transaction`
-      INSERT INTO source_records (
-        id, data_source_id, source_record_id, source_url, retrieved_at,
-        license_uri, attribution, assertion_type, raw_payload, raw_checksum,
-        importer_version, status
-      ) VALUES (
         ${ids.sourceRecordSaraguro},
         ${ids.dataSourceSaraguro},
         'publication:10.1186/1746-4269-10-26',
@@ -1362,119 +929,6 @@ try {
         status = EXCLUDED.status
     `;
 
-    await transaction`
-      INSERT INTO source_records (
-        id, data_source_id, source_record_id, source_url, retrieved_at,
-        license_uri, attribution, assertion_type, raw_payload, raw_checksum,
-        importer_version, status
-      ) VALUES (
-        ${ids.sourceRecordPleurotusCultivation},
-        ${ids.dataSourceFrontiers},
-        'publication:10.3389/fhort.2025.1720226',
-        'https://www.frontiersin.org/journals/horticulture/articles/10.3389/fhort.2025.1720226/full',
-        '2026-08-23T00:00:00Z',
-        'CC BY 4.0',
-        'De Bonis, M.; Pecchia, J. A.; Nicoletto, C.; Frontiers in Horticulture.',
-        'academic_publication',
-        ${json({
-          doi: "10.3389/fhort.2025.1720226",
-          publicationDate: "2026-01-12",
-          studyContext:
-            "Ensayo en una sala de cultivo de Penn State con Pleurotus ostreatus, dos sustratos y tratamientos de luz monocromática.",
-          protocolContext: {
-            incubationTemperatureC: 23,
-            firstAndSecondFlushTemperatureC: 18,
-            substrateMoistureRangePercent: [65, 70],
-            spawnRatePercentByWeight: 3,
-            lightPhotoperiodHoursPerDay: 8,
-          },
-          rightsNote:
-            "Se conserva metadata y paráfrasis estructurada; no se redistribuyen tablas, figuras ni el artículo completo.",
-        })},
-        'sha256:seed-debonis-pleurotus-light-substrate-2026',
-        'academic-source-manual-review-0.1.0',
-        'accepted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        data_source_id = EXCLUDED.data_source_id,
-        source_record_id = EXCLUDED.source_record_id,
-        source_url = EXCLUDED.source_url,
-        retrieved_at = EXCLUDED.retrieved_at,
-        license_uri = EXCLUDED.license_uri,
-        attribution = EXCLUDED.attribution,
-        assertion_type = EXCLUDED.assertion_type,
-        raw_payload = EXCLUDED.raw_payload,
-        raw_checksum = EXCLUDED.raw_checksum,
-        importer_version = EXCLUDED.importer_version,
-        status = EXCLUDED.status
-    `;
-
-    await transaction`
-      INSERT INTO source_records (
-        id, data_source_id, source_record_id, source_url, retrieved_at,
-        license_uri, attribution, assertion_type, raw_payload, raw_checksum,
-        importer_version, status
-      ) VALUES (
-        ${ids.sourceRecordGbifOpuntiaOccurrence},
-        ${ids.dataSourceGbif},
-        'occurrence:6130799370',
-        'https://www.gbif.org/occurrence/6130799370',
-        '2026-08-23T00:00:00Z',
-        'https://creativecommons.org/licenses/by/4.0/',
-        'GBIF occurrence 6130799370; dataset: iNaturalist research-grade observations; titular: Andy Jordan; consultado 2026-08-23.',
-        'contemporary_observation',
-        ${json(gbifPublicOccurrencePayload)},
-        ${payloadChecksum(gbifPublicOccurrencePayload)},
-        'gbif-manual-review-0.1.0',
-        'accepted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        data_source_id = EXCLUDED.data_source_id,
-        source_record_id = EXCLUDED.source_record_id,
-        source_url = EXCLUDED.source_url,
-        retrieved_at = EXCLUDED.retrieved_at,
-        license_uri = EXCLUDED.license_uri,
-        attribution = EXCLUDED.attribution,
-        assertion_type = EXCLUDED.assertion_type,
-        raw_payload = EXCLUDED.raw_payload,
-        raw_checksum = EXCLUDED.raw_checksum,
-        importer_version = EXCLUDED.importer_version,
-        status = EXCLUDED.status
-    `;
-
-    await transaction`
-      INSERT INTO source_records (
-        id, data_source_id, source_record_id, source_url, retrieved_at,
-        license_uri, attribution, assertion_type, raw_payload, raw_checksum,
-        importer_version, status
-      ) VALUES (
-        ${ids.sourceRecordGbifOpuntiaMedia},
-        ${ids.dataSourceGbif},
-        'media:6130799370:609573877',
-        'https://www.inaturalist.org/photos/609573877',
-        '2026-08-23T00:00:00Z',
-        'https://creativecommons.org/licenses/by/4.0/',
-        'GBIF multimedia 609573877; ocurrencia 6130799370; creador: Andy Jordan; titular: Andy Jordan; consultado 2026-08-23.',
-        'contemporary_observation',
-        ${json(gbifPublicMediaPayload)},
-        ${payloadChecksum(gbifPublicMediaPayload)},
-        'gbif-manual-review-0.1.0',
-        'accepted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        data_source_id = EXCLUDED.data_source_id,
-        source_record_id = EXCLUDED.source_record_id,
-        source_url = EXCLUDED.source_url,
-        retrieved_at = EXCLUDED.retrieved_at,
-        license_uri = EXCLUDED.license_uri,
-        attribution = EXCLUDED.attribution,
-        assertion_type = EXCLUDED.assertion_type,
-        raw_payload = EXCLUDED.raw_payload,
-        raw_checksum = EXCLUDED.raw_checksum,
-        importer_version = EXCLUDED.importer_version,
-        status = EXCLUDED.status
-    `;
-
     for (const [sourceRecordId, note, taxonomyConfirmed] of [
       [
         ids.sourceRecordPowo,
@@ -1487,38 +941,8 @@ try {
         true,
       ],
       [
-        ids.sourceRecordPowoOpuntia,
-        "Seed editorial: licencia, atribución, checksum y alcance taxonómico revisados.",
-        true,
-      ],
-      [
-        ids.sourceRecordGbifOpuntia,
-        "Seed editorial: licencia, atribución, checksum y alcance taxonómico revisados.",
-        true,
-      ],
-      [
-        ids.sourceRecordGbifPleurotus,
-        "Seed editorial: licencia, atribución, checksum y alcance taxonómico revisados.",
-        true,
-      ],
-      [
         ids.sourceRecordSaraguro,
         "Seed editorial: fuente académica, atribución y sensibilidad conservadas; la relación cultural permanece restringida y bajo revisión comunitaria.",
-        false,
-      ],
-      [
-        ids.sourceRecordPleurotusCultivation,
-        "Seed editorial: licencia, atribución, checksum y alcance experimental de la publicación revisados.",
-        false,
-      ],
-      [
-        ids.sourceRecordGbifOpuntiaOccurrence,
-        "Registro GBIF seleccionado: licencia CC BY 4.0, atribución, privacidad y precisión pública revisadas; la coordenada exacta permanece sólo en el payload de procedencia.",
-        true,
-      ],
-      [
-        ids.sourceRecordGbifOpuntiaMedia,
-        "Multimedia revisada por separado: licencia CC BY 4.0, creador y titular conservados; no se hereda la licencia de la ocurrencia.",
         false,
       ],
       [
@@ -1651,10 +1075,7 @@ try {
       ) VALUES
         ('ipni', '88444-2', 'https://www.ipni.org/n/88444-2', '2026-08-23T00:00:00Z', 'CC BY 3.0', ${ids.taxon}),
         ('gbif', '5622352', 'https://www.gbif.org/species/5622352', '2026-08-23T00:00:00Z', 'CC BY 4.0', ${ids.taxon}),
-        ('gbif', '11093098', 'https://www.gbif.org/species/11093098', '2026-08-23T00:00:00Z', 'CC BY 4.0', ${ids.taxon}),
-        ('ipni', '1151735-2', 'https://www.ipni.org/n/1151735-2', '2026-08-23T00:00:00Z', 'CC BY 3.0', ${ids.taxonOpuntia}),
-        ('gbif', '5384064', 'https://www.gbif.org/species/5384064', '2026-08-23T00:00:00Z', 'CC BY 4.0', ${ids.taxonOpuntia}),
-        ('gbif', '2526530', 'https://www.gbif.org/species/2526530', '2026-08-23T00:00:00Z', 'CC BY 4.0', ${ids.taxonPleurotus})
+        ('gbif', '11093098', 'https://www.gbif.org/species/11093098', '2026-08-23T00:00:00Z', 'CC BY 4.0', ${ids.taxon})
       ON CONFLICT (namespace, identifier) DO UPDATE SET
         canonical_url = EXCLUDED.canonical_url,
         retrieved_at = EXCLUDED.retrieved_at,
@@ -1675,10 +1096,7 @@ try {
         VALUES
           (${ids.sourceRecordPowo}, 'ipni', '88444-2', ${ids.sourcePowo}),
           (${ids.sourceRecordGbif}, 'gbif', '5622352', ${ids.sourceGbif}),
-          (${ids.sourceRecordGbif}, 'gbif', '11093098', ${ids.sourceGbif}),
-          (${ids.sourceRecordPowoOpuntia}, 'ipni', '1151735-2', ${ids.sourcePowoOpuntia}),
-          (${ids.sourceRecordGbifOpuntia}, 'gbif', '5384064', ${ids.sourceGbifOpuntia}),
-          (${ids.sourceRecordGbifPleurotus}, 'gbif', '2526530', ${ids.sourceGbifPleurotus})
+          (${ids.sourceRecordGbif}, 'gbif', '11093098', ${ids.sourceGbif})
       ) AS mapping(source_record_id, namespace, identifier, source_id)
       JOIN external_identifiers AS external_identifier
         ON external_identifier.namespace = mapping.namespace
@@ -1691,10 +1109,7 @@ try {
         source_record_id, taxon_id, assertion_type
       ) VALUES
         (${ids.sourceRecordPowo}, ${ids.taxon}, 'taxonomic_fact'),
-        (${ids.sourceRecordGbif}, ${ids.taxon}, 'taxonomic_fact'),
-        (${ids.sourceRecordPowoOpuntia}, ${ids.taxonOpuntia}, 'taxonomic_fact'),
-        (${ids.sourceRecordGbifOpuntia}, ${ids.taxonOpuntia}, 'taxonomic_fact'),
-        (${ids.sourceRecordGbifPleurotus}, ${ids.taxonPleurotus}, 'taxonomic_fact')
+        (${ids.sourceRecordGbif}, ${ids.taxon}, 'taxonomic_fact')
       ON CONFLICT DO NOTHING
     `;
 
@@ -1703,10 +1118,7 @@ try {
         source_record_id, biological_entity_id, assertion_type
       ) VALUES
         (${ids.sourceRecordPowo}, ${ids.biologicalEntity}, 'taxonomic_fact'),
-        (${ids.sourceRecordGbif}, ${ids.biologicalEntity}, 'taxonomic_fact'),
-        (${ids.sourceRecordPowoOpuntia}, ${ids.biologicalEntityOpuntia}, 'taxonomic_fact'),
-        (${ids.sourceRecordGbifOpuntia}, ${ids.biologicalEntityOpuntia}, 'taxonomic_fact'),
-        (${ids.sourceRecordGbifPleurotus}, ${ids.biologicalEntityPleurotus}, 'taxonomic_fact')
+        (${ids.sourceRecordGbif}, ${ids.biologicalEntity}, 'taxonomic_fact')
       ON CONFLICT DO NOTHING
     `;
 
@@ -1816,182 +1228,6 @@ try {
           license_uri = EXCLUDED.license_uri,
           review_status = EXCLUDED.review_status,
           updated_at = now()
-      `;
-    }
-
-    for (const [id, publicId, predicate, objectText] of [
-      [
-        ids.claimPowoOpuntiaStatus,
-        "claim-powo-opuntia-ficus-indica-accepted",
-        "taxonomicStatus",
-        "POWO registra Opuntia ficus-indica como especie aceptada.",
-      ],
-      [
-        ids.claimPowoOpuntiaRange,
-        "claim-powo-opuntia-ficus-indica-native-range",
-        "nativeRange",
-        "Plants of the World Online indica un rango nativo en México (Oaxaca).",
-      ],
-      [
-        ids.claimPowoOpuntiaBiome,
-        "claim-powo-opuntia-ficus-indica-biome",
-        "biome",
-        "Plants of the World Online vincula la especie con un bioma tropical estacionalmente seco.",
-      ],
-    ] as const) {
-      await transaction`
-        INSERT INTO claims (
-          id, public_id, subject_type, subject_id, predicate, object_text,
-          assertion_type, evidence_level, source_id, source_record_id,
-          author_perspective, recorded_on, visibility, license_uri, review_status
-        ) VALUES (
-          ${id}, ${publicId}, 'taxon', ${ids.taxonOpuntia}, ${predicate}, ${objectText},
-          'taxonomic_fact', 'documented', ${ids.sourcePowoOpuntia},
-          ${ids.sourceRecordPowoOpuntia},
-          'Plants of the World Online; lectura editorial de WACHUMA.',
-          '2026-08-23', 'public', 'CC BY 3.0', 'accepted'
-        )
-        ON CONFLICT (id) DO UPDATE SET
-          public_id = EXCLUDED.public_id,
-          predicate = EXCLUDED.predicate,
-          object_text = EXCLUDED.object_text,
-          source_id = EXCLUDED.source_id,
-          source_record_id = EXCLUDED.source_record_id,
-          author_perspective = EXCLUDED.author_perspective,
-          recorded_on = EXCLUDED.recorded_on,
-          visibility = EXCLUDED.visibility,
-          license_uri = EXCLUDED.license_uri,
-          review_status = EXCLUDED.review_status,
-          updated_at = now()
-      `;
-    }
-
-    await transaction`
-      INSERT INTO claims (
-        id, public_id, subject_type, subject_id, predicate, object_text,
-        assertion_type, evidence_level, source_id, source_record_id,
-        author_perspective, recorded_on, visibility, license_uri, review_status
-      ) VALUES (
-        ${ids.claimGbifOpuntiaMatch},
-        'claim-gbif-opuntia-ficus-indica-name-match',
-        'taxon',
-        ${ids.taxonOpuntia},
-        'gbifNameMatch',
-        'GBIF Backbone devuelve una coincidencia exacta y estado ACCEPTED para Opuntia ficus-indica, con usageKey 5384064.',
-        'taxonomic_fact',
-        'documented',
-        ${ids.sourceGbifOpuntia},
-        ${ids.sourceRecordGbifOpuntia},
-        'GBIF Backbone Taxonomy; lectura editorial de WACHUMA.',
-        '2026-08-23',
-        'public',
-        'CC BY 4.0',
-        'accepted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        public_id = EXCLUDED.public_id,
-        predicate = EXCLUDED.predicate,
-        object_text = EXCLUDED.object_text,
-        source_id = EXCLUDED.source_id,
-        source_record_id = EXCLUDED.source_record_id,
-        author_perspective = EXCLUDED.author_perspective,
-        recorded_on = EXCLUDED.recorded_on,
-        visibility = EXCLUDED.visibility,
-        license_uri = EXCLUDED.license_uri,
-        review_status = EXCLUDED.review_status,
-        updated_at = now()
-    `;
-
-    for (const [id, publicId, predicate, objectText] of [
-      [
-        ids.claimGbifPleurotusStatus,
-        "claim-gbif-pleurotus-ostreatus-accepted",
-        "taxonomicStatus",
-        "GBIF Backbone registra Pleurotus ostreatus como especie aceptada con una coincidencia exacta.",
-      ],
-      [
-        ids.claimGbifPleurotusMatch,
-        "claim-gbif-pleurotus-ostreatus-name-match",
-        "gbifNameMatch",
-        "GBIF Backbone devuelve usageKey 2526530 para Pleurotus ostreatus y conserva la clasificación Fungi · Basidiomycota · Agaricomycetes · Agaricales · Pleurotaceae.",
-      ],
-    ] as const) {
-      await transaction`
-        INSERT INTO claims (
-          id, public_id, subject_type, subject_id, predicate, object_text,
-          assertion_type, evidence_level, source_id, source_record_id,
-          author_perspective, recorded_on, visibility, license_uri, review_status
-        ) VALUES (
-          ${id}, ${publicId}, 'taxon', ${ids.taxonPleurotus}, ${predicate}, ${objectText},
-          'taxonomic_fact', 'documented', ${ids.sourceGbifPleurotus},
-          ${ids.sourceRecordGbifPleurotus},
-          'GBIF Backbone Taxonomy; lectura editorial de WACHUMA.',
-          '2026-08-23', 'public', 'CC BY 4.0', 'accepted'
-        )
-        ON CONFLICT (id) DO UPDATE SET
-          public_id = EXCLUDED.public_id,
-          predicate = EXCLUDED.predicate,
-          object_text = EXCLUDED.object_text,
-          source_id = EXCLUDED.source_id,
-          source_record_id = EXCLUDED.source_record_id,
-          author_perspective = EXCLUDED.author_perspective,
-          recorded_on = EXCLUDED.recorded_on,
-          visibility = EXCLUDED.visibility,
-          license_uri = EXCLUDED.license_uri,
-          review_status = EXCLUDED.review_status,
-          updated_at = now()
-      `;
-    }
-
-    for (const [claimId, sourceId, sourceRecordId] of [
-      [
-        ids.claimGbifPleurotusStatus,
-        ids.sourceGbifPleurotus,
-        ids.sourceRecordGbifPleurotus,
-      ],
-      [
-        ids.claimGbifPleurotusMatch,
-        ids.sourceGbifPleurotus,
-        ids.sourceRecordGbifPleurotus,
-      ],
-    ] as const) {
-      await transaction`
-        INSERT INTO claim_sources (claim_id, source_id, source_record_id, role)
-        VALUES (${claimId}, ${sourceId}, ${sourceRecordId}, 'primary')
-        ON CONFLICT (claim_id, source_id) DO UPDATE SET
-          source_record_id = EXCLUDED.source_record_id,
-          role = EXCLUDED.role
-      `;
-    }
-
-    for (const [claimId, sourceId, sourceRecordId] of [
-      [
-        ids.claimPowoOpuntiaStatus,
-        ids.sourcePowoOpuntia,
-        ids.sourceRecordPowoOpuntia,
-      ],
-      [
-        ids.claimPowoOpuntiaRange,
-        ids.sourcePowoOpuntia,
-        ids.sourceRecordPowoOpuntia,
-      ],
-      [
-        ids.claimPowoOpuntiaBiome,
-        ids.sourcePowoOpuntia,
-        ids.sourceRecordPowoOpuntia,
-      ],
-      [
-        ids.claimGbifOpuntiaMatch,
-        ids.sourceGbifOpuntia,
-        ids.sourceRecordGbifOpuntia,
-      ],
-    ] as const) {
-      await transaction`
-        INSERT INTO claim_sources (claim_id, source_id, source_record_id, role)
-        VALUES (${claimId}, ${sourceId}, ${sourceRecordId}, 'primary')
-        ON CONFLICT (claim_id, source_id) DO UPDATE SET
-          source_record_id = EXCLUDED.source_record_id,
-          role = EXCLUDED.role
       `;
     }
 
@@ -2397,122 +1633,6 @@ try {
       `;
     }
 
-    const opuntiaGuide = editorialGuide("guide-opuntia-ficus-indica-rhs-v1");
-    await transaction`
-      INSERT INTO growing_guides (
-        id, public_id, guide_key, version, title, biological_entity_id,
-        climate_context, technique_context, region_context, status, summary
-      ) VALUES (
-        ${ids.guideRhsOpuntia},
-        ${opuntiaGuide.publicId},
-        ${opuntiaGuide.guideKey},
-        ${opuntiaGuide.version},
-        ${opuntiaGuide.title},
-        ${ids.biologicalEntityOpuntia},
-        ${opuntiaGuide.climateContext ?? null},
-        ${opuntiaGuide.techniqueContext ?? null},
-        ${opuntiaGuide.regionContext ?? null},
-        ${opuntiaGuide.status},
-        ${opuntiaGuide.summary ?? null}
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        public_id = EXCLUDED.public_id,
-        guide_key = EXCLUDED.guide_key,
-        version = EXCLUDED.version,
-        title = EXCLUDED.title,
-        biological_entity_id = EXCLUDED.biological_entity_id,
-        climate_context = EXCLUDED.climate_context,
-        technique_context = EXCLUDED.technique_context,
-        region_context = EXCLUDED.region_context,
-        status = EXCLUDED.status,
-        summary = EXCLUDED.summary
-    `;
-
-    for (const [
-      id,
-      sectionKey,
-      statement,
-      evidenceLevel,
-      assertionType,
-      sourceId,
-    ] of editorialGuideClaims("guide-opuntia-ficus-indica-rhs-v1")) {
-      await transaction`
-        INSERT INTO growing_guide_claims (
-          id, growing_guide_id, section_key, statement, evidence_level,
-          source_id, assertion_type
-        ) VALUES (
-          ${id}, ${ids.guideRhsOpuntia}, ${sectionKey}, ${statement}, ${evidenceLevel},
-          ${sourceId}, ${assertionType}
-        )
-        ON CONFLICT (id) DO UPDATE SET
-          growing_guide_id = EXCLUDED.growing_guide_id,
-          section_key = EXCLUDED.section_key,
-          statement = EXCLUDED.statement,
-          evidence_level = EXCLUDED.evidence_level,
-          source_id = EXCLUDED.source_id,
-          assertion_type = EXCLUDED.assertion_type
-      `;
-    }
-
-    const pleurotusGuide = editorialGuide(
-      "guide-pleurotus-ostreatus-debonis-2026-v1",
-    );
-    await transaction`
-      INSERT INTO growing_guides (
-        id, public_id, guide_key, version, title, biological_entity_id,
-        climate_context, technique_context, region_context, status, summary
-      ) VALUES (
-        ${ids.guidePleurotusCultivation},
-        ${pleurotusGuide.publicId},
-        ${pleurotusGuide.guideKey},
-        ${pleurotusGuide.version},
-        ${pleurotusGuide.title},
-        ${ids.biologicalEntityPleurotus},
-        ${pleurotusGuide.climateContext ?? null},
-        ${pleurotusGuide.techniqueContext ?? null},
-        ${pleurotusGuide.regionContext ?? null},
-        ${pleurotusGuide.status},
-        ${pleurotusGuide.summary ?? null}
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        public_id = EXCLUDED.public_id,
-        guide_key = EXCLUDED.guide_key,
-        version = EXCLUDED.version,
-        title = EXCLUDED.title,
-        biological_entity_id = EXCLUDED.biological_entity_id,
-        climate_context = EXCLUDED.climate_context,
-        technique_context = EXCLUDED.technique_context,
-        region_context = EXCLUDED.region_context,
-        status = EXCLUDED.status,
-        summary = EXCLUDED.summary
-    `;
-
-    for (const [
-      id,
-      sectionKey,
-      statement,
-      evidenceLevel,
-      assertionType,
-      sourceId,
-    ] of editorialGuideClaims("guide-pleurotus-ostreatus-debonis-2026-v1")) {
-      await transaction`
-        INSERT INTO growing_guide_claims (
-          id, growing_guide_id, section_key, statement, evidence_level,
-          source_id, assertion_type
-        ) VALUES (
-          ${id}, ${ids.guidePleurotusCultivation}, ${sectionKey}, ${statement}, ${evidenceLevel},
-          ${sourceId}, ${assertionType}
-        )
-        ON CONFLICT (id) DO UPDATE SET
-          growing_guide_id = EXCLUDED.growing_guide_id,
-          section_key = EXCLUDED.section_key,
-          statement = EXCLUDED.statement,
-          evidence_level = EXCLUDED.evidence_level,
-          source_id = EXCLUDED.source_id,
-          assertion_type = EXCLUDED.assertion_type
-      `;
-    }
-
     for (const [guideId, coverage] of guideCoverageById) {
       await transaction`
         UPDATE growing_guides
@@ -2520,17 +1640,6 @@ try {
         WHERE id = ${guideId}
       `;
     }
-
-    await transaction`
-      INSERT INTO record_provenance (
-        source_record_id, growing_guide_id, assertion_type
-      ) VALUES (
-        ${ids.sourceRecordPleurotusCultivation},
-        ${ids.guidePleurotusCultivation},
-        'academic_publication'
-      )
-      ON CONFLICT DO NOTHING
-    `;
 
     await transaction`
       INSERT INTO communities (
@@ -2864,103 +1973,6 @@ try {
       VALUES (${ids.media}, ${ids.biologicalEntity}, 0)
       ON CONFLICT (media_id, sort_order) DO UPDATE SET
         biological_entity_id = EXCLUDED.biological_entity_id
-    `;
-
-    await transaction`
-      INSERT INTO observations (
-        id, public_id, taxon_id, observed_at, observation_basis,
-        geometry_public, geometry_exact, environment, notes, visibility,
-        uncertainty
-      ) VALUES (
-        ${ids.observationGbifOpuntia},
-        'observation-gbif-6130799370',
-        ${ids.taxonOpuntia},
-        '2026-01-20T20:14:51-03:00',
-        'external',
-        ST_SetSRID(ST_GeomFromText('POINT(-71.31 -33.75)'), 4326),
-        ST_SetSRID(ST_GeomFromText('POINT(-71.308512 -33.745195)'), 4326),
-        ${json({
-          provider: "gbif",
-          sourceRecordId: "occurrence:6130799370",
-          countryCode: "CL",
-          datasetName: "iNaturalist research-grade observations",
-          scientificName: "Opuntia ficus-indica (L.) Mill.",
-        })},
-        'Ocurrencia GBIF seleccionada y revisada. La geometría pública se redondea a dos decimales; la coordenada exacta permanece en el payload de procedencia.',
-        'restricted',
-        ${json({
-          coordinateUncertaintyInMeters: 8,
-          publicPrecision: "0.01 degrees",
-          sourceRecordReview: "accepted",
-        })}
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        taxon_id = EXCLUDED.taxon_id,
-        observed_at = EXCLUDED.observed_at,
-        observation_basis = EXCLUDED.observation_basis,
-        geometry_public = EXCLUDED.geometry_public,
-        geometry_exact = EXCLUDED.geometry_exact,
-        environment = EXCLUDED.environment,
-        notes = EXCLUDED.notes,
-        visibility = EXCLUDED.visibility,
-        uncertainty = EXCLUDED.uncertainty
-    `;
-
-    await transaction`
-      INSERT INTO media (
-        id, media_type, uri, title, alt_text, license_uri, attribution,
-        source_id, visibility
-      ) VALUES (
-        ${ids.mediaGbifOpuntia},
-        'image',
-        'https://inaturalist-open-data.s3.amazonaws.com/photos/609573877/original.jpg',
-        'Opuntia ficus-indica · observación GBIF 6130799370',
-        'Fotografía atribuida a Andy Jordan de una observación de Opuntia ficus-indica en Chile.',
-        'https://creativecommons.org/licenses/by/4.0/',
-        'Andy Jordan; iNaturalist; GBIF occurrence 6130799370. La licencia y la atribución se revisaron individualmente para este medio.',
-        ${gbifOccurrenceSourceId},
-        'restricted'
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        media_type = EXCLUDED.media_type,
-        uri = EXCLUDED.uri,
-        title = EXCLUDED.title,
-        alt_text = EXCLUDED.alt_text,
-        license_uri = EXCLUDED.license_uri,
-        attribution = EXCLUDED.attribution,
-        source_id = EXCLUDED.source_id,
-        visibility = EXCLUDED.visibility
-    `;
-
-    await transaction`
-      INSERT INTO media_attachments (media_id, observation_id, sort_order)
-      VALUES (${ids.mediaGbifOpuntia}, ${ids.observationGbifOpuntia}, 0)
-      ON CONFLICT (media_id, sort_order) DO UPDATE SET
-        observation_id = EXCLUDED.observation_id
-    `;
-
-    await transaction`
-      INSERT INTO record_provenance (
-        source_record_id, observation_id, source_id, assertion_type
-      ) VALUES (
-        ${ids.sourceRecordGbifOpuntiaOccurrence},
-        ${ids.observationGbifOpuntia},
-        ${gbifOccurrenceSourceId},
-        'contemporary_observation'
-      )
-      ON CONFLICT DO NOTHING
-    `;
-
-    await transaction`
-      INSERT INTO record_provenance (
-        source_record_id, media_id, source_id, assertion_type
-      ) VALUES (
-        ${ids.sourceRecordGbifOpuntiaMedia},
-        ${ids.mediaGbifOpuntia},
-        ${gbifOccurrenceSourceId},
-        'contemporary_observation'
-      )
-      ON CONFLICT DO NOTHING
     `;
 
     await transaction`

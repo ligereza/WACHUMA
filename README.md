@@ -4,11 +4,16 @@ Jardín digital, atlas biológico y base de conocimiento biocultural abierta.
 
 WACHUMA representa organismos, ejemplares vivos, material biológico, linajes,
 ecología, cultivo, historia y relaciones culturales con procedencia explícita.
-La experiencia pública actual es monográfica: gira alrededor de _Echinopsis
-pachanoi_ / _Trichocereus pachanoi_. _Opuntia ficus-indica_ y _Pleurotus
-ostreatus_ se conservan como registros históricos restringidos: el primero
-queda fuera del catálogo principal y el segundo reserva su lugar para la
-futura investigación sobre organismos asociados al cultivo del cactus. Los
+La experiencia pública es monográfica y el eje no se mueve: _Echinopsis
+pachanoi_ / _Trichocereus pachanoi_. El alcance admite dos órbitas alrededor de
+ese eje, y sólo esas dos. Como cactáceas secundarias o terciarias entran los
+hermanos y primos del pachanoi —_Echinopsis peruviana_, la antorcha boliviana
+_Echinopsis lageniformis_ / _Trichocereus bridgesii_ y los ejemplares sobre los
+que existan teorías que lo preceden o proceden—, siempre que la relación esté
+documentada y no supuesta. Como organismos asociados entran los hongos que
+comúnmente atacan al cactus o le causan pudrición, no la micología en general.
+Lo que no colabora con el cactus, con las cactáceas emparentadas o con su
+representación 3D queda fuera del repositorio. Los
 nombres “wachuma”, “huachuma” y “San Pedro” se tratarán como nombres o
 conceptos culturales contextualizados, no como equivalencias taxonómicas
 automáticas.

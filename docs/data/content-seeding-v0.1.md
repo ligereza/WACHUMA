@@ -47,12 +47,19 @@ pachanoi_ ya están en PostgreSQL. La release pública deliberadamente contiene
 un solo taxón para que la experiencia 3D, el cultivo, la historia, la química y
 la cultura compartan un mismo eje editorial.
 
-_Opuntia ficus-indica_ y _Pleurotus ostreatus_ no se borran: permanecen como
-registros históricos restringidos para conservar trazabilidad de decisiones
-anteriores. _Opuntia_ queda fuera del catálogo monográfico y _Pleurotus_ se
-reserva para la futura categoría de organismos que afectan o acompañan el
-cultivo de _Echinopsis_. Sus ocurrencias, medios y manuales no se proyectan
-como contenido público en esta release.
+_Opuntia ficus-indica_ y _Pleurotus ostreatus_ salieron del repositorio. No es
+una decisión de visibilidad sino de alcance: _Opuntia_ pertenece a otra
+subfamilia entera y no es pariente del pachanoi, y _Pleurotus ostreatus_ es un
+saprótrofo comestible que descompone madera, no un hongo que ataque al cactus ni
+le cause pudrición. Conservarlos como registros restringidos mantenía vivo un
+corpus que el proyecto ya no persigue. Su historia sigue en git y en los
+documentos de corrida, que no se reescriben.
+
+Lo que sí entra alrededor del eje son las cactáceas emparentadas —_Echinopsis
+peruviana_, _Echinopsis lageniformis_ / _Trichocereus bridgesii_ y los taxones
+con teorías que preceden o proceden al pachanoi— y los hongos que comúnmente lo
+atacan o lo pudren. Ninguno de esos registros se inventa: entra con fuente,
+alcance y revisión como cualquier otra afirmación.
 
 La primera release monográfica comienza con _Echinopsis pachanoi_, cuyo nombre
 GBIF puede aparecer como sinónimo frente a una aceptación taxonómica distinta.

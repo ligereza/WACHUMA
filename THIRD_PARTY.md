@@ -40,12 +40,6 @@ con un parser de snapshots en staging; todavía no se redistribuyen sus filas
 ni se publican traits hasta resolver la licencia del release exacto y sus
 estudios de origen.
 
-La guía experimental de _Pleurotus ostreatus_ se basa en De Bonis, Pecchia y
-Nicoletto (2026), artículo abierto de Frontiers in Horticulture bajo CC BY 4.0.
-WACHUMA conserva metadata, DOI, atribución y paráfrasis estructurada; no
-redistribuye tablas, figuras ni el artículo completo, y marca explícitamente el
-contexto experimental de sus condiciones.
-
 Para GBIF, las licencias y atribuciones se revisan por registro y por medio;
 la documentación operativa de referencia es [Data use](https://techdocs.gbif.org/en/data-use/)
 y [Multimedia publishing](https://techdocs.gbif.org/en/data-publishing/multimedia-publishing).

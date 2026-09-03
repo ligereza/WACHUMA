@@ -127,7 +127,7 @@ test(
         .json()
         .find(
           (record: { id: string }) =>
-            record.id === "00000000-0000-4000-8000-000000000158",
+            record.id === "00000000-0000-4000-8000-000000000142",
         );
       assert.ok(promotedSourceRecord);
       assert.ok(
@@ -343,7 +343,7 @@ test(
 
       const promotion = await app.inject({
         method: "POST",
-        url: "/api/v1/admin/source-records/00000000-0000-4000-8000-000000000158/promote-taxon",
+        url: "/api/v1/admin/source-records/00000000-0000-4000-8000-000000000142/promote-taxon",
         headers: { authorization: "Bearer integration-token" },
         payload: {
           reviewer: "integration-editor",
@@ -358,35 +358,17 @@ test(
       assert.equal(promotion.json().visibility, "public");
       assert.equal(
         promotion.json().biologicalEntityPublicId,
-        "biological-entity-opuntia-ficus-indica",
+        "biological-entity-echinopsis-pachanoi",
       );
       const [promotionAudit] = await sql`
         SELECT review_kind, taxonomy_confirmed
         FROM source_record_reviews
-        WHERE source_record_id = '00000000-0000-4000-8000-000000000158'
+        WHERE source_record_id = '00000000-0000-4000-8000-000000000142'
         ORDER BY reviewed_at DESC
         LIMIT 1
       `;
       assert.equal(promotionAudit?.review_kind, "taxonomic_promotion");
       assert.equal(promotionAudit?.taxonomy_confirmed, true);
-
-      // The endpoint promotion is tested independently, but the monographic
-      // public profile must remain deterministic for the rest of the suite.
-      await sql`
-        UPDATE biological_entities
-        SET visibility = 'restricted'
-        WHERE public_id = 'biological-entity-opuntia-ficus-indica'
-      `;
-      await sql`
-        UPDATE observations
-        SET visibility = 'restricted'
-        WHERE public_id = 'observation-gbif-6130799370'
-      `;
-      await sql`
-        UPDATE media
-        SET visibility = 'restricted'
-        WHERE id = '00000000-0000-4000-8000-000000000166'
-      `;
 
       const publicSpecimen = await app.inject({
         method: "GET",
