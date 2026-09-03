@@ -75,22 +75,20 @@ de procedencia, capa de evidencia, derivación de materiales, traits/protocolos,
 exportadores, descriptor procedural 3D, pruebas y CI. Eso demuestra que el
 sistema puede sostener el modelo; no demuestra que el atlas ya esté poblado.
 
-El primer corte público ya no depende solo de fixtures: _Echinopsis pachanoi_,
-_Opuntia ficus-indica_ y _Pleurotus ostreatus_ tienen metadatos atribuidos de
-POWO/Kew y GBIF, identificadores externos y claims que conservan la diferencia
-entre proveedores. Las dos especies vegetales tienen guías RHS publicadas con
-once claims horticulturales respaldados en total; _Pleurotus ostreatus_ añade una
-guía experimental CC BY 4.0 con seis claims situados sobre sustrato,
-inoculación, temperatura, luz, cosecha y alcance. Las proyecciones GBIF se
-reconcilian por identificador externo y
-el taxón puede promoverse con una revisión separada y auditable.
+El primer corte público ya no depende solo de fixtures: _Echinopsis pachanoi_
+tiene metadatos atribuidos de POWO/Kew y GBIF, identificadores externos y claims
+que conservan la diferencia entre proveedores, más una guía RHS publicada con
+sus claims horticulturales respaldados. Las proyecciones GBIF se reconcilian por
+identificador externo y el taxón puede promoverse con una revisión separada y
+auditable.
 Siguen siendo sintéticos o restringidos los ejemplares, el linaje y la escena de
 jardín. El corpus conserva una relación cultural documentada y restringida para
 _Echinopsis pachanoi_ en un contexto Saraguro específico de una fuente; no se
 publica automáticamente ni habla en nombre de la comunidad. El snapshot vivo de GBIF conserva ocurrencias
-en staging cuando sus licencias no permiten publicación; una ocurrencia CC BY
-4.0 (`6130799370`) y una media asociada ya fueron aceptadas y publicadas
-después de revisión explícita. La geometría pública es redondeada y el payload
+en staging cuando sus licencias no permiten publicación. La única ocurrencia
+aceptada y publicada tras revisión explícita (`6130799370`, CC BY 4.0) y su
+media asociada eran de _Opuntia ficus-indica_ y salieron con esa especie, así
+que hoy no hay observaciones externas publicadas. La geometría pública es redondeada y el payload
 exacto permanece en procedencia. La arquitectura de información ya se aplica a
 las superficies públicas y cuenta con una bandeja web protegida para operar la
 revisión editorial.
