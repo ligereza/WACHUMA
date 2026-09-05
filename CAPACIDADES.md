@@ -55,14 +55,43 @@ silencioso.
 
 **Representar el organismo en 3D como interpretación.** Escenas versionadas con
 hash y manifiesto, recetas deterministas con semilla, y el rótulo
-`procedural-interpretation` que impide leer un render como evidencia.
+`procedural-interpretation` que impide leer un render como evidencia. El asset
+demo se genera desde `@wachuma/procgen` en Node, sin Blender; `pnpm
+quality:procgen-glb` vuelve a generarlo, comprueba el hash, siete costillas,
+cuerpo cerrado, orientación y auto-intersecciones. Blender queda como adaptador
+comparativo de la secuencia apical, no como dependencia del núcleo.
+
+El GLB exportado no conserva identidad de vértice (`rib_id`, `areole_id`, `u`,
+`local_s`, `birth_frame`); esa correspondencia requeriría un sidecar versionado
+y una prueba contra el GLB.
+
+**Buscar con cobertura declarada.** La búsqueda textual es parcial: se limita a
+los campos comparados por sus índices y los patrones de menos de tres caracteres
+quedan fuera de la cobertura de `pg_trgm`.
 
 **Exportarse sin perder identidad**, a Darwin Core, JSON-LD/PROV-O y RO-Crate.
+`pnpm export:public` produce el archivo Darwin Core, el grafo RO-Crate y un
+manifiesto SHA-256 desde las proyecciones públicas; `pnpm quality:public-export`
+comprueba la reconstrucción, la atribución y que no se filtren registros
+restringidos.
+
+**Revisar fuentes sin perder alcance.** `/admin/review` muestra para cada
+`source_record_id` pendiente una propuesta editorial con evidencia, licencia,
+muestras, región, método, qué sostiene y qué no sostiene, además del diff con
+la proyección pública. `pnpm quality:source-review` comprueba que las 14 filas
+web actuales (10 IDs estables por cosechas repetidas) tengan cobertura. La
+propuesta no cambia estados ni publica automáticamente.
+
+La importación GBIF de _Echinopsis pachanoi_ conserva ocurrencias y medios
+como staging pendiente, con licencia y atribución por registro. La geometría
+exacta queda sólo en procedencia y `pnpm quality:gbif-pachanoi` verifica que la
+proyección pública esté redondeada y restringida hasta revisión humana.
 
 **Medirse solo.** `pnpm verify:release` corre la batería completa —tipos, lint,
 pruebas, build, contenido, licencias, SBOM, migraciones, formato, siembra
-idempotente, integración contra PostgreSQL, auditoría del corpus, paridad entre
-contenido y base, y humo de la web— y se detiene en la primera puerta que falla.
+idempotente, GLB procgen, integración contra PostgreSQL, auditoría del corpus,
+paridad entre contenido y base, y humo DB-backed de 18 superficies públicas— y
+se detiene en la primera puerta que falla.
 Un verde después de arreglar algo puede esconder la siguiente rotura: se vuelve
 a correr entera.
 

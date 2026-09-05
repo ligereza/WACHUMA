@@ -16,6 +16,268 @@ export const editorialSpeciesDocument = {
   visibility: "public",
   description:
     "Ficha pública anclada a fuentes taxonómicas externas. Conserva sin resolver la diferencia entre el tratamiento de POWO, que acepta Echinopsis pachanoi como especie, y el de Albesiano y Kiesling (2012), que la trata como Trichocereus macrogonus var. pachanoi; también mantiene separados los nombres culturales documentados en contextos específicos.",
+  pathogens: [
+    {
+      publicId: "biological-entity-bipolaris-cactivora",
+      scientificName: "Bipolaris cactivora",
+      rank: "species",
+      taxonomicStatus: "accepted",
+      entityType: "species",
+      visibility: "restricted",
+      authorityNote:
+        "Entidad de riesgo fitopatológico; el nombre aceptado y el identificador GBIF se conservan separados de la evidencia de hospedero.",
+      description:
+        "Hongo ascomiceto asociado a pudrición de tallo en cactáceas. La literatura revisada documenta Cereus y otros géneros, no una inoculación confirmada en Echinopsis pachanoi.",
+      externalIdentifiers: [
+        {
+          namespace: "gbif",
+          identifier: "165628953",
+          canonicalUrl: "https://www.gbif.org/species/165628953",
+          license: "CC BY 4.0",
+        },
+      ],
+      sourcePublicId: "source-gbif-pathogens",
+      sourceRecordId: "species:165628953",
+    },
+    {
+      publicId: "biological-entity-pectobacterium-cacticida",
+      scientificName: "Pectobacterium cacticida",
+      rank: "species",
+      taxonomicStatus: "accepted",
+      entityType: "species",
+      visibility: "restricted",
+      authorityNote:
+        "Entidad bacteriana de riesgo fitopatológico; GBIF conserva también la combinación histórica Erwinia cacticida.",
+      description:
+        "Bacteria pectinolítica cuyo artículo de secuencia de referencia la describe como agente de pudrición blanda de cactus. La evidencia no prueba infección de Echinopsis pachanoi.",
+      externalIdentifiers: [
+        {
+          namespace: "gbif",
+          identifier: "102828396",
+          canonicalUrl: "https://www.gbif.org/species/102828396",
+          license: "CC BY 4.0",
+        },
+      ],
+      sourcePublicId: "source-gbif-pathogens",
+      sourceRecordId: "species:102828396",
+    },
+    {
+      publicId: "biological-entity-fusarium-oxysporum",
+      scientificName: "Fusarium oxysporum",
+      rank: "species",
+      taxonomicStatus: "accepted",
+      entityType: "species",
+      visibility: "restricted",
+      authorityNote:
+        "La forma especialis opuntiarum se registra bajo la especie de GBIF; no se presenta como una identificación de cepa de pachanoi.",
+      description:
+        "Hongo ascomiceto con reportes de pudrición basal en cactáceas. Un primer reporte con inoculación y postulados de Koch corresponde a Echinocactus grusonii; no demuestra hospedero Echinopsis pachanoi.",
+      externalIdentifiers: [
+        {
+          namespace: "gbif",
+          identifier: "5251961",
+          canonicalUrl: "https://www.gbif.org/species/5251961",
+          license: "CC BY 4.0",
+        },
+      ],
+      sourcePublicId: "source-gbif-pathogens",
+      sourceRecordId: "species:5251961",
+    },
+    {
+      publicId: "biological-entity-phytophthora-cactorum",
+      scientificName: "Phytophthora cactorum",
+      rank: "species",
+      taxonomicStatus: "accepted",
+      entityType: "species",
+      visibility: "restricted",
+      authorityNote:
+        "Oomiceto (Stramenopiles), no hongo; se conserva como entidad separada para evitar una clasificación micológica incorrecta.",
+      description:
+        "Oomiceto fitopatógeno citado como causa de pudrición húmeda ascendente desde la base en cactáceas. La circular fitopatológica no demuestra infección de Echinopsis pachanoi.",
+      externalIdentifiers: [
+        {
+          namespace: "gbif",
+          identifier: "3203674",
+          canonicalUrl: "https://www.gbif.org/species/3203674",
+          license: "CC BY 4.0",
+        },
+      ],
+      sourcePublicId: "source-gbif-pathogens",
+      sourceRecordId: "species:3203674",
+    },
+  ],
+  pathogenicityClaims: [
+    {
+      publicId: "claim-pachanoi-risk-bipolaris-cactivora",
+      pathogenPublicId: "biological-entity-bipolaris-cactivora",
+      predicate: "pathogenicity",
+      statement:
+        "Ridings (1978) describe Drechslera cactivora (nombre usado hoy para Bipolaris cactivora) como agente de pudrición de tallo en Cereus y otros géneros de cactáceas; la circular registra lesiones acuosas, pudrición rápida y ocasional pudrición basal, pero no una inoculación confirmada en Echinopsis pachanoi.",
+      assertionType: "academic_publication",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-fdacs-cactus-stem-rot-1978",
+      sourceRecordId: "publication:fdacs-pp191-1978",
+      authorPerspective:
+        "Ridings y Florida Department of Agriculture; WACHUMA conserva el alcance a géneros de Cactaceae y no lo convierte en diagnóstico específico de Echinopsis pachanoi.",
+      recordedOn: "1978-08-01",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-pachanoi-risk-pectobacterium-cacticida",
+      pathogenPublicId: "biological-entity-pectobacterium-cacticida",
+      predicate: "pathogenicity",
+      statement:
+        "Xie, Zhu, Liao, Liang y An (2023) describen Pectobacterium cacticida (antes Erwinia cacticida) como patógeno que causa pudrición blanda en cactus y caracterizan su cepa tipo; la evidencia publicada no demuestra infección de Echinopsis pachanoi.",
+      assertionType: "academic_publication",
+      evidenceLevel: "peer-reviewed",
+      sourcePublicId: "source-pectobacterium-cacticida-soft-rot-2023",
+      sourceRecordId: "doi:10.1094/PHYTOFR-11-22-0133-A",
+      authorPerspective:
+        "Xie, Zhu, Liao, Liang y An; WACHUMA registra una relación de riesgo en cactus y mantiene abierta la susceptibilidad específica de Echinopsis pachanoi.",
+      recordedOn: "2023-02-06",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-pachanoi-risk-fusarium-oxysporum",
+      pathogenPublicId: "biological-entity-fusarium-oxysporum",
+      predicate: "pathogenicity",
+      statement:
+        "Polizzi y Vitale (2004) reportaron pudrición basal de Echinocactus grusonii causada por Fusarium oxysporum f. sp. opuntiarum y reprodujeron la enfermedad mediante inoculación; la forma especialis se enlaza a la especie Fusarium oxysporum de GBIF y no prueba un hospedero Echinopsis pachanoi.",
+      assertionType: "academic_publication",
+      evidenceLevel: "peer-reviewed",
+      sourcePublicId: "source-fusarium-oxysporum-cactus-basal-rot-2004",
+      sourceRecordId: "doi:10.1094/PDIS.2004.88.1.85A",
+      authorPerspective:
+        "Polizzi y Vitale; WACHUMA conserva la evidencia experimental en otra cactácea y no extrapola la patogenicidad a Echinopsis pachanoi.",
+      recordedOn: "2004-01-01",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-pachanoi-risk-phytophthora-cactorum",
+      pathogenPublicId: "biological-entity-phytophthora-cactorum",
+      predicate: "pathogenicity",
+      statement:
+        "La circular fitopatológica de Florida (Ridings, 1978) distingue Phytophthora cactorum como agente de pudrición húmeda que progresa desde la base del tallo en cactáceas; Phytophthora es un oomiceto, no un hongo, y la fuente no demuestra infección de Echinopsis pachanoi.",
+      assertionType: "academic_publication",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-fdacs-cactus-stem-rot-1978",
+      sourceRecordId: "publication:fdacs-pp191-1978",
+      authorPerspective:
+        "Ridings y Florida Department of Agriculture; WACHUMA conserva explícitamente la clasificación como oomiceto y limita el alcance a cactáceas reportadas.",
+      recordedOn: "1978-08-01",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+  ],
+  relatedTaxa: [
+    {
+      publicId: "biological-entity-echinopsis-peruviana",
+      scientificName: "Echinopsis peruviana",
+      rank: "species",
+      taxonomicStatus: "unresolved",
+      entityType: "species",
+      visibility: "restricted",
+      authorityNote:
+        "Taxón relacionado con circunscripción no resuelta: POWO lo trata como sinónimo de Echinopsis macrogona, mientras Albesiano y Kiesling lo discuten dentro de Cereus macrogonus y Trichocereus.",
+      description:
+        "Echinopsis peruviana (Trichocereus peruvianus) se conserva como taxón relacionado, no como una segunda identidad de Echinopsis pachanoi. La diferencia entre el rango aceptado por POWO y el tratamiento de Albesiano y Kiesling exige mantener la relación bajo revisión.",
+      synonyms: ["Trichocereus peruvianus"],
+      externalIdentifiers: [
+        {
+          namespace: "gbif",
+          identifier: "7281309",
+          canonicalUrl: "https://www.gbif.org/species/7281309",
+          license: "CC BY 4.0",
+        },
+        {
+          namespace: "ipni",
+          identifier: "88459-2",
+          canonicalUrl: "https://www.ipni.org/n/88459-2",
+          license: "CC BY 3.0",
+        },
+      ],
+      sourcePublicId: "source-gbif-related-cacti",
+      sourceRecordId: "species:7281309",
+    },
+    {
+      publicId: "biological-entity-echinopsis-lageniformis",
+      scientificName: "Echinopsis lageniformis",
+      rank: "species",
+      taxonomicStatus: "accepted",
+      entityType: "species",
+      visibility: "restricted",
+      authorityNote:
+        "POWO acepta Echinopsis lageniformis; Trichocereus bridgesii se conserva como sinónimo nomenclatural y no como entidad separada.",
+      description:
+        "Cactácea columnar boliviana del contexto amplio de Trichocereus. Albesiano y Terrazas la incluyen junto con T. pachanoi en su muestreo y clasificación, pero esa proximidad documental no prueba identidad ni una relación de grupo hermano.",
+      synonyms: ["Trichocereus bridgesii"],
+      externalIdentifiers: [
+        {
+          namespace: "gbif",
+          identifier: "5622588",
+          canonicalUrl: "https://www.gbif.org/species/5622588",
+          license: "CC BY 4.0",
+        },
+        {
+          namespace: "gbif",
+          identifier: "7282728",
+          canonicalUrl: "https://www.gbif.org/species/7282728",
+          license: "CC BY 4.0",
+        },
+        {
+          namespace: "ipni",
+          identifier: "132706-1",
+          canonicalUrl: "https://www.ipni.org/n/132706-1",
+          license: "CC BY 3.0",
+        },
+        {
+          namespace: "ipni",
+          identifier: "138904-1",
+          canonicalUrl: "https://www.ipni.org/n/138904-1",
+          license: "CC BY 3.0",
+        },
+      ],
+      sourcePublicId: "source-gbif-related-cacti",
+      sourceRecordId: "species:5622588",
+    },
+  ],
+  relatedTaxonClaims: [
+    {
+      publicId: "claim-pachanoi-related-echinopsis-peruviana",
+      relatedTaxonPublicId: "biological-entity-echinopsis-peruviana",
+      predicate: "relatedTaxon",
+      statement:
+        "Albesiano y Kiesling (2012) tratan Trichocereus peruvianus dentro del complejo de Cereus macrogonus y lo consideran conspecífico con T. pachanoi con una diferencia de rango infraespecífico; POWO lista Echinopsis peruviana como sinónimo de Echinopsis macrogona. WACHUMA documenta ambas referencias como contexto taxonómico y no las convierte en equivalencia propia de la ficha.",
+      assertionType: "academic_publication",
+      evidenceLevel: "peer-reviewed",
+      sourcePublicId: "source-albesiano-kiesling-macrogonus-2012",
+      sourceRecordId: "doi:10.2985/1070-0048-17.1.3",
+      authorPerspective:
+        "Albesiano y Kiesling; POWO aporta una circunscripción nomenclatural distinta. WACHUMA conserva la relación con Echinopsis pachanoi como afirmación documentada y no como sinónimo resuelto.",
+      recordedOn: "2012-03-31",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-pachanoi-related-echinopsis-lageniformis",
+      relatedTaxonPublicId: "biological-entity-echinopsis-lageniformis",
+      predicate: "relatedTaxon",
+      statement:
+        "Albesiano y Terrazas (2012) incluyen Trichocereus bridgesii y T. pachanoi en el muestreo y la clasificación de Trichocereus; POWO acepta Echinopsis lageniformis y trata T. bridgesii como sinónimo. Esta coincidencia de contexto taxonómico no prueba identidad, sinonimia ni una relación directa de grupo hermano con Echinopsis pachanoi.",
+      assertionType: "academic_publication",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-albesiano-terrazas-trichocereus-2012",
+      sourceRecordId: "haseltonia:17:3-23",
+      authorPerspective:
+        "Albesiano y Terrazas; POWO aporta el tratamiento nomenclatural vigente consultado. WACHUMA limita la relación al contexto de muestreo y evita inferir parentesco directo.",
+      recordedOn: "2012-01-01",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+  ],
   claims: [
     {
       publicId: "claim-ipni-echinopsis-pachanoi-protologue-1920",
@@ -302,6 +564,88 @@ export const editorialSpeciesDocument = {
     },
   ],
   sources: [
+    {
+      publicId: "source-gbif-related-cacti",
+      title: "GBIF Backbone Taxonomy · cactáceas relacionadas",
+      citation:
+        "GBIF Secretariat. GBIF Backbone Taxonomy; fichas taxonómicas consultadas para Echinopsis peruviana, Echinopsis lageniformis y Trichocereus bridgesii el 5 de septiembre de 2026.",
+      url: "https://www.gbif.org/",
+      sourceType: "external_dataset",
+      license: "CC BY 4.0",
+      attribution: "GBIF Secretariat; GBIF Backbone Taxonomy",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "taxonomic_fact",
+    },
+    {
+      publicId: "source-powo-related-cacti",
+      title: "Plants of the World Online · cactáceas relacionadas",
+      citation:
+        "Royal Botanic Gardens, Kew. Plants of the World Online; tratamientos consultados para Echinopsis macrogona, Echinopsis lageniformis y Trichocereus bridgesii el 5 de septiembre de 2026.",
+      url: "https://powo.science.kew.org/",
+      sourceType: "external_dataset",
+      license: "CC BY 3.0",
+      attribution: "Royal Botanic Gardens, Kew; Plants of the World Online",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "taxonomic_fact",
+    },
+    {
+      publicId: "source-gbif-pathogens",
+      title: "GBIF Backbone Taxonomy · patógenos de cactáceas",
+      citation:
+        "GBIF Secretariat. GBIF Backbone Taxonomy; fichas taxonómicas consultadas para Bipolaris cactivora, Pectobacterium cacticida, Fusarium oxysporum y Phytophthora cactorum el 5 de septiembre de 2026.",
+      url: "https://www.gbif.org/",
+      sourceType: "external_dataset",
+      license: "CC BY 4.0",
+      attribution: "GBIF Secretariat; GBIF Backbone Taxonomy",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "taxonomic_fact",
+    },
+    {
+      publicId: "source-fdacs-cactus-stem-rot-1978",
+      title: "A Stem Rot of Cacti",
+      citation:
+        "Ridings, W. H. (1978). A Stem Rot of Cacti. Plant Pathology Circular No. 191, Florida Department of Agriculture and Consumer Services, Division of Plant Industry.",
+      url: "https://ccmedia.fdacs.gov/content/download/11198/file/pp191.pdf",
+      sourceType: "scientific_publication",
+      license: "government publication; metadata and cited text",
+      attribution:
+        "W. H. Ridings; Florida Department of Agriculture and Consumer Services",
+      publishedOn: "1978-08-01",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "academic_publication",
+    },
+    {
+      publicId: "source-pectobacterium-cacticida-soft-rot-2023",
+      title:
+        "Complete Genome Sequence Resource of the Pathogen Pectobacterium cacticida CFCC 10813T Causing Soft Rot Diseases of Cactus Plants",
+      citation:
+        "Xie, T., Zhu, H., Liao, T., Liang, Y. & An, Q. (2023). Complete Genome Sequence Resource of the Pathogen Pectobacterium cacticida CFCC 10813T Causing Soft Rot Diseases of Cactus Plants. PhytoFrontiers, 3(2), 456–460. DOI: 10.1094/PHYTOFR-11-22-0133-A.",
+      url: "https://doi.org/10.1094/PHYTOFR-11-22-0133-A",
+      doi: "10.1094/PHYTOFR-11-22-0133-A",
+      sourceType: "scientific_publication",
+      license: "publisher access; article metadata and abstract cited",
+      attribution:
+        "Ting Xie; Huajie Zhu; Tianlan Liao; Yan Liang; Qianli An; PhytoFrontiers",
+      publishedOn: "2023-02-06",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "academic_publication",
+    },
+    {
+      publicId: "source-fusarium-oxysporum-cactus-basal-rot-2004",
+      title:
+        "First Report of Basal Stem Rot of Golden Barrel Cactus Caused by Fusarium oxysporum f. sp. opuntiarum in Italy",
+      citation:
+        "Polizzi, G. & Vitale, A. (2004). First Report of Basal Stem Rot of Golden Barrel Cactus Caused by Fusarium oxysporum f. sp. opuntiarum in Italy. Plant Disease, 88(1), 85. DOI: 10.1094/PDIS.2004.88.1.85A.",
+      url: "https://doi.org/10.1094/PDIS.2004.88.1.85A",
+      doi: "10.1094/PDIS.2004.88.1.85A",
+      sourceType: "scientific_publication",
+      license: "publisher access; article metadata and abstract cited",
+      attribution:
+        "Giancarlo Polizzi; Alessandro Vitale; American Phytopathological Society",
+      publishedOn: "2004-01-01",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "academic_publication",
+    },
     {
       publicId: "source-ipni-trichocereus-pachanoi-1920",
       title: "IPNI · Trichocereus pachanoi Britton & Rose",

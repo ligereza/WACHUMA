@@ -31,9 +31,45 @@ export type EditorialSpeciesDocument = {
     canonicalUrl?: string;
     license?: string;
   }>;
+  pathogens?: EditorialPathogenDocument[];
+  pathogenicityClaims?: EditorialPathogenicityClaim[];
+  relatedTaxa?: EditorialRelatedTaxonDocument[];
+  relatedTaxonClaims?: EditorialRelatedTaxonClaim[];
   claims?: EditorialSpeciesClaim[];
   sources?: EditorialSourceReference[];
   [key: string]: unknown;
+};
+
+/** A reviewed biological entity linked to a pathogen risk in the species record. */
+export type EditorialPathogenDocument = {
+  publicId: string;
+  scientificName: string;
+  rank?: string;
+  taxonomicStatus?: string;
+  entityType?: string;
+  authorityNote?: string;
+  visibility?: string;
+  description?: string;
+  externalIdentifiers?: Array<{
+    namespace: string;
+    identifier: string;
+    canonicalUrl?: string;
+    license?: string;
+  }>;
+  sourcePublicId: string;
+  sourceRecordId: string;
+};
+
+export type EditorialPathogenicityClaim = EditorialSpeciesClaim & {
+  pathogenPublicId: string;
+};
+
+export type EditorialRelatedTaxonDocument = EditorialPathogenDocument & {
+  synonyms?: string[];
+};
+
+export type EditorialRelatedTaxonClaim = EditorialSpeciesClaim & {
+  relatedTaxonPublicId: string;
 };
 
 export type EditorialSpeciesClaim = {

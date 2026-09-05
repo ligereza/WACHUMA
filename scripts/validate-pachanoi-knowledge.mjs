@@ -14,6 +14,10 @@ const sourceByPublicId = new Map(
   catalog.sources.map((source) => [source.publicId, source]),
 );
 const claims = species.claims ?? [];
+const pathogens = species.pathogens ?? [];
+const pathogenicityClaims = species.pathogenicityClaims ?? [];
+const relatedTaxa = species.relatedTaxa ?? [];
+const relatedTaxonClaims = species.relatedTaxonClaims ?? [];
 const claimCounts = new Map();
 
 for (const claim of claims) {
@@ -25,6 +29,102 @@ for (const claim of claims) {
     `${claim.publicId} must keep a provider sourceRecordId`,
   );
 }
+
+assert.ok(
+  pathogens.length >= 2,
+  "The pachanoi record needs at least two pathogen entities",
+);
+assert.equal(
+  pathogenicityClaims.length,
+  pathogens.length,
+  "Each pathogen entity needs one sourced pathogenicity relation",
+);
+const pathogenIds = new Set(pathogens.map((pathogen) => pathogen.publicId));
+for (const pathogen of pathogens) {
+  assert.equal(pathogen.entityType, "species");
+  assert.equal(pathogen.visibility, "restricted");
+  assert.ok(
+    pathogen.externalIdentifiers?.some(
+      (identifier) =>
+        identifier.namespace === "gbif" && identifier.canonicalUrl,
+    ),
+    `${pathogen.publicId} needs a GBIF identifier`,
+  );
+}
+for (const claim of pathogenicityClaims) {
+  assert.ok(
+    pathogenIds.has(claim.pathogenPublicId),
+    `${claim.publicId} needs a pathogen entity`,
+  );
+  assert.equal(claim.predicate, "pathogenicity");
+  assert.match(
+    claim.statement,
+    /no (?:una |una )?inoculaci[oó]n confirmada|no demuestra infecci[oó]n|no prueba un hospedero/i,
+    `${claim.publicId} must state the direct pachanoi evidence limit`,
+  );
+  assert.ok(
+    claim.sourcePublicId && sourceByPublicId.has(claim.sourcePublicId),
+    `${claim.publicId} needs a cited phytopathology source`,
+  );
+}
+const oomycete = pathogens.find(
+  (pathogen) => pathogen.publicId === "biological-entity-phytophthora-cactorum",
+);
+assert.ok(oomycete, "The corpus must distinguish Phytophthora cactorum");
+assert.match(oomycete.description ?? "", /oomiceto/i);
+assert.match(oomycete.authorityNote ?? "", /no hongo/i);
+
+assert.ok(
+  relatedTaxa.length >= 2,
+  "The pachanoi record needs at least two related cactus taxa",
+);
+assert.equal(
+  relatedTaxonClaims.length,
+  relatedTaxa.length,
+  "Each related cactus needs one sourced relation claim",
+);
+const relatedTaxonIds = new Set(relatedTaxa.map((taxon) => taxon.publicId));
+for (const relatedTaxon of relatedTaxa) {
+  assert.equal(relatedTaxon.entityType, "species");
+  assert.equal(relatedTaxon.visibility, "restricted");
+  assert.ok(
+    relatedTaxon.externalIdentifiers?.some(
+      (identifier) =>
+        identifier.namespace === "gbif" &&
+        identifier.canonicalUrl &&
+        identifier.license === "CC BY 4.0",
+    ),
+    `${relatedTaxon.publicId} needs a licensed GBIF identifier`,
+  );
+}
+for (const claim of relatedTaxonClaims) {
+  assert.ok(
+    relatedTaxonIds.has(claim.relatedTaxonPublicId),
+    `${claim.publicId} needs a related taxon entity`,
+  );
+  assert.equal(claim.predicate, "relatedTaxon");
+  assert.match(
+    claim.statement,
+    /no (?:prueba|demuestra).*(?:identidad|sinonimia|grupo hermano|equivalencia)|no.*(?:identidad|sinonimia|grupo hermano|equivalencia)/i,
+    `${claim.publicId} must state the relationship evidence limit`,
+  );
+  assert.ok(
+    claim.sourcePublicId && sourceByPublicId.has(claim.sourcePublicId),
+    `${claim.publicId} needs a cited taxonomic source`,
+  );
+}
+assert.ok(
+  relatedTaxa.some((taxon) => taxon.scientificName === "Echinopsis peruviana"),
+  "Echinopsis peruviana must be represented",
+);
+assert.ok(
+  relatedTaxa.some(
+    (taxon) =>
+      taxon.scientificName === "Echinopsis lageniformis" &&
+      taxon.synonyms?.includes("Trichocereus bridgesii"),
+  ),
+  "Echinopsis lageniformis / Trichocereus bridgesii must be represented",
+);
 
 for (const [predicate, minimum] of [
   ["historicalTaxonomy", 2],
@@ -141,6 +241,7 @@ console.log(
         albesianoKieslingTreatment.publicId,
       ],
       combinationIpni: combinationIpni.identifier,
+      relatedTaxa: relatedTaxa.map((taxon) => taxon.scientificName),
     },
     null,
     2,
