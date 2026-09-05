@@ -14,49 +14,155 @@
     "sources"
   ],
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "const": "1.0" },
-    "publicId": { "type": "string", "minLength": 1 },
-    "scientificName": { "type": "string", "minLength": 1 },
-    "rank": { "type": "string", "minLength": 1 },
-    "taxonomicStatus": { "type": "string", "minLength": 1 },
-    "entityType": { "type": "string", "minLength": 1 },
-    "authorityNote": { "type": "string", "minLength": 1 },
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "publicId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scientificName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rank": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taxonomicStatus": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entityType": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityNote": {
+      "type": "string",
+      "minLength": 1
+    },
     "visibility": {
       "enum": ["public", "restricted", "sensitive", "community-controlled"]
     },
-    "description": { "type": "string" },
+    "description": {
+      "type": "string"
+    },
     "externalIdentifiers": {
       "type": "array",
       "items": {
         "type": "object",
         "required": ["namespace", "identifier", "license"],
         "properties": {
-          "namespace": { "type": "string", "minLength": 1 },
-          "identifier": { "type": "string", "minLength": 1 },
-          "canonicalUrl": { "type": "string", "format": "uri" },
-          "license": { "type": "string", "minLength": 1 }
+          "namespace": {
+            "type": "string",
+            "minLength": 1
+          },
+          "identifier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "canonicalUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "additionalProperties": false
       }
     },
     "taxonomicVariants": {
       "type": "array",
-      "items": { "$ref": "#/$defs/taxonomicVariant" }
+      "items": {
+        "$ref": "#/$defs/taxonomicVariant"
+      }
     },
     "claims": {
       "type": "array",
-      "items": { "$ref": "#/$defs/speciesClaim" }
+      "items": {
+        "$ref": "#/$defs/speciesClaim"
+      }
     },
     "vernacularNames": {
       "type": "array",
-      "items": { "$ref": "#/$defs/culturalName" }
+      "items": {
+        "$ref": "#/$defs/culturalName"
+      }
     },
     "distribution": {
       "type": "array",
-      "items": { "$ref": "#/$defs/distribution" }
+      "items": {
+        "$ref": "#/$defs/distribution"
+      }
     },
-    "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } }
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "pathogens": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/associatedOrganism"
+      }
+    },
+    "relatedTaxa": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/associatedOrganism"
+      }
+    },
+    "pathogenicityClaims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/pathogenicityClaim"
+      }
+    },
+    "relatedTaxonClaims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relatedTaxonClaim"
+      }
+    },
+    "ecology": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "cultivation": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "relatedSpecies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/associatedOrganism"
+      }
+    },
+    "culturalRelations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
   },
   "$defs": {
     "taxonomicVariant": {
@@ -69,12 +175,21 @@
         "reviewStatus"
       ],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
         "relationType": {
           "enum": ["historical_combination", "synonym", "unresolved_variant"]
         },
-        "context": { "type": "string", "minLength": 1 },
-        "sourcePublicId": { "type": "string", "minLength": 1 },
+        "context": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourcePublicId": {
+          "type": "string",
+          "minLength": 1
+        },
         "reviewStatus": {
           "enum": ["draft", "under-review", "accepted", "rejected"]
         }
@@ -91,9 +206,18 @@
         "reviewStatus"
       ],
       "properties": {
-        "term": { "type": "string", "minLength": 1 },
-        "context": { "type": "string", "minLength": 1 },
-        "sourcePublicId": { "type": "string", "minLength": 1 },
+        "term": {
+          "type": "string",
+          "minLength": 1
+        },
+        "context": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourcePublicId": {
+          "type": "string",
+          "minLength": 1
+        },
         "accessLevel": {
           "enum": ["public", "restricted", "sensitive", "community-controlled"]
         },
@@ -119,15 +243,42 @@
         "reviewStatus"
       ],
       "properties": {
-        "publicId": { "type": "string", "minLength": 1 },
-        "predicate": { "type": "string", "minLength": 1 },
-        "statement": { "type": "string", "minLength": 1 },
-        "assertionType": { "type": "string", "minLength": 1 },
-        "evidenceLevel": { "type": "string", "minLength": 1 },
-        "sourcePublicId": { "type": "string", "minLength": 1 },
-        "sourceRecordId": { "type": "string", "minLength": 1 },
-        "authorPerspective": { "type": "string", "minLength": 1 },
-        "recordedOn": { "type": "string", "format": "date" },
+        "publicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "predicate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assertionType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceLevel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourcePublicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRecordId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorPerspective": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordedOn": {
+          "type": "string",
+          "format": "date"
+        },
         "visibility": {
           "enum": ["public", "restricted", "sensitive", "community-controlled"]
         },
@@ -141,11 +292,25 @@
       "type": "object",
       "required": ["label"],
       "properties": {
-        "placePublicId": { "type": "string", "minLength": 1 },
-        "observationPublicId": { "type": "string", "minLength": 1 },
-        "label": { "type": "string", "minLength": 1 },
-        "geometry": { "type": "object" },
-        "sourcePublicId": { "type": "string", "minLength": 1 }
+        "placePublicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observationPublicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "geometry": {
+          "type": "object"
+        },
+        "sourcePublicId": {
+          "type": "string",
+          "minLength": 1
+        }
       },
       "additionalProperties": false
     },
@@ -162,13 +327,34 @@
         "assertionType"
       ],
       "properties": {
-        "publicId": { "type": "string", "minLength": 1 },
-        "title": { "type": "string", "minLength": 1 },
-        "citation": { "type": "string", "minLength": 1 },
-        "url": { "type": "string", "format": "uri" },
-        "doi": { "type": "string", "minLength": 1 },
-        "publishedOn": { "type": "string", "format": "date" },
-        "accessedAt": { "type": "string", "format": "date-time" },
+        "publicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "citation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "doi": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publishedOn": {
+          "type": "string",
+          "format": "date"
+        },
+        "accessedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
         "sourceType": {
           "enum": [
             "scientific_publication",
@@ -180,12 +366,242 @@
             "editorial"
           ]
         },
-        "license": { "type": "string", "minLength": 1 },
-        "attribution": { "type": "string", "minLength": 1 },
-        "assertionType": { "type": "string", "minLength": 1 }
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attribution": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assertionType": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "associatedOrganism": {
+      "type": "object",
+      "required": [
+        "publicId",
+        "scientificName",
+        "entityType",
+        "visibility",
+        "description",
+        "externalIdentifiers",
+        "sourcePublicId",
+        "sourceRecordId"
+      ],
+      "properties": {
+        "publicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scientificName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rank": {
+          "type": "string",
+          "minLength": 1
+        },
+        "taxonomicStatus": {
+          "enum": ["accepted", "synonym", "doubtful", "unresolved"]
+        },
+        "entityType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visibility": {
+          "enum": ["public", "restricted", "sensitive", "community-controlled"]
+        },
+        "authorityNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "synonyms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "externalIdentifiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["namespace", "identifier", "license"],
+            "properties": {
+              "namespace": {
+                "type": "string",
+                "minLength": 1
+              },
+              "identifier": {
+                "type": "string",
+                "minLength": 1
+              },
+              "canonicalUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "license": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "sourcePublicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRecordId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "pathogenicityClaim": {
+      "type": "object",
+      "required": [
+        "publicId",
+        "predicate",
+        "statement",
+        "assertionType",
+        "evidenceLevel",
+        "sourcePublicId",
+        "sourceRecordId",
+        "authorPerspective",
+        "recordedOn",
+        "visibility",
+        "reviewStatus",
+        "pathogenPublicId"
+      ],
+      "properties": {
+        "publicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "predicate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assertionType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceLevel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourcePublicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRecordId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorPerspective": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordedOn": {
+          "type": "string",
+          "format": "date"
+        },
+        "visibility": {
+          "enum": ["public", "restricted", "sensitive", "community-controlled"]
+        },
+        "reviewStatus": {
+          "enum": ["draft", "under-review", "accepted", "rejected"]
+        },
+        "pathogenPublicId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The pathogen this claim is about; never the cactus itself."
+        }
+      },
+      "additionalProperties": false
+    },
+    "relatedTaxonClaim": {
+      "type": "object",
+      "required": [
+        "publicId",
+        "predicate",
+        "statement",
+        "assertionType",
+        "evidenceLevel",
+        "sourcePublicId",
+        "sourceRecordId",
+        "authorPerspective",
+        "recordedOn",
+        "visibility",
+        "reviewStatus",
+        "relatedTaxonPublicId"
+      ],
+      "properties": {
+        "publicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "predicate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assertionType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceLevel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourcePublicId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRecordId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorPerspective": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordedOn": {
+          "type": "string",
+          "format": "date"
+        },
+        "visibility": {
+          "enum": ["public", "restricted", "sensitive", "community-controlled"]
+        },
+        "reviewStatus": {
+          "enum": ["draft", "under-review", "accepted", "rejected"]
+        },
+        "relatedTaxonPublicId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The related taxon this claim is about."
+        }
       },
       "additionalProperties": false
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }
