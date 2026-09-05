@@ -78,6 +78,11 @@ la proyección pública. `pnpm quality:source-review` comprueba que las 14 filas
 web actuales (10 IDs estables por cosechas repetidas) tengan cobertura. La
 propuesta no cambia estados ni publica automáticamente.
 
+La importación GBIF de _Echinopsis pachanoi_ conserva ocurrencias y medios
+como staging pendiente, con licencia y atribución por registro. La geometría
+exacta queda sólo en procedencia y `pnpm quality:gbif-pachanoi` verifica que la
+proyección pública esté redondeada y restringida hasta revisión humana.
+
 **Medirse solo.** `pnpm verify:release` corre la batería completa —tipos, lint,
 pruebas, build, contenido, licencias, SBOM, migraciones, formato, siembra
 idempotente, integración contra PostgreSQL, auditoría del corpus, paridad entre

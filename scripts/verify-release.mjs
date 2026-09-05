@@ -26,6 +26,7 @@ const commands = [
   ["db:verify"],
   ["quality:public-export"],
   ["quality:source-review"],
+  ["quality:gbif-pachanoi"],
   ["quality:legacy-db"],
   ["quality:markdown"],
   ["quality:corpus"],
