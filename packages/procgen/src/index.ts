@@ -8,6 +8,27 @@ import type {
 
 export { buildPachanoi, clamp, warpShoot } from "./pachanoi-surface.js";
 export type { PachanoiSurface, Point2, Point3 } from "./pachanoi-surface.js";
+export {
+  activateBasalBud,
+  applyDevelopmentalEvent,
+  advanceDevelopment,
+  createDevelopmentalState,
+  defaultDevelopmentalProfile,
+  projectDevelopmentalState,
+  setHydration,
+  sigmoid,
+} from "./developmental-state.js";
+export type {
+  AreoleState,
+  DevelopmentalEvent,
+  DevelopmentalAreole,
+  DevelopmentalHistoryEntry,
+  DevelopmentalProfile,
+  DevelopmentalProjection,
+  DevelopmentalShoot,
+  DevelopmentalState,
+  HydrationEvent,
+} from "./developmental-state.js";
 
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 

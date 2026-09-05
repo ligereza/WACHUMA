@@ -1,10 +1,8 @@
-import type {
-  BiologicalEntityType,
-  Id,
-  PublicId,
-  SpeciesDocument,
-  TaxonRank,
-  Visibility,
+import type { Id, PublicId, SpeciesDocument } from "@wachuma/shared";
+import {
+  BIOLOGICAL_ENTITY_TYPE_VALUES,
+  TAXON_RANK_VALUES,
+  VISIBILITY_VALUES,
 } from "@wachuma/shared";
 
 import { editorialSpeciesDocument } from "./generated/echinopsis-pachanoi.js";
@@ -46,43 +44,13 @@ const asEnum = <T extends string>(
   return value as T;
 };
 
-const taxonRanks = [
-  "domain",
-  "kingdom",
-  "phylum",
-  "class",
-  "order",
-  "family",
-  "genus",
-  "species",
-  "subspecies",
-  "variety",
-  "form",
-  "hybrid",
-] as const satisfies readonly TaxonRank[];
-const entityTypes = [
-  "species",
-  "subspecies",
-  "variety",
-  "cultivar",
-  "hybrid",
-  "clone",
-  "strain",
-] as const satisfies readonly BiologicalEntityType[];
-const visibilities = [
-  "public",
-  "restricted",
-  "sensitive",
-  "community-controlled",
-] as const satisfies readonly Visibility[];
-
 export const demoSpeciesDocument: SpeciesDocument = {
   id: asId("taxon-echinopsis-pachanoi", "id"),
   taxonId: asId("taxon-echinopsis-pachanoi", "taxonId"),
   publicId: asPublicId(editorialSpeciesDocument.publicId, "publicId"),
   scientificName: editorialSpeciesDocument.scientificName,
   displayName: editorialSpeciesDocument.scientificName,
-  rank: asEnum(editorialSpeciesDocument.rank, taxonRanks, "rank"),
+  rank: asEnum(editorialSpeciesDocument.rank, TAXON_RANK_VALUES, "rank"),
   taxonomicStatus: asEnum(
     editorialSpeciesDocument.taxonomicStatus,
     ["accepted", "synonym", "doubtful", "unresolved"],
@@ -90,12 +58,12 @@ export const demoSpeciesDocument: SpeciesDocument = {
   ),
   entityType: asEnum(
     editorialSpeciesDocument.entityType,
-    entityTypes,
+    BIOLOGICAL_ENTITY_TYPE_VALUES,
     "entityType",
   ),
   visibility: asEnum(
     editorialSpeciesDocument.visibility,
-    visibilities,
+    VISIBILITY_VALUES,
     "visibility",
   ),
   description: editorialSpeciesDocument.description,
@@ -134,7 +102,11 @@ export const demoSpeciesDocument: SpeciesDocument = {
   vernacularNames: editorialSpeciesDocument.vernacularNames.map((name) => ({
     ...name,
     sourcePublicId: asPublicId(name.sourcePublicId, "name.sourcePublicId"),
-    accessLevel: asEnum(name.accessLevel, visibilities, "name.accessLevel"),
+    accessLevel: asEnum(
+      name.accessLevel,
+      VISIBILITY_VALUES,
+      "name.accessLevel",
+    ),
     reviewStatus: asEnum(
       name.reviewStatus,
       ["draft", "under-review", "accepted", "rejected"],

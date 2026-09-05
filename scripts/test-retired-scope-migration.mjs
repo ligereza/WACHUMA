@@ -75,6 +75,8 @@ try {
       VALUES ('f0000000-0000-4000-8000-000000000039', 'test', 'retired', 'f0000000-0000-4000-8000-000000000031');
       INSERT INTO record_provenance (id, source_record_id, biological_entity_id, assertion_type)
       VALUES ('f0000000-0000-4000-8000-000000000040', 'f0000000-0000-4000-8000-000000000025', 'f0000000-0000-4000-8000-000000000031', 'editorial_interpretation');
+      INSERT INTO record_provenance (id, source_record_id, growing_guide_id, assertion_type)
+      VALUES ('f0000000-0000-4000-8000-000000000043', 'f0000000-0000-4000-8000-000000000025', 'f0000000-0000-4000-8000-000000000035', 'editorial_interpretation');
       INSERT INTO source_record_reviews (source_record_id, reviewer, decision, note)
       VALUES ('f0000000-0000-4000-8000-000000000025', 'test', 'rejected', 'test');
     `);

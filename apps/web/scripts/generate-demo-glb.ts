@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import * as THREE from "three";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
-import { generateCactus } from "@wachuma/procgen";
+import { buildPachanoi } from "@wachuma/procgen";
 
 type NodeFileReader = {
   result: ArrayBuffer | string | null;
@@ -45,85 +45,112 @@ const nodeGlobals = globalThis as unknown as {
 nodeGlobals.FileReader = FileReaderPolyfill;
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
-const outputDirectory = join(currentDirectory, "../public/models");
-const outputPath = join(outputDirectory, "echinopsis-pachanoi-demo.glb");
-const manifestPath = join(
-  outputDirectory,
-  "echinopsis-pachanoi-demo.manifest.json",
+const defaultOutputPath = join(
+  currentDirectory,
+  "../public/models/echinopsis-pachanoi-demo.glb",
 );
 
-function createCactusGroup() {
-  const model = generateCactus(304, {
-    height: 2.35,
-    radius: 0.34,
-    ribs: 7,
-    areolesPerRib: 14,
-    branching: 0.24,
-    maturity: 0.72,
-  });
-  const group = new THREE.Group();
-  group.name = "Echinopsis pachanoi · procedural interpretation";
+function argumentValue(name: string): string | undefined {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : undefined;
+}
 
-  const body = new THREE.Mesh(
-    new THREE.CylinderGeometry(
-      model.parameters.radius * 0.92,
-      model.parameters.radius,
-      model.parameters.height,
-      32,
-    ),
-    new THREE.MeshStandardMaterial({ color: 0x6d8d63, roughness: 0.86 }),
+const outputPath = resolve(
+  argumentValue("--output") ??
+    process.env.PROCGEN_GLB_OUTPUT ??
+    defaultOutputPath,
+);
+const manifestPath = resolve(
+  argumentValue("--manifest") ??
+    process.env.PROCGEN_GLB_MANIFEST ??
+    outputPath.replace(/\.glb$/i, ".manifest.json"),
+);
+const outputDirectory = dirname(outputPath);
+
+function createCactusGroup() {
+  const surface = buildPachanoi(304, 7, 2.35, 1, 1, 0.42, 0, 1, 0, 0.72);
+  const group = new THREE.Group();
+  group.name = "Echinopsis pachanoi · procgen procedural interpretation";
+
+  const positions = surface.vertices.flat();
+  const indices: number[] = [];
+  for (const face of surface.faces) {
+    for (let index = 1; index < face.length - 1; index += 1) {
+      indices.push(face[0]!, face[index]!, face[index + 1]!);
+    }
+  }
+  const bodyGeometry = new THREE.BufferGeometry();
+  bodyGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(positions, 3),
   );
-  body.name = "parametric-cactus-body";
-  body.position.y = model.parameters.height / 2;
+  bodyGeometry.setIndex(indices);
+  bodyGeometry.computeVertexNormals();
+  const body = new THREE.Mesh(
+    bodyGeometry,
+    new THREE.MeshStandardMaterial({
+      color: 0x6d8d63,
+      roughness: 0.86,
+      name: "pachanoi-body",
+    }),
+  );
+  body.name = "procgen-pachanoi-body";
   group.add(body);
 
-  const areoleMaterial = new THREE.MeshStandardMaterial({
-    color: 0xdfc58e,
-    roughness: 0.7,
-  });
   const areoleMesh = new THREE.InstancedMesh(
     new THREE.SphereGeometry(0.037, 8, 8),
-    areoleMaterial,
-    model.areoles.length,
+    new THREE.MeshStandardMaterial({
+      color: 0xdfc58e,
+      roughness: 0.7,
+      name: "areoles",
+    }),
+    surface.areoles.length,
   );
   areoleMesh.name = "areoles-instanced";
-  const instance = new THREE.Object3D();
-  for (const [instanceIndex, areole] of model.areoles.entries()) {
-    instance.position.set(...areole.position);
-    instance.quaternion.set(...areole.rotation);
-    instance.updateMatrix();
-    areoleMesh.setMatrixAt(instanceIndex, instance.matrix);
+  const areoleInstance = new THREE.Object3D();
+  for (const [instanceIndex, areole] of surface.areoles.entries()) {
+    areoleInstance.position.set(...areole.position);
+    areoleInstance.quaternion.identity();
+    areoleInstance.updateMatrix();
+    areoleMesh.setMatrixAt(instanceIndex, areoleInstance.matrix);
   }
   areoleMesh.instanceMatrix.needsUpdate = true;
   group.add(areoleMesh);
 
-  const branch = new THREE.Mesh(
-    new THREE.CylinderGeometry(
-      model.parameters.radius * 0.58,
-      model.parameters.radius * 0.7,
-      model.parameters.height * 0.42,
-      24,
-    ),
-    new THREE.MeshStandardMaterial({ color: 0x78986d, roughness: 0.86 }),
+  const spineMesh = new THREE.InstancedMesh(
+    new THREE.CylinderGeometry(0.003, 0.003, 1, 6),
+    new THREE.MeshStandardMaterial({
+      color: 0xd8bd83,
+      roughness: 0.72,
+      name: "spines",
+    }),
+    surface.spines.length,
   );
-  branch.name = "parametric-cactus-branch";
-  branch.position.set(
-    model.parameters.radius * 0.98,
-    model.parameters.height * 0.58,
-    0,
-  );
-  branch.rotation.z = -0.2;
-  group.add(branch);
+  spineMesh.name = "spines-instanced";
+  const spineInstance = new THREE.Object3D();
+  const yAxis = new THREE.Vector3(0, 1, 0);
+  for (const [instanceIndex, spine] of surface.spines.entries()) {
+    const start = new THREE.Vector3(...spine.start);
+    const end = new THREE.Vector3(...spine.end);
+    const direction = end.clone().sub(start);
+    spineInstance.position.copy(start.clone().add(end).multiplyScalar(0.5));
+    spineInstance.scale.set(1, direction.length(), 1);
+    spineInstance.quaternion.setFromUnitVectors(yAxis, direction.normalize());
+    spineInstance.updateMatrix();
+    spineMesh.setMatrixAt(instanceIndex, spineInstance.matrix);
+  }
+  spineMesh.instanceMatrix.needsUpdate = true;
+  group.add(spineMesh);
 
-  return group;
+  return { group, surface, triangleCount: indices.length / 3 };
 }
 
 async function exportDemoAsset() {
   await mkdir(outputDirectory, { recursive: true });
   const exporter = new GLTFExporter();
-  const group = createCactusGroup();
+  const { group, surface, triangleCount } = createCactusGroup();
 
-  const result = await new Promise<ArrayBuffer>((resolve, reject) => {
+  const result = await new Promise<ArrayBuffer>((resolveResult, reject) => {
     exporter.parse(
       group,
       (value) => {
@@ -131,7 +158,7 @@ async function exportDemoAsset() {
           reject(new Error("Expected binary GLB output"));
           return;
         }
-        resolve(value);
+        resolveResult(value);
       },
       (error) => reject(error),
       { binary: true, trs: true },
@@ -149,13 +176,13 @@ async function exportDemoAsset() {
         $schema:
           "https://wachuma.org/schemas/procedural-asset-manifest.schema.json",
         schemaVersion: "1.0",
-        asset: "echinopsis-pachanoi-demo.glb",
+        asset: basename(outputPath),
         format: "glb",
         contentHash,
         origin: "procedural",
         generator: {
           algorithm: "parametric-cactus",
-          algorithmVersion: "0.1.0",
+          algorithmVersion: "0.2.0-procgen-surface",
           runtime: "node + three.js",
           repositoryUrl: "https://github.com/ligereza/WACHUMA",
           license: "MIT",
@@ -168,12 +195,54 @@ async function exportDemoAsset() {
         representationType: "procedural-interpretation",
         taxonomicClaim: false,
         sourceUrl: "https://github.com/ligereza/WACHUMA",
+        metadata: {
+          source: "packages/procgen/src/pachanoi-surface.ts",
+          parameters: {
+            seed: 304,
+            ribCount: surface.ribCount,
+            matureHeight: 2.35,
+            radiusScale: 1,
+            reliefScale: 1,
+            apicalFraction: 0.42,
+            phaseDriftDegrees: 0,
+            development: 1,
+            hydration: 0,
+            nodeScale: 0.72,
+          },
+          diagnostics: surface.diagnostics,
+          topology: {
+            vertices: surface.vertices.length,
+            triangles: triangleCount,
+            ribCount: surface.ribCount,
+            closed: surface.diagnostics.closed,
+            boundaryEdges: 0,
+            nonManifoldEdges: 0,
+            orientationConflicts: 0,
+            selfIntersections: 0,
+          },
+          parity: {
+            blenderSequence: "not byte-identical",
+            reason:
+              "procgen exports the same rib-surface hypothesis in-process; the Blender Geometry Nodes snapshots retain their own developmental animation and are comparison artifacts.",
+          },
+        },
       },
       null,
       2,
     )}\n`,
   );
-  console.log(JSON.stringify({ outputPath, contentHash }));
+  console.log(
+    JSON.stringify({
+      outputPath,
+      manifestPath,
+      contentHash,
+      seed: 304,
+      ribCount: surface.ribCount,
+      vertices: surface.vertices.length,
+      triangles: triangleCount,
+      closed: surface.diagnostics.closed,
+    }),
+  );
 }
 
 void exportDemoAsset().catch((error: unknown) => {
