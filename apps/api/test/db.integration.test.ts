@@ -467,7 +467,13 @@ test(
         echinopsisGuide?.sections.find(
           (section: { sectionKey: string }) => section.sectionKey === "light",
         )?.status,
-        "not_documented",
+        "documented",
+      );
+      assert.equal(
+        echinopsisGuide?.sections.filter(
+          (section: { status: string }) => section.status === "not_documented",
+        ).length,
+        0,
       );
       assert.equal(
         guides
