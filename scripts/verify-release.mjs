@@ -19,6 +19,7 @@ const commands = [
   ["quality:migrations"],
   ["quality:retired-scope"],
   ["quality:procedural"],
+  ["quality:procgen-glb"],
   ["quality:source-map"],
   ["validate:glb"],
   ["quality:topology"],

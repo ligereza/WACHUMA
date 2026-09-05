@@ -55,7 +55,11 @@ silencioso.
 
 **Representar el organismo en 3D como interpretación.** Escenas versionadas con
 hash y manifiesto, recetas deterministas con semilla, y el rótulo
-`procedural-interpretation` que impide leer un render como evidencia.
+`procedural-interpretation` que impide leer un render como evidencia. El asset
+demo se genera desde `@wachuma/procgen` en Node, sin Blender; `pnpm
+quality:procgen-glb` vuelve a generarlo, comprueba el hash, siete costillas,
+cuerpo cerrado, orientación y auto-intersecciones. Blender queda como adaptador
+comparativo de la secuencia apical, no como dependencia del núcleo.
 
 El GLB exportado no conserva identidad de vértice (`rib_id`, `areole_id`, `u`,
 `local_s`, `birth_frame`); esa correspondencia requeriría un sidecar versionado
@@ -85,8 +89,9 @@ proyección pública esté redondeada y restringida hasta revisión humana.
 
 **Medirse solo.** `pnpm verify:release` corre la batería completa —tipos, lint,
 pruebas, build, contenido, licencias, SBOM, migraciones, formato, siembra
-idempotente, integración contra PostgreSQL, auditoría del corpus, paridad entre
-contenido y base, y humo de la web— y se detiene en la primera puerta que falla.
+idempotente, GLB procgen, integración contra PostgreSQL, auditoría del corpus,
+paridad entre contenido y base, y humo DB-backed de 18 superficies públicas— y
+se detiene en la primera puerta que falla.
 Un verde después de arreglar algo puede esconder la siguiente rotura: se vuelve
 a correr entera.
 

@@ -49,6 +49,7 @@
     "quality:legacy-db": "node scripts/test-legacy-db.mjs",
     "quality:markdown": "node scripts/validate-markdown-structure.mjs",
     "quality:procedural": "node scripts/validate-procedural-adapter.mjs",
+    "quality:procgen-glb": "node scripts/quality-procgen-glb.mjs",
     "quality:source-map": "node scripts/validate-procedural-source-map.mjs",
     "validate:glb": "node scripts/validate-glb.mjs",
     "quality:topology": "node scripts/validate-pachanoi-topology.mjs",
