@@ -213,7 +213,7 @@ export function Garden3DPreview() {
           origin: "procedural",
           uri: "/models/echinopsis-pachanoi-demo.glb",
           contentHash:
-            "e14f510f05ea363fbe3f2fbde298f47c731e7e7ef597e46e824bae2e8701e209",
+            "af0916a83cedb22076447358e421b08d069a56868d32f114a2f8bb3ef94748b0",
           license: "WACHUMA-PROJECT",
           attribution: "Generador parametric-cactus propio de WACHUMA",
           visibility: "restricted",

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ValidationError } from "./errors.js";
 import { validateClaimPublication } from "./knowledge-validation.js";
+import { VISIBILITY_VALUES } from "./types.js";
 
 const publicIdPattern = /^[a-z0-9][a-z0-9._-]{0,159}$/;
 
@@ -24,12 +25,7 @@ export const SearchQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(30),
 });
 
-export const VisibilitySchema = z.enum([
-  "public",
-  "restricted",
-  "sensitive",
-  "community-controlled",
-]);
+export const VisibilitySchema = z.enum(VISIBILITY_VALUES);
 
 export const AssertionTypeSchema = z.enum([
   "taxonomic_fact",
