@@ -1,10 +1,12 @@
 import { z } from "zod";
 import type { PublicId, Visibility } from "./types.js";
+import { VISIBILITY_VALUES } from "./types.js";
 import type {
   Location,
   PublicCultivationEvent,
   SpecimenRecord,
 } from "./domain.js";
+import type { SourceReviewProposal } from "./source-review-proposals.js";
 
 const GeoJsonSchema = z
   .record(z.string(), z.unknown())
@@ -26,12 +28,7 @@ const LocationFieldsSchema = z.object({
   parentPublicId: z.string().trim().min(1).max(160).optional(),
   geometryPublic: GeoJsonSchema.optional(),
   geometryExact: GeoJsonSchema.optional(),
-  visibility: z.enum([
-    "public",
-    "restricted",
-    "sensitive",
-    "community-controlled",
-  ]),
+  visibility: z.enum(VISIBILITY_VALUES),
   notes: z.string().max(4000).optional(),
 });
 
@@ -65,12 +62,7 @@ export const AdminSpecimenCreateSchema = z.object({
   ]),
   biologicalEntityPublicId: z.string().min(1).max(160),
   status: z.enum(["alive", "stored", "archived", "lost", "deceased"]),
-  visibility: z.enum([
-    "public",
-    "restricted",
-    "sensitive",
-    "community-controlled",
-  ]),
+  visibility: z.enum(VISIBILITY_VALUES),
   acquiredAt: z.iso.datetime().optional(),
   notes: z.string().max(4000).optional(),
 });
@@ -215,12 +207,7 @@ const CulturalRelationFieldsSchema = z.object({
   ]),
   authorPerspective: z.string().trim().min(1).max(2000),
   sensitivity: z.enum(["normal", "sensitive", "sacred"]),
-  accessLevel: z.enum([
-    "public",
-    "restricted",
-    "sensitive",
-    "community-controlled",
-  ]),
+  accessLevel: z.enum(VISIBILITY_VALUES),
   license: z.string().trim().min(1).max(500),
   reviewNote: z.string().trim().min(1).max(4000).optional(),
   reviewStatus: z.enum(["draft", "under-review", "accepted", "rejected"]),
@@ -378,6 +365,18 @@ export interface AdminSourceRecordTarget {
   canonicalUrl?: string;
 }
 
+export interface AdminSourceRecordPublicationDiff {
+  state: "published" | "restricted" | "unlinked";
+  targets: Array<{
+    kind: AdminSourceRecordTarget["kind"];
+    publicId?: PublicId;
+    id?: string;
+    currentVisibility?: Visibility;
+    currentLicense?: string;
+    licenseDelta: "same" | "different" | "unavailable";
+  }>;
+}
+
 export interface AdminSourceRecord {
   id: string;
   providerKey: string;
@@ -385,6 +384,7 @@ export interface AdminSourceRecord {
   sourceUrl?: string;
   retrievedAt: string;
   license: string;
+  providerLicense?: string;
   attribution: string;
   assertionType: string;
   rawPayload: Record<string, unknown>;
@@ -393,6 +393,9 @@ export interface AdminSourceRecord {
   reviewedBy?: string;
   reviewedAt?: string;
   targets: AdminSourceRecordTarget[];
+  publishedDiff: AdminSourceRecordPublicationDiff;
+  /** Editorial preparation only; it never changes the review decision. */
+  reviewProposal?: SourceReviewProposal;
 }
 
 export interface AdminTaxonPromotion {

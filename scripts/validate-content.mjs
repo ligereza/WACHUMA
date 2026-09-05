@@ -120,6 +120,173 @@ for (const speciesDocument of speciesDocuments) {
     );
   }
 
+  const pathogens = speciesDocument.pathogens ?? [];
+  const pathogenIds = new Set();
+  for (const pathogen of pathogens) {
+    assert.ok(pathogen.publicId, "Every pathogen needs a publicId");
+    assert.ok(
+      !pathogenIds.has(pathogen.publicId),
+      `${pathogen.publicId} is duplicated`,
+    );
+    pathogenIds.add(pathogen.publicId);
+    assert.ok(
+      pathogen.scientificName,
+      `${pathogen.publicId} needs a scientific name`,
+    );
+    assert.equal(
+      pathogen.entityType,
+      "species",
+      `${pathogen.publicId} must be a species entity`,
+    );
+    assert.equal(
+      pathogen.visibility,
+      "restricted",
+      `${pathogen.publicId} remains restricted until direct pachanoi evidence exists`,
+    );
+    assert.ok(
+      pathogen.sourcePublicId,
+      `${pathogen.publicId} needs a taxonomy source`,
+    );
+    assert.ok(
+      sourceIds.has(pathogen.sourcePublicId),
+      `${pathogen.publicId} references a missing taxonomy source`,
+    );
+    assert.ok(
+      pathogen.sourceRecordId,
+      `${pathogen.publicId} needs a provider sourceRecordId`,
+    );
+    for (const identifier of pathogen.externalIdentifiers ?? []) {
+      assert.equal(
+        identifier.namespace,
+        "gbif",
+        `${pathogen.publicId} must be linked to GBIF`,
+      );
+      assert.ok(
+        identifier.identifier,
+        `${pathogen.publicId} needs a GBIF identifier`,
+      );
+      assert.ok(
+        identifier.canonicalUrl,
+        `${pathogen.publicId} needs a canonical GBIF URL`,
+      );
+      assert.equal(
+        identifier.license,
+        "CC BY 4.0",
+        `${pathogen.publicId} needs the GBIF license`,
+      );
+    }
+  }
+  const pathogenicityClaims = speciesDocument.pathogenicityClaims ?? [];
+  assert.ok(
+    pathogens.length >= 2,
+    `${speciesDocument.publicId} needs at least two reviewed pathogen entities`,
+  );
+  assert.equal(
+    pathogenicityClaims.length,
+    pathogens.length,
+    `${speciesDocument.publicId} needs one sourced pathogenicity claim per pathogen`,
+  );
+  for (const claim of pathogenicityClaims) {
+    assert.ok(
+      pathogenIds.has(claim.pathogenPublicId),
+      `${claim.publicId} references a missing pathogen entity`,
+    );
+    assert.equal(
+      claim.predicate,
+      "pathogenicity",
+      `${claim.publicId} must use the pathogenicity predicate`,
+    );
+    assert.match(
+      claim.statement,
+      /no (?:una |una )?inoculaci[oó]n confirmada|no demuestra infecci[oó]n|no prueba un hospedero/i,
+      `${claim.publicId} must state the direct pachanoi evidence limit`,
+    );
+    assert.ok(
+      sourceIds.has(claim.sourcePublicId),
+      `${claim.publicId} references a missing source`,
+    );
+  }
+
+  const relatedTaxa = speciesDocument.relatedTaxa ?? [];
+  const relatedTaxonIds = new Set();
+  for (const relatedTaxon of relatedTaxa) {
+    assert.ok(relatedTaxon.publicId, "Every related taxon needs a publicId");
+    assert.ok(
+      !relatedTaxonIds.has(relatedTaxon.publicId),
+      `${relatedTaxon.publicId} is duplicated`,
+    );
+    relatedTaxonIds.add(relatedTaxon.publicId);
+    assert.ok(
+      relatedTaxon.scientificName,
+      `${relatedTaxon.publicId} needs a scientific name`,
+    );
+    assert.equal(
+      relatedTaxon.entityType,
+      "species",
+      `${relatedTaxon.publicId} must be a species entity`,
+    );
+    assert.equal(
+      relatedTaxon.visibility,
+      "restricted",
+      `${relatedTaxon.publicId} remains restricted to the monograph scope`,
+    );
+    assert.ok(
+      relatedTaxon.sourcePublicId,
+      `${relatedTaxon.publicId} needs a taxonomy source`,
+    );
+    assert.ok(
+      sourceIds.has(relatedTaxon.sourcePublicId),
+      `${relatedTaxon.publicId} references a missing taxonomy source`,
+    );
+    assert.ok(
+      relatedTaxon.sourceRecordId,
+      `${relatedTaxon.publicId} needs a provider sourceRecordId`,
+    );
+    assert.ok(
+      relatedTaxon.externalIdentifiers?.some(
+        (identifier) =>
+          identifier.namespace === "gbif" &&
+          identifier.canonicalUrl &&
+          identifier.license === "CC BY 4.0",
+      ),
+      `${relatedTaxon.publicId} needs a licensed GBIF identifier`,
+    );
+  }
+  const relatedTaxonClaims = speciesDocument.relatedTaxonClaims ?? [];
+  assert.ok(
+    relatedTaxa.length >= 2,
+    `${speciesDocument.publicId} needs at least two related cactus taxa`,
+  );
+  assert.equal(
+    relatedTaxonClaims.length,
+    relatedTaxa.length,
+    `${speciesDocument.publicId} needs one sourced relation claim per related taxon`,
+  );
+  for (const claim of relatedTaxonClaims) {
+    assert.ok(
+      relatedTaxonIds.has(claim.relatedTaxonPublicId),
+      `${claim.publicId} references a missing related taxon`,
+    );
+    assert.equal(
+      claim.predicate,
+      "relatedTaxon",
+      `${claim.publicId} must use the relatedTaxon predicate`,
+    );
+    assert.match(
+      claim.statement,
+      /no (?:prueba|demuestra).*(?:identidad|sinonimia|grupo hermano|equivalencia)|no.*(?:identidad|sinonimia|grupo hermano|equivalencia)/i,
+      `${claim.publicId} must state the relationship evidence limit`,
+    );
+    assert.ok(
+      sourceIds.has(claim.sourcePublicId),
+      `${claim.publicId} references a missing source`,
+    );
+    assert.ok(
+      claim.sourceRecordId,
+      `${claim.publicId} needs a provider sourceRecordId`,
+    );
+  }
+
   for (const name of speciesDocument.vernacularNames ?? []) {
     assert.ok(
       sourceIds.has(name.sourcePublicId),

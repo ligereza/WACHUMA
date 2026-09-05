@@ -1,16 +1,18 @@
 import type { Sql } from "postgres";
 import type {
   AdminSourceRecord,
+  AdminSourceRecordPublicationDiff,
   AdminSourceRecordTarget,
   AdminSourceRecordReviewInput,
   AdminTaxonPromotion,
   AdminTaxonPromotionInput,
 } from "@wachuma/shared";
-import { DomainError } from "@wachuma/shared";
+import { DomainError, getSourceReviewProposal } from "@wachuma/shared";
 
 type SourceRecordRow = {
   id: string;
   provider_key: string;
+  provider_license_uri: string | null;
   source_record_id: string;
   source_url: string | null;
   retrieved_at: string;
@@ -25,7 +27,35 @@ type SourceRecordRow = {
   targets: AdminSourceRecordTarget[];
 };
 
+function publishedDiff(
+  targets: AdminSourceRecordTarget[],
+  sourceLicense: string,
+): AdminSourceRecordPublicationDiff {
+  const visibleTargets = targets.filter((target) => target.visibility);
+  const state = !targets.length
+    ? "unlinked"
+    : visibleTargets.some((target) => target.visibility === "public")
+      ? "published"
+      : "restricted";
+  return {
+    state,
+    targets: targets.map((target) => ({
+      kind: target.kind,
+      ...(target.publicId ? { publicId: target.publicId } : {}),
+      ...(target.id ? { id: target.id } : {}),
+      ...(target.visibility ? { currentVisibility: target.visibility } : {}),
+      ...(target.license ? { currentLicense: target.license } : {}),
+      licenseDelta: target.license
+        ? target.license === sourceLicense
+          ? "same"
+          : "different"
+        : "unavailable",
+    })),
+  };
+}
+
 function toRecord(row: SourceRecordRow): AdminSourceRecord {
+  const reviewProposal = getSourceReviewProposal(row.source_record_id);
   return {
     id: row.id,
     providerKey: row.provider_key,
@@ -33,6 +63,9 @@ function toRecord(row: SourceRecordRow): AdminSourceRecord {
     ...(row.source_url ? { sourceUrl: row.source_url } : {}),
     retrievedAt: row.retrieved_at,
     license: row.license_uri,
+    ...(row.provider_license_uri
+      ? { providerLicense: row.provider_license_uri }
+      : {}),
     attribution: row.attribution,
     assertionType: row.assertion_type,
     rawPayload: row.raw_payload,
@@ -41,6 +74,8 @@ function toRecord(row: SourceRecordRow): AdminSourceRecord {
     ...(row.reviewed_by ? { reviewedBy: row.reviewed_by } : {}),
     ...(row.reviewed_at ? { reviewedAt: row.reviewed_at } : {}),
     targets: row.targets ?? [],
+    publishedDiff: publishedDiff(row.targets ?? [], row.license_uri),
+    ...(reviewProposal ? { reviewProposal } : {}),
   };
 }
 
@@ -93,6 +128,7 @@ export function createSourceReviewRepository(sql: Sql) {
         SELECT
           source_record.id,
           data_source.provider_key,
+          data_source.default_license_uri AS provider_license_uri,
           source_record.source_record_id,
           source_record.source_url,
           source_record.retrieved_at,
@@ -174,6 +210,7 @@ export function createSourceReviewRepository(sql: Sql) {
         GROUP BY
           source_record.id,
           data_source.provider_key,
+          data_source.default_license_uri,
           source_record.source_record_id,
           source_record.source_url,
           source_record.retrieved_at,
@@ -200,6 +237,7 @@ export function createSourceReviewRepository(sql: Sql) {
           SELECT
             source_record.id,
             data_source.provider_key,
+            data_source.default_license_uri AS provider_license_uri,
             source_record.source_record_id,
             source_record.source_url,
             source_record.retrieved_at,
@@ -276,6 +314,7 @@ export function createSourceReviewRepository(sql: Sql) {
           GROUP BY
             source_record.id,
             data_source.provider_key,
+            data_source.default_license_uri,
             source_record.source_record_id,
             source_record.source_url,
             source_record.retrieved_at,

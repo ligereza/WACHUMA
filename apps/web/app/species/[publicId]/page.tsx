@@ -98,6 +98,9 @@ export default async function SpeciesDetailPage({
       claim.predicate,
     ),
   );
+  const taxonomicPositionClaims = claims.filter(
+    (claim) => claim.predicate === "taxonomicStatus",
+  );
   const cultivationClaims = speciesGuides.flatMap((guide) =>
     guide.claims.map((claim) => ({ guide, claim })),
   );
@@ -258,6 +261,33 @@ export default async function SpeciesDetailPage({
               </dd>
             </div>
           </dl>
+          {taxonomicPositionClaims.length > 1 ? (
+            <div className="name-list compact-name-list">
+              <p className="card-kicker">Desacuerdo taxonómico no resuelto</p>
+              <p>
+                Esta ficha conserva las posturas de sus fuentes sin escoger una
+                como resolución editorial.
+              </p>
+              {taxonomicPositionClaims.map((claim) => {
+                const source = species.sources.find(
+                  (candidate) => candidate.publicId === claim.sourcePublicId,
+                );
+                return (
+                  <article key={claim.publicId}>
+                    <h2>{source?.title ?? claim.sourcePublicId ?? "Fuente"}</h2>
+                    <p>{claim.objectText ?? "Valor estructurado"}</p>
+                    <small>
+                      {source?.citation ? `${source.citation} · ` : ""}
+                      {claim.authorPerspective ?? "perspectiva no declarada"}
+                      {claim.recordedOn
+                        ? ` · registrada ${claim.recordedOn}`
+                        : ""}
+                    </small>
+                  </article>
+                );
+              })}
+            </div>
+          ) : null}
           {species.taxonomicVariants?.length ? (
             <div className="name-list compact-name-list">
               <p className="card-kicker">Variantes taxonómicas</p>

@@ -25,7 +25,7 @@ test("species explorer returns the explicit demo record", async () => {
       (identifier: { namespace: string; identifier: string }) =>
         `${identifier.namespace}:${identifier.identifier}`,
     ),
-    ["ipni:88444-2", "gbif:5622352", "gbif:11093098"],
+    ["ipni:88444-2", "ipni:77125731-1", "gbif:5622352", "gbif:11093098"],
   );
   await app.close();
 });
@@ -40,6 +40,8 @@ test("species detail keeps cultural names contextualized and sourced", async () 
 
   assert.equal(response.statusCode, 200);
   const body = response.json() as {
+    taxonomicStatus: string;
+    externalIdentifiers: Array<{ namespace: string; identifier: string }>;
     taxonomicVariants: Array<{
       name: string;
       relationType: string;
@@ -53,6 +55,14 @@ test("species detail keeps cultural names contextualized and sourced", async () 
     }>;
     sources: Array<{ publicId: string }>;
   };
+  assert.equal(body.taxonomicStatus, "unresolved");
+  assert.ok(
+    body.externalIdentifiers.some(
+      (identifier) =>
+        identifier.namespace === "ipni" &&
+        identifier.identifier === "77125731-1",
+    ),
+  );
   assert.deepEqual(
     body.vernacularNames.map((name) => name.term),
     ["San Pedro"],
@@ -63,29 +73,39 @@ test("species detail keeps cultural names contextualized and sourced", async () 
       name.context.includes("equivalencia taxonómica"),
     ),
   );
-  assert.deepEqual(
-    body.sources.map((source) => source.publicId),
-    [
-      "source-ipni-trichocereus-pachanoi-1920",
-      "source-schlumpberger-renner-echinopsis-2012",
-      "source-albesiano-terrazas-trichocereus-2012",
-      "source-utn-echinopsis-pachanoi-habitat-2017",
-      "source-wachuma-demo-editorial",
-      "source-unprg-echinopsis-pachanoi-rhizosphere-2023",
-      "source-untumbes-echinopsis-metabolomics-2020",
-      "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
-      "source-powo-echinopsis-pachanoi",
-      "source-gbif-echinopsis-pachanoi",
-      "source-armijos-saraguro-yachakkuna-2014",
-      "source-rhs-cacti-succulents-guide",
-    ],
-  );
+  const sourceIds = new Set(body.sources.map((source) => source.publicId));
+  for (const sourceId of [
+    "source-ipni-trichocereus-pachanoi-1920",
+    "source-ipni-trichocereus-macrogonus-var-pachanoi-2012",
+    "source-schlumpberger-renner-echinopsis-2012",
+    "source-albesiano-terrazas-trichocereus-2012",
+    "source-albesiano-kiesling-macrogonus-2012",
+    "source-utn-echinopsis-pachanoi-habitat-2017",
+    "source-wachuma-demo-editorial",
+    "source-unprg-echinopsis-pachanoi-rhizosphere-2023",
+    "source-untumbes-echinopsis-metabolomics-2020",
+    "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
+    "source-powo-echinopsis-pachanoi",
+    "source-gbif-echinopsis-pachanoi",
+    "source-armijos-saraguro-yachakkuna-2014",
+    "source-rhs-cacti-succulents-guide",
+  ]) {
+    assert.ok(sourceIds.has(sourceId), `species sources include ${sourceId}`);
+  }
   assert.equal(body.taxonomicVariants[0]?.name, "Trichocereus pachanoi");
   assert.equal(
     body.taxonomicVariants[0]?.relationType,
     "historical_combination",
   );
   assert.equal(body.taxonomicVariants[0]?.reviewStatus, "draft");
+  assert.deepEqual(body.taxonomicVariants[1], {
+    name: "Trichocereus macrogonus var. pachanoi",
+    relationType: "unresolved_variant",
+    context:
+      "Tratamiento de Albesiano y Kiesling (2012), conservado junto a la aceptación de Echinopsis pachanoi en POWO; WACHUMA no lo promueve como una resolución taxonómica propia.",
+    sourcePublicId: "source-albesiano-kiesling-macrogonus-2012",
+    reviewStatus: "under-review",
+  });
   await app.close();
 });
 
@@ -95,6 +115,19 @@ test("species explorer searches the historical taxonomic variant", async () => {
   const response = await app.inject({
     method: "GET",
     url: "/api/v1/species?search=Trichocereus",
+  });
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.json()[0]?.scientificName, "Echinopsis pachanoi");
+  await app.close();
+});
+
+test("species explorer searches the unresolved 2012 taxonomic treatment", async () => {
+  const app = buildApi();
+
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/species?search=macrogonus",
   });
 
   assert.equal(response.statusCode, 200);

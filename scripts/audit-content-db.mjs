@@ -202,6 +202,8 @@ try {
         ON source_record.id = claim.source_record_id
       WHERE claim.subject_type = 'taxon'
         AND claim.subject_id = ${entity.taxon_id}
+        AND claim.predicate <> 'pathogenicity'
+        AND claim.predicate <> 'relatedTaxon'
         AND claim.source_record_id IS NOT NULL
       ORDER BY claim.public_id ASC
     `;
@@ -247,6 +249,334 @@ try {
         check(
           actualValue === expectedValue,
           `species ${document.publicId} claim ${expected.publicId} ${field} differs between content and PostgreSQL`,
+        );
+      }
+    }
+
+    const pathogens = document.pathogens ?? [];
+    for (const pathogen of pathogens) {
+      const [pathogenRow] = await sql`
+        SELECT entity.id, entity.public_id, entity.visibility,
+               entity.entity_type, entity.display_name,
+               taxon.scientific_name, taxon.rank, taxon.taxonomic_status,
+               taxon.description
+        FROM biological_entities AS entity
+        JOIN taxa AS taxon ON taxon.id = entity.taxon_id
+        WHERE entity.public_id = ${pathogen.publicId}
+        LIMIT 1
+      `;
+      check(
+        Boolean(pathogenRow),
+        `pathogen ${pathogen.publicId} is absent from PostgreSQL`,
+      );
+      if (!pathogenRow) continue;
+      for (const [field, actual, expected] of [
+        [
+          "visibility",
+          pathogenRow.visibility,
+          pathogen.visibility ?? "restricted",
+        ],
+        [
+          "entityType",
+          pathogenRow.entity_type,
+          pathogen.entityType ?? "species",
+        ],
+        ["displayName", pathogenRow.display_name, pathogen.scientificName],
+        [
+          "scientificName",
+          pathogenRow.scientific_name,
+          pathogen.scientificName,
+        ],
+        ["rank", pathogenRow.rank, pathogen.rank ?? "species"],
+        [
+          "taxonomicStatus",
+          pathogenRow.taxonomic_status,
+          pathogen.taxonomicStatus ?? "accepted",
+        ],
+        ["description", pathogenRow.description, pathogen.description ?? null],
+      ]) {
+        check(
+          actual === expected,
+          `pathogen ${pathogen.publicId} ${field} differs between content and PostgreSQL`,
+        );
+      }
+      const pathogenIdentifiers = await sql`
+        SELECT namespace, identifier, canonical_url, license_uri
+        FROM external_identifiers
+        WHERE biological_entity_id = ${pathogenRow.id}
+      `;
+      for (const identifier of pathogen.externalIdentifiers ?? []) {
+        const actual = pathogenIdentifiers.find(
+          (candidate) =>
+            candidate.namespace === identifier.namespace &&
+            candidate.identifier === identifier.identifier,
+        );
+        check(
+          Boolean(actual),
+          `pathogen ${pathogen.publicId} GBIF identifier is absent from PostgreSQL`,
+        );
+        if (actual) {
+          check(
+            actual.canonical_url === identifier.canonicalUrl,
+            `pathogen ${pathogen.publicId} GBIF URL differs`,
+          );
+          check(
+            actual.license_uri === identifier.license,
+            `pathogen ${pathogen.publicId} GBIF license differs`,
+          );
+        }
+      }
+      const [provenance] = await sql`
+        SELECT source_record.source_record_id
+        FROM record_provenance AS provenance
+        JOIN source_records AS source_record ON source_record.id = provenance.source_record_id
+        WHERE provenance.biological_entity_id = ${pathogenRow.id}
+          AND source_record.source_record_id = ${pathogen.sourceRecordId}
+          AND source_record.status = 'accepted'
+        LIMIT 1
+      `;
+      check(
+        Boolean(provenance),
+        `pathogen ${pathogen.publicId} lacks accepted source provenance`,
+      );
+    }
+
+    const pathogenicityClaims = document.pathogenicityClaims ?? [];
+    const persistedPathogenicity = await sql`
+      SELECT claim.public_id, claim.predicate, claim.object_type,
+             claim.object_id, source.public_id AS source_public_id,
+             source_record.source_record_id AS provider_source_record_id,
+             claim.author_perspective, claim.recorded_on,
+             claim.visibility, claim.review_status
+      FROM claims AS claim
+      JOIN sources AS source ON source.id = claim.source_id
+      LEFT JOIN source_records AS source_record ON source_record.id = claim.source_record_id
+      WHERE claim.subject_type = 'taxon'
+        AND claim.subject_id = ${entity.taxon_id}
+        AND claim.predicate = 'pathogenicity'
+      ORDER BY claim.public_id ASC
+    `;
+    check(
+      persistedPathogenicity.length === pathogenicityClaims.length,
+      `species ${document.publicId} has ${persistedPathogenicity.length} persisted pathogenicity claims but content declares ${pathogenicityClaims.length}`,
+    );
+    for (const expected of pathogenicityClaims) {
+      const pathogen = document.pathogens?.find(
+        (item) => item.publicId === expected.pathogenPublicId,
+      );
+      const [pathogenRow] = pathogen
+        ? await sql`SELECT id FROM biological_entities WHERE public_id = ${pathogen.publicId} LIMIT 1`
+        : [];
+      const actual = persistedPathogenicity.find(
+        (claim) => claim.public_id === expected.publicId,
+      );
+      check(
+        Boolean(actual),
+        `pathogenicity claim ${expected.publicId} is not persisted`,
+      );
+      if (actual) {
+        check(
+          actual.predicate === expected.predicate,
+          `pathogenicity claim ${expected.publicId} predicate differs`,
+        );
+        check(
+          actual.object_type === "biological_entity",
+          `pathogenicity claim ${expected.publicId} object type differs`,
+        );
+        check(
+          actual.object_id === pathogenRow?.id,
+          `pathogenicity claim ${expected.publicId} object entity differs`,
+        );
+        check(
+          actual.source_public_id === expected.sourcePublicId,
+          `pathogenicity claim ${expected.publicId} source differs`,
+        );
+        check(
+          actual.provider_source_record_id === expected.sourceRecordId,
+          `pathogenicity claim ${expected.publicId} source record differs`,
+        );
+        check(
+          actual.author_perspective === expected.authorPerspective,
+          `pathogenicity claim ${expected.publicId} perspective differs`,
+        );
+        check(
+          normalizeDatabaseDate(actual.recorded_on, true) ===
+            expected.recordedOn,
+          `pathogenicity claim ${expected.publicId} date differs`,
+        );
+        check(
+          actual.visibility === expected.visibility,
+          `pathogenicity claim ${expected.publicId} visibility differs`,
+        );
+        check(
+          actual.review_status === expected.reviewStatus,
+          `pathogenicity claim ${expected.publicId} review status differs`,
+        );
+      }
+    }
+
+    const relatedTaxa = document.relatedTaxa ?? [];
+    for (const relatedTaxon of relatedTaxa) {
+      const [relatedRow] = await sql`
+        SELECT entity.id, entity.public_id, entity.visibility,
+               entity.entity_type, entity.display_name,
+               taxon.scientific_name, taxon.rank, taxon.taxonomic_status,
+               taxon.description
+        FROM biological_entities AS entity
+        JOIN taxa AS taxon ON taxon.id = entity.taxon_id
+        WHERE entity.public_id = ${relatedTaxon.publicId}
+        LIMIT 1
+      `;
+      check(
+        Boolean(relatedRow),
+        `related taxon ${relatedTaxon.publicId} is absent from PostgreSQL`,
+      );
+      if (!relatedRow) continue;
+      for (const [field, actual, expected] of [
+        [
+          "visibility",
+          relatedRow.visibility,
+          relatedTaxon.visibility ?? "restricted",
+        ],
+        [
+          "entityType",
+          relatedRow.entity_type,
+          relatedTaxon.entityType ?? "species",
+        ],
+        ["displayName", relatedRow.display_name, relatedTaxon.scientificName],
+        [
+          "scientificName",
+          relatedRow.scientific_name,
+          relatedTaxon.scientificName,
+        ],
+        ["rank", relatedRow.rank, relatedTaxon.rank ?? "species"],
+        [
+          "taxonomicStatus",
+          relatedRow.taxonomic_status,
+          relatedTaxon.taxonomicStatus ?? "accepted",
+        ],
+        [
+          "description",
+          relatedRow.description,
+          relatedTaxon.description ?? null,
+        ],
+      ]) {
+        check(
+          actual === expected,
+          `related taxon ${relatedTaxon.publicId} ${field} differs between content and PostgreSQL`,
+        );
+      }
+      const relatedIdentifiers = await sql`
+        SELECT namespace, identifier, canonical_url, license_uri
+        FROM external_identifiers
+        WHERE biological_entity_id = ${relatedRow.id}
+      `;
+      for (const identifier of relatedTaxon.externalIdentifiers ?? []) {
+        const actual = relatedIdentifiers.find(
+          (candidate) =>
+            candidate.namespace === identifier.namespace &&
+            candidate.identifier === identifier.identifier,
+        );
+        check(
+          Boolean(actual),
+          `related taxon ${relatedTaxon.publicId} identifier ${identifier.namespace}:${identifier.identifier} is absent from PostgreSQL`,
+        );
+        if (actual) {
+          check(
+            actual.canonical_url === identifier.canonicalUrl,
+            `related taxon ${relatedTaxon.publicId} identifier ${identifier.namespace}:${identifier.identifier} URL differs`,
+          );
+          check(
+            actual.license_uri === identifier.license,
+            `related taxon ${relatedTaxon.publicId} identifier ${identifier.namespace}:${identifier.identifier} license differs`,
+          );
+        }
+      }
+      const [provenance] = await sql`
+        SELECT source_record.source_record_id
+        FROM record_provenance AS provenance
+        JOIN source_records AS source_record ON source_record.id = provenance.source_record_id
+        WHERE provenance.biological_entity_id = ${relatedRow.id}
+          AND source_record.source_record_id = ${relatedTaxon.sourceRecordId}
+          AND source_record.status = 'accepted'
+        LIMIT 1
+      `;
+      check(
+        Boolean(provenance),
+        `related taxon ${relatedTaxon.publicId} lacks accepted source provenance`,
+      );
+    }
+
+    const relatedTaxonClaims = document.relatedTaxonClaims ?? [];
+    const persistedRelatedTaxa = await sql`
+      SELECT claim.public_id, claim.predicate, claim.object_type,
+             claim.object_id, source.public_id AS source_public_id,
+             source_record.source_record_id AS provider_source_record_id,
+             claim.author_perspective, claim.recorded_on,
+             claim.visibility, claim.review_status
+      FROM claims AS claim
+      JOIN sources AS source ON source.id = claim.source_id
+      LEFT JOIN source_records AS source_record ON source_record.id = claim.source_record_id
+      WHERE claim.subject_type = 'taxon'
+        AND claim.subject_id = ${entity.taxon_id}
+        AND claim.predicate = 'relatedTaxon'
+      ORDER BY claim.public_id ASC
+    `;
+    check(
+      persistedRelatedTaxa.length === relatedTaxonClaims.length,
+      `species ${document.publicId} has ${persistedRelatedTaxa.length} persisted related-taxon claims but content declares ${relatedTaxonClaims.length}`,
+    );
+    for (const expected of relatedTaxonClaims) {
+      const relatedTaxon = relatedTaxa.find(
+        (item) => item.publicId === expected.relatedTaxonPublicId,
+      );
+      const [relatedRow] = relatedTaxon
+        ? await sql`SELECT id FROM biological_entities WHERE public_id = ${relatedTaxon.publicId} LIMIT 1`
+        : [];
+      const actual = persistedRelatedTaxa.find(
+        (claim) => claim.public_id === expected.publicId,
+      );
+      check(
+        Boolean(actual),
+        `related-taxon claim ${expected.publicId} is not persisted`,
+      );
+      if (actual) {
+        check(
+          actual.predicate === expected.predicate,
+          `related-taxon claim ${expected.publicId} predicate differs`,
+        );
+        check(
+          actual.object_type === "biological_entity",
+          `related-taxon claim ${expected.publicId} object type differs`,
+        );
+        check(
+          actual.object_id === relatedRow?.id,
+          `related-taxon claim ${expected.publicId} object entity differs`,
+        );
+        check(
+          actual.source_public_id === expected.sourcePublicId,
+          `related-taxon claim ${expected.publicId} source differs`,
+        );
+        check(
+          actual.provider_source_record_id === expected.sourceRecordId,
+          `related-taxon claim ${expected.publicId} source record differs`,
+        );
+        check(
+          actual.author_perspective === expected.authorPerspective,
+          `related-taxon claim ${expected.publicId} perspective differs`,
+        );
+        check(
+          normalizeDatabaseDate(actual.recorded_on, true) ===
+            expected.recordedOn,
+          `related-taxon claim ${expected.publicId} date differs`,
+        );
+        check(
+          actual.visibility === expected.visibility,
+          `related-taxon claim ${expected.publicId} visibility differs`,
+        );
+        check(
+          actual.review_status === expected.reviewStatus,
+          `related-taxon claim ${expected.publicId} review status differs`,
         );
       }
     }

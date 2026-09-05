@@ -19,11 +19,12 @@ con cara de medición. Los hechos del corpus editorial se preguntan con
 
 ## El organismo
 
-| Palabra                                  | Qué es                                                                                                                                |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| **_Echinopsis pachanoi_**                | el nombre científico aceptado, según POWO                                                                                             |
-| **_Trichocereus pachanoi_**              | combinación taxonómica histórica, conservada como variante documentada                                                                |
-| **wachuma**, **huachuma**, **San Pedro** | nombres culturales situados, con fuente, contexto y revisión. **Nunca** sinónimos del taxón ni resolubles por el título de una página |
+| Palabra                                       | Qué es                                                                                                                                |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **_Echinopsis pachanoi_**                     | el nombre científico aceptado por POWO; WACHUMA lo usa como ancla de la ficha sin resolver tratamientos alternativos                  |
+| **_Trichocereus pachanoi_**                   | combinación taxonómica histórica, conservada como variante documentada                                                                |
+| **_Trichocereus macrogonus_ var. _pachanoi_** | tratamiento de Albesiano y Kiesling (2012), conservado como postura taxonómica no resuelta junto a POWO                               |
+| **wachuma**, **huachuma**, **San Pedro**      | nombres culturales situados, con fuente, contexto y revisión. **Nunca** sinónimos del taxón ni resolubles por el título de una página |
 
 ## Las tres capas de identidad
 
