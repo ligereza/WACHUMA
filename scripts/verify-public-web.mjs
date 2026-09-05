@@ -131,7 +131,8 @@ try {
   assert.match(cultivationDetail, /Orientación de cultivo/i);
   assert.match(cultivationDetail, /source-rhs-cacti-succulents-guide/i);
   assert.match(cultivationDetail, /Mapa de cobertura/i);
-  assert.match(cultivationDetail, /sin documentar/i);
+  assert.match(cultivationDetail, /no aplica/i);
+  assert.doesNotMatch(cultivationDetail, /sin documentar/i);
   assert.match(cultivationDetail, /Bibliografía del manual/i);
 
   const search = await (await fetch(`${webBaseUrl}/search?q=pachanoi`)).text();
