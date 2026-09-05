@@ -334,6 +334,9 @@ export function GeometryNodesPachanoiPreview() {
       <div className="svg-loft-preview-panel gn-pachanoi-project-panel">
         <p className="eyebrow">Blender 4.5.4 · Geometry Nodes · GLB horneado</p>
         <h1>Pachanoi: módulos de costilla</h1>
+        <p className="eyebrow">
+          WEB_GEOMETRY_APPROXIMATION · presentación no canónica
+        </p>
         <p>
           El volumen no se deforma desde un tubo. Geometry Nodes instancia la
           misma costilla paramétrica
@@ -341,7 +344,9 @@ export function GeometryNodesPachanoiPreview() {
           espinas se evalúa sobre esa superficie y el meristemo prolonga el
           crecimiento apical. El preview reproduce snapshots evaluados del mismo
           `.blend`, porque el exportador glTF no conserva el modificador
-          Geometry Nodes animado.
+          Geometry Nodes animado. Los controles de redondeo y escala de espinas
+          también desplazan vértices en el shader; esta vista no es evidencia de
+          la geometría exportada del GLB.
         </p>
         <div className="gn-control-group" aria-label="Controles de desarrollo">
           <p className="eyebrow">Desarrollo apical</p>
