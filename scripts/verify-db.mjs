@@ -42,6 +42,9 @@ try {
   // exercises a stale repository implementation after a local source change.
   run(["--filter", "@wachuma/db", "build"]);
   run(["--filter", "@wachuma/api", "test"], { RUN_DB_INTEGRATION: "1" });
+  // The integration suite proves the real query shape; this companion harness
+  // scales its claims branch temporarily and always rolls the transaction back.
+  run(["bench:public-search", "--", "--rows", "5000"]);
 } catch (error) {
   verificationError = error;
 } finally {
