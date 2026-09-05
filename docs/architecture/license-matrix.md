@@ -76,7 +76,7 @@ artefacto exacto y registrar la decisión.
 | RHS Growing Guide               | Orientación institucional con términos propios; conservar URL, fecha y alcance. No redistribuir su texto completo ni convertir una guía general en evidencia específica de especie.                                                                                                                                                                                                    |
 | GeoNames                        | CC BY; mostrar atribución y conservar URL/identificador.                                                                                                                                                                                                                                                                                                                               |
 | DOI/ORCID                       | Son identificadores y metadatos; la licencia del artículo, perfil o documento enlazado se resuelve en su fuente.                                                                                                                                                                                                                                                                       |
-| Armijos, Cota & González (2014) | CC BY 2.0 según el artículo abierto                                                                                                                                                                                                                                                                                                                                                    | Fuente académica para una relación cultural situada Saraguro–Echinopsis pachanoi | Se conserva metadata, DOI, licencia y paráfrasis acotada; la relación permanece restringida y bajo revisión comunitaria. |
+| Armijos, Cota & González (2014) | CC BY 2.0 según el artículo abierto                                                                                                                                                                                                                                                                                                                                                    |
 | Conocimiento comunitario        | No se trata como “open data” por defecto. Cada relación declara acceso (`public`, `restricted`, `sensitive`, `community-controlled`), licencia o restricción y comunidad relacionada.                                                                                                                                                                                                  |
 
 ## Política de distribución de WACHUMA
@@ -91,6 +91,21 @@ artefacto exacto y registrar la decisión.
   fuente esté disponible en línea.
 - `LICENSES/THIRD_PARTY.md` y un export de atribuciones deben acompañar cada
   release con imports.
+
+## Evidencia verificable de licencias
+
+Esta tabla es el registro mínimo que acompaña a las filas de política anteriores.
+Una licencia no confirmada no autoriza redistribución. “Atribución” describe qué
+debe conservarse o mostrarse; no convierte una licencia de datos, contenido o
+control comunitario en licencia del código.
+
+| Artefacto                       | Licencia             | Fuente                                                 | Atribución / evidencia                                              | Estado        |
+| ------------------------------- | -------------------- | ------------------------------------------------------ | ------------------------------------------------------------------- | ------------- |
+| WACHUMA código actual           | MIT                  | `LICENSE`                                              | Aviso MIT del proyecto                                              | confirmada    |
+| WACHUMA contenido original      | CC BY 4.0            | `LICENSE-CONTENT.md`                                   | Autoría WACHUMA y excepciones por registro                          | confirmada    |
+| FungalTraits release v0.0.3     | `Other (Open)`       | `docs/data/fungaltraits-import-run-2026-08-24.md`      | DOI, checksum y atribución conservados; licencia de datos pendiente | no confirmada |
+| Armijos, Cota & González (2014) | CC BY 2.0            | Artículo abierto y DOI registrados en el source record | Cita, DOI y paráfrasis acotada; relación bajo revisión comunitaria  | confirmada    |
+| Conocimiento comunitario        | depende del registro | Fuente y comunidad declaradas por relación             | Acceso y atribución revisados por comunidad                         | no confirmada |
 
 ## Pendientes antes de una release pública
 
