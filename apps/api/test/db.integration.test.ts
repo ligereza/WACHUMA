@@ -290,6 +290,46 @@ test(
           claim.objectText.includes("Trichocereus macrogonus var. pachanoi"),
         ),
       );
+      const pathogenicityPositions = taxonomicClaims
+        .json()
+        .filter(
+          (claim: { predicate: string }) => claim.predicate === "pathogenicity",
+        );
+      assert.equal(pathogenicityPositions.length, 4);
+      assert.deepEqual(
+        pathogenicityPositions
+          .map((claim: { objectType?: string; objectId?: string }) => [
+            claim.objectType,
+            claim.objectId,
+          ])
+          .every(
+            ([objectType, objectId]: [
+              string | undefined,
+              string | undefined,
+            ]) => objectType === "biological_entity" && Boolean(objectId),
+          ),
+        true,
+      );
+      const relatedTaxonPositions = taxonomicClaims
+        .json()
+        .filter(
+          (claim: { predicate: string }) => claim.predicate === "relatedTaxon",
+        );
+      assert.deepEqual(
+        relatedTaxonPositions
+          .map((claim: { publicId: string }) => claim.publicId)
+          .sort(),
+        [
+          "claim-pachanoi-related-echinopsis-lageniformis",
+          "claim-pachanoi-related-echinopsis-peruviana",
+        ],
+      );
+      assert.ok(
+        relatedTaxonPositions.every(
+          (claim: { objectType?: string; objectId?: string }) =>
+            claim.objectType === "biological_entity" && Boolean(claim.objectId),
+        ),
+      );
       assert.ok(echinopsis.json().ecology.length >= 2);
       assert.ok(
         echinopsis
