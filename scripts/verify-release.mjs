@@ -25,6 +25,7 @@ const commands = [
   ["format:check"],
   ["db:verify"],
   ["quality:legacy-db"],
+  ["quality:markdown"],
   ["quality:corpus"],
   ["quality:content-db"],
   ["quality:public-corpus"],

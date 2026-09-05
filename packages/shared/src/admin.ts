@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { PublicId, Visibility } from "./types.js";
+import { VISIBILITY_VALUES } from "./types.js";
 import type {
   Location,
   PublicCultivationEvent,
@@ -26,12 +27,7 @@ const LocationFieldsSchema = z.object({
   parentPublicId: z.string().trim().min(1).max(160).optional(),
   geometryPublic: GeoJsonSchema.optional(),
   geometryExact: GeoJsonSchema.optional(),
-  visibility: z.enum([
-    "public",
-    "restricted",
-    "sensitive",
-    "community-controlled",
-  ]),
+  visibility: z.enum(VISIBILITY_VALUES),
   notes: z.string().max(4000).optional(),
 });
 
@@ -65,12 +61,7 @@ export const AdminSpecimenCreateSchema = z.object({
   ]),
   biologicalEntityPublicId: z.string().min(1).max(160),
   status: z.enum(["alive", "stored", "archived", "lost", "deceased"]),
-  visibility: z.enum([
-    "public",
-    "restricted",
-    "sensitive",
-    "community-controlled",
-  ]),
+  visibility: z.enum(VISIBILITY_VALUES),
   acquiredAt: z.iso.datetime().optional(),
   notes: z.string().max(4000).optional(),
 });
@@ -215,12 +206,7 @@ const CulturalRelationFieldsSchema = z.object({
   ]),
   authorPerspective: z.string().trim().min(1).max(2000),
   sensitivity: z.enum(["normal", "sensitive", "sacred"]),
-  accessLevel: z.enum([
-    "public",
-    "restricted",
-    "sensitive",
-    "community-controlled",
-  ]),
+  accessLevel: z.enum(VISIBILITY_VALUES),
   license: z.string().trim().min(1).max(500),
   reviewNote: z.string().trim().min(1).max(4000).optional(),
   reviewStatus: z.enum(["draft", "under-review", "accepted", "rejected"]),
