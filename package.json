@@ -22,6 +22,7 @@
     "db:verify": "node scripts/verify-db.mjs",
     "export:public": "pnpm --filter @wachuma/interop build && node scripts/export-public-corpus.mjs",
     "quality:public-export": "node scripts/verify-public-export.mjs",
+    "quality:source-review": "node scripts/verify-source-review-proposals.mjs",
     "verify:public-web": "node scripts/verify-public-web.mjs",
     "import:gbif:snapshot": "pnpm --filter @wachuma/importer-gbif build && node scripts/fetch-gbif-snapshot.mjs",
     "harvest:pachanoi:pages": "node scripts/harvest-pachanoi-pages.mjs",

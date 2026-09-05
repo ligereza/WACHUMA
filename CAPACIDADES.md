@@ -71,6 +71,13 @@ manifiesto SHA-256 desde las proyecciones públicas; `pnpm quality:public-export
 comprueba la reconstrucción, la atribución y que no se filtren registros
 restringidos.
 
+**Revisar fuentes sin perder alcance.** `/admin/review` muestra para cada
+`source_record_id` pendiente una propuesta editorial con evidencia, licencia,
+muestras, región, método, qué sostiene y qué no sostiene, además del diff con
+la proyección pública. `pnpm quality:source-review` comprueba que las 14 filas
+web actuales (10 IDs estables por cosechas repetidas) tengan cobertura. La
+propuesta no cambia estados ni publica automáticamente.
+
 **Medirse solo.** `pnpm verify:release` corre la batería completa —tipos, lint,
 pruebas, build, contenido, licencias, SBOM, migraciones, formato, siembra
 idempotente, integración contra PostgreSQL, auditoría del corpus, paridad entre
