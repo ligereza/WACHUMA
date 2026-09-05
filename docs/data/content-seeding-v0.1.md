@@ -55,6 +55,15 @@ le cause pudrición. Conservarlos como registros restringidos mantenía vivo un
 corpus que el proyecto ya no persigue. Su historia sigue en git y en los
 documentos de corrida, que no se reescriben.
 
+Las bases heredadas se limpian con la migración
+`0024_remove_out_of_scope_taxa.sql`. Antes de aplicarla se debe conservar un
+backup o export de `source_records`: la operación es transaccional, elimina
+las dependencias de esos dos taxones en el orden de claves foráneas, conserva
+fuentes bibliográficas compartidas y elimina un `source_record` sólo cuando ya
+no tiene provenance, claims, revisiones ni referencias de escenas. El seed no
+recrea esos registros. `pnpm quality:retired-scope` prueba el caso heredado en
+una transacción aislada y hace rollback al terminar.
+
 Lo que sí entra alrededor del eje son las cactáceas emparentadas —_Echinopsis
 peruviana_, _Echinopsis lageniformis_ / _Trichocereus bridgesii_ y los taxones
 con teorías que preceden o proceden al pachanoi— y los hongos que comúnmente lo

@@ -88,6 +88,16 @@ export default async function SpeciesDetailPage({
   const ecologyClaims = claims.filter((claim) =>
     ["nativeRange", "ecologicalContext", "biome"].includes(claim.predicate),
   );
+  const geneticClaims = claims.filter((claim) =>
+    ["molecularPhylogeny", "chloroplastPhylogeny", "geneticScope"].includes(
+      claim.predicate,
+    ),
+  );
+  const historicalClaims = claims.filter((claim) =>
+    ["historicalTaxonomy", "historicalContext", "historicalAccount"].includes(
+      claim.predicate,
+    ),
+  );
   const cultivationClaims = speciesGuides.flatMap((guide) =>
     guide.claims.map((claim) => ({ guide, claim })),
   );
@@ -463,11 +473,52 @@ export default async function SpeciesDetailPage({
 
         <section className="detail-card">
           <p className="card-kicker">Historia</p>
-          {species.history.length ? (
-            species.history.map((item) => <p key={item}>{item}</p>)
+          {species.history.length || historicalClaims.length ? (
+            <>
+              {species.history.map((item) => (
+                <p key={item}>{item}</p>
+              ))}
+              {historicalClaims.map((claim) => (
+                <article className="source-row" key={claim.publicId}>
+                  <h2>{claim.predicate}</h2>
+                  <p>{claim.objectText ?? "Valor estructurado"}</p>
+                  <small>
+                    {claim.assertionType} · fuente{" "}
+                    {claim.sourcePublicId ?? claim.sourceId}
+                  </small>
+                </article>
+              ))}
+            </>
           ) : (
             <p className="empty-note">
               No hay un relato histórico publicable asociado todavía.
+            </p>
+          )}
+        </section>
+
+        <section className="detail-card">
+          <p className="card-kicker">Evidencia genética y filogenética</p>
+          {geneticClaims.length ? (
+            <>
+              <p>
+                Esta sección resume estudios moleculares del grupo. No equivale
+                a un perfil genómico de un ejemplar, clon o población local.
+              </p>
+              {geneticClaims.map((claim) => (
+                <article className="source-row" key={claim.publicId}>
+                  <h2>{claim.predicate}</h2>
+                  <p>{claim.objectText ?? "Valor estructurado"}</p>
+                  <small>
+                    {claim.assertionType} · evidencia {claim.evidenceLevel} ·
+                    fuente {claim.sourcePublicId ?? claim.sourceId}
+                  </small>
+                </article>
+              ))}
+            </>
+          ) : (
+            <p className="empty-note">
+              No hay evidencia molecular publicada enlazada todavía. La forma
+              del cactus no se usa como sustituto de una secuencia genética.
             </p>
           )}
         </section>

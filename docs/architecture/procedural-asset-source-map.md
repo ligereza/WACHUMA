@@ -33,9 +33,13 @@ criptográfica dentro de la GPU.
 | Preview         | `apps/web/app/components/GeometryNodesPachanoiPreview.tsx`            | Carga GLB y presenta controles; actualmente también deforma vértices en shaders para redondeo y escala de espinas  | Presentación con aproximación geométrica web |
 
 El GLB no es la fuente primaria: no contiene el árbol GN, sus sockets, la
-regla generativa ni la procedencia completa. Su validación glTF tampoco prueba
-por sí sola manifoldness, continuidad C², Jacobianos, auto-intersecciones ni
-identidad biológica de vértices.
+regla generativa ni la procedencia completa. `pnpm validate:glb` comprueba la
+especificación glTF; `pnpm quality:topology` añade una comprobación limitada
+sobre la superficie corporal exportada (soldadura geométrica de posiciones,
+aristas de frontera, aristas no-manifold, orientación y degenerados), además de
+los hashes SHA-256 de cada GLB y la consistencia cardinal de la identidad
+lateral declarada en el manifiesto. Ninguno de los dos prueba continuidad C²,
+Jacobianos, auto-intersecciones ni identidad biológica de vértices.
 
 ## Artefactos legacy o no activos
 

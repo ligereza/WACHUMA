@@ -146,6 +146,16 @@ const ids = {
   traitDefinitionHeight: "00000000-0000-4000-8000-000000000137",
   traitMeasurementHeight: "00000000-0000-4000-8000-000000000138",
   claimEchinopsisHistory: "00000000-0000-4000-8000-000000000139",
+  sourceRecordIpni: "00000000-0000-4000-8000-000000000220",
+  sourceRecordSchlumpberger: "00000000-0000-4000-8000-000000000221",
+  sourceRecordAlbesiano: "00000000-0000-4000-8000-000000000222",
+  sourceIpni: "00000000-0000-4000-8000-000000000223",
+  sourceSchlumpberger: "00000000-0000-4000-8000-000000000224",
+  sourceAlbesiano: "00000000-0000-4000-8000-000000000225",
+  claimIpniProtologue: "00000000-0000-4000-8000-000000000226",
+  claimIpniCombinations: "00000000-0000-4000-8000-000000000227",
+  claimSchlumpberger: "00000000-0000-4000-8000-000000000228",
+  claimAlbesiano: "00000000-0000-4000-8000-000000000229",
 } as const;
 
 const guideIdByPublicId = new Map([
@@ -199,6 +209,9 @@ const sourceIdByPublicId = new Map([
   ["source-unprg-echinopsis-pachanoi-rhizosphere-2023", ids.sourceUnprg],
   ["source-untumbes-echinopsis-metabolomics-2020", ids.sourceUntumbes],
   ["source-scielo-echinopsis-pachanoi-rhizosphere-2025", ids.sourceScielo],
+  ["source-ipni-trichocereus-pachanoi-1920", ids.sourceIpni],
+  ["source-schlumpberger-renner-echinopsis-2012", ids.sourceSchlumpberger],
+  ["source-albesiano-terrazas-trichocereus-2012", ids.sourceAlbesiano],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
 ]);
 
@@ -213,6 +226,9 @@ const seedSourceIdByPublicId = new Map([
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
   ["source-armijos-saraguro-yachakkuna-2014", ids.sourceSaraguro],
   ["source-gbif", ids.sourceGbifOccurrence],
+  ["source-ipni-trichocereus-pachanoi-1920", ids.sourceIpni],
+  ["source-schlumpberger-renner-echinopsis-2012", ids.sourceSchlumpberger],
+  ["source-albesiano-terrazas-trichocereus-2012", ids.sourceAlbesiano],
 ]);
 
 const editorialTaxonIdBySpeciesPublicId = new Map([
@@ -232,6 +248,16 @@ const editorialClaimIdByPublicId = new Map([
   ],
   ["claim-powo-echinopsis-pachanoi-native-range", ids.claimPowoRange],
   ["claim-powo-echinopsis-pachanoi-biome", ids.claimPowoBiome],
+  ["claim-ipni-echinopsis-pachanoi-protologue-1920", ids.claimIpniProtologue],
+  ["claim-ipni-echinopsis-pachanoi-combinations", ids.claimIpniCombinations],
+  [
+    "claim-schlumpberger-renner-echinopsis-plastid-2012",
+    ids.claimSchlumpberger,
+  ],
+  [
+    "claim-albesiano-terrazas-trichocereus-chloroplast-2012",
+    ids.claimAlbesiano,
+  ],
 ]);
 
 const editorialSourceRecordIdByProviderRecordId = new Map([
@@ -244,6 +270,9 @@ const editorialSourceRecordIdByProviderRecordId = new Map([
   ["scielo-pid:S0187-57792025000100601", ids.sourceRecordScielo],
   ["taxon:88444-2", ids.sourceRecordPowo],
   ["species:5622352", ids.sourceRecordGbif],
+  ["ipni:name:257116-2", ids.sourceRecordIpni],
+  ["doi:10.3732/ajb.1100288", ids.sourceRecordSchlumpberger],
+  ["haseltonia:17:3-23", ids.sourceRecordAlbesiano],
 ]);
 
 function resolveSeedSourceId(publicId: string): string {
@@ -692,7 +721,13 @@ try {
         default_license_uri = EXCLUDED.default_license_uri
     `;
 
-    const pachanoiPageSourceRecords = [
+    const pachanoiPageSourceRecords: Array<{
+      id: string;
+      sourcePublicId: string;
+      sourceRecordId: string;
+      assertionType?: string;
+      status?: string;
+    }> = [
       {
         id: ids.sourceRecordUtn,
         sourcePublicId: "source-utn-echinopsis-pachanoi-habitat-2017",
@@ -713,7 +748,28 @@ try {
         sourcePublicId: "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
         sourceRecordId: "scielo-pid:S0187-57792025000100601",
       },
-    ] as const;
+      {
+        id: ids.sourceRecordIpni,
+        sourcePublicId: "source-ipni-trichocereus-pachanoi-1920",
+        sourceRecordId: "ipni:name:257116-2",
+        assertionType: "academic_publication",
+        status: "accepted",
+      },
+      {
+        id: ids.sourceRecordSchlumpberger,
+        sourcePublicId: "source-schlumpberger-renner-echinopsis-2012",
+        sourceRecordId: "doi:10.3732/ajb.1100288",
+        assertionType: "academic_publication",
+        status: "accepted",
+      },
+      {
+        id: ids.sourceRecordAlbesiano,
+        sourcePublicId: "source-albesiano-terrazas-trichocereus-2012",
+        sourceRecordId: "haseltonia:17:3-23",
+        assertionType: "academic_publication",
+        status: "accepted",
+      },
+    ];
     for (const pageRecord of pachanoiPageSourceRecords) {
       const editorialSource = editorialContent.sources.find(
         (source) => source.publicId === pageRecord.sourcePublicId,
@@ -747,11 +803,11 @@ try {
           ${editorialSource.accessedAt},
           ${editorialSource.license},
           ${editorialSource.attribution},
-          'academic_publication',
+          ${pageRecord.assertionType ?? "academic_publication"},
           ${json(rawPayload)},
           ${payloadChecksum(rawPayload)},
           'pachanoi-page-harvester-v0.2.1',
-          'pending'
+          ${pageRecord.status ?? "pending"}
         )
         ON CONFLICT (id) DO UPDATE SET
           data_source_id = EXCLUDED.data_source_id,
@@ -949,6 +1005,21 @@ try {
         ids.sourceRecordLineageDemo,
         "Fixture sintético para comprobar el contrato público de lineage; no representa material real ni autorización de custodia.",
         false,
+      ],
+      [
+        ids.sourceRecordIpni,
+        "Seed editorial: registro nomenclatural IPNI, licencia, atribución y alcance histórico revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordSchlumpberger,
+        "Seed editorial: artículo filogenético, alcance del muestreo y límites de inferencia revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordAlbesiano,
+        "Seed editorial: artículo de marcadores plastídicos, atribución y alcance de la hipótesis revisados.",
+        true,
       ],
     ] as const) {
       await transaction`
