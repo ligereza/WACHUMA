@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
@@ -5,6 +6,22 @@ import { fileURLToPath } from "node:url";
 import postgres from "../packages/db/node_modules/postgres/src/index.js";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
+if (!process.env.DATABASE_URL) {
+  throw new Error(
+    "DATABASE_URL is required for quality:retired-scope; this gate never falls back to fixtures.",
+  );
+}
+const packageManager = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+const migrationRun = spawnSync(packageManager, ["db:migrate"], {
+  cwd: root,
+  env: process.env,
+  stdio: "inherit",
+  shell: false,
+});
+if (migrationRun.error) throw migrationRun.error;
+if (migrationRun.status !== 0) {
+  throw new Error(`db:migrate failed (${migrationRun.status})`);
+}
 const migration = await readFile(
   resolve(root, "packages/db/migrations/0024_remove_out_of_scope_taxa.sql"),
   "utf8",

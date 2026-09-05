@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -157,17 +158,56 @@ function topology(asset, primitive) {
 
 const failures = [];
 const reports = [];
+const identityByFrame = new Map();
 for (const frame of manifest.frames) {
   const assetPath = resolve(
     root,
     "apps/web/public/models/pachanoi-sequence",
     frame.asset,
   );
-  const asset = parseGlb(new Uint8Array(await readFile(assetPath)));
+  const assetBytes = await readFile(assetPath);
+  const assetHash = createHash("sha256").update(assetBytes).digest("hex");
+  if (frame.contentHash !== assetHash) {
+    failures.push(`${frame.asset}: manifest contentHash does not match GLB`);
+  }
+  const asset = parseGlb(new Uint8Array(assetBytes));
   const expectedRibs = frame.parameters?.["Rib Count"];
   if (expectedRibs !== frame.identity?.rib_ids?.length) {
     failures.push(`${frame.asset}: manifest rib count and identity disagree`);
   }
+  const expectedRows = frame.parameters?.["Areole Rows"];
+  const areoles = frame.identity?.areoles ?? [];
+  const areoleIds = new Set();
+  for (const areole of areoles) {
+    if (areoleIds.has(areole.areole_id)) {
+      failures.push(
+        `${frame.asset}: duplicate areole identity ${areole.areole_id}`,
+      );
+    }
+    areoleIds.add(areole.areole_id);
+    if (areole.rib_id < 0 || areole.rib_id >= expectedRibs) {
+      failures.push(`${frame.asset}: areole rib_id is outside Rib Count`);
+    }
+    if (areole.row < 0 || areole.row >= expectedRows) {
+      failures.push(`${frame.asset}: areole row is outside Areole Rows`);
+    }
+    if (!Number.isFinite(areole.u) || areole.u < 0 || areole.u > 1) {
+      failures.push(`${frame.asset}: areole u is outside [0, 1]`);
+    }
+    if (!Number.isFinite(areole.birth_frame) || areole.birth_frame < 1) {
+      failures.push(`${frame.asset}: areole birth_frame is invalid`);
+    }
+  }
+  if (areoles.length !== expectedRibs * expectedRows) {
+    failures.push(`${frame.asset}: areole lattice cardinality is inconsistent`);
+  }
+  identityByFrame.set(
+    frame.frame,
+    areoles
+      .map((areole) => areole.areole_id)
+      .sort()
+      .join("|"),
+  );
   const materials = asset.json.materials ?? [];
   const primitiveReports = [];
   for (const [meshIndex, mesh] of (asset.json.meshes ?? []).entries()) {
@@ -223,6 +263,8 @@ console.log(
     {
       frames: reports.length,
       bodySurfaceChecks: reports.reduce((count) => count + 1, 0),
+      contentHashChecks: manifest.frames.length,
+      identityChecks: identityByFrame.size,
       failures,
       notMeasured: [
         "self-intersections",
