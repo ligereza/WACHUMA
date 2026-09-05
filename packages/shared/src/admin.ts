@@ -6,6 +6,7 @@ import type {
   PublicCultivationEvent,
   SpecimenRecord,
 } from "./domain.js";
+import type { SourceReviewProposal } from "./source-review-proposals.js";
 
 const GeoJsonSchema = z
   .record(z.string(), z.unknown())
@@ -393,6 +394,8 @@ export interface AdminSourceRecord {
   reviewedAt?: string;
   targets: AdminSourceRecordTarget[];
   publishedDiff: AdminSourceRecordPublicationDiff;
+  /** Editorial preparation only; it never changes the review decision. */
+  reviewProposal?: SourceReviewProposal;
 }
 
 export interface AdminTaxonPromotion {

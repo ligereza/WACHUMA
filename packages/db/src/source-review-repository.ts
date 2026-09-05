@@ -7,7 +7,7 @@ import type {
   AdminTaxonPromotion,
   AdminTaxonPromotionInput,
 } from "@wachuma/shared";
-import { DomainError } from "@wachuma/shared";
+import { DomainError, getSourceReviewProposal } from "@wachuma/shared";
 
 type SourceRecordRow = {
   id: string;
@@ -55,6 +55,7 @@ function publishedDiff(
 }
 
 function toRecord(row: SourceRecordRow): AdminSourceRecord {
+  const reviewProposal = getSourceReviewProposal(row.source_record_id);
   return {
     id: row.id,
     providerKey: row.provider_key,
@@ -74,6 +75,7 @@ function toRecord(row: SourceRecordRow): AdminSourceRecord {
     ...(row.reviewed_at ? { reviewedAt: row.reviewed_at } : {}),
     targets: row.targets ?? [],
     publishedDiff: publishedDiff(row.targets ?? [], row.license_uri),
+    ...(reviewProposal ? { reviewProposal } : {}),
   };
 }
 
