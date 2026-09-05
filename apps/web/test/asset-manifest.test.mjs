@@ -26,6 +26,13 @@ test("procedural GLB manifest is reproducible and provenance-aware", async () =>
   assert.equal(manifest.origin, "procedural");
   assert.equal(manifest.adapterBoundary, "in-process");
   assert.equal(manifest.taxonomicClaim, false);
+  assert.equal(manifest.generator.algorithmVersion, "0.2.0-procgen-surface");
+  assert.equal(
+    manifest.metadata.source,
+    "packages/procgen/src/pachanoi-surface.ts",
+  );
+  assert.equal(manifest.metadata.parameters.ribCount, 7);
+  assert.equal(manifest.metadata.topology.selfIntersections, 0);
   assert.equal(
     createHash("sha256").update(model).digest("hex"),
     manifest.contentHash,
