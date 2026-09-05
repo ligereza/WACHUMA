@@ -19,7 +19,22 @@ en la proyección. La API de demostración sin PostgreSQL solo conserva resultad
 de los recursos demo explícitamente públicos y no serializa relaciones culturales
 restringidas.
 
-La primera implementación usa `ILIKE` con índices trigram sobre las columnas
-textuales principales. Si el corpus crece hasta requerir ranking lingüístico,
-se puede añadir una proyección de búsqueda o `tsvector` sin cambiar los
-identificadores ni la procedencia del modelo canónico.
+La primera implementación usa `ILIKE`. El esquema tiene 26 índices trigram
+para las 37 referencias textuales que compara la consulta pública. La cobertura
+se concentra en campos que crecen con el corpus: nombres taxonómicos y de
+entidades, identificadores externos, claims, fuentes, guías y ejemplares.
+
+Quedan deliberadamente sin índice trigram los valores de baja cardinalidad
+(`specimens.status`, `specimens.specimen_type`,
+`cultural_relations.relation_type`, `places.country_code`) y las tablas de
+referencia pequeñas (`communities`, `historical_periods`). La consulta también
+compara campos derivados o repetidos por sus distintas ramas —por ejemplo el
+nombre científico al buscar especies, guías y ejemplares—; no son índices
+adicionales ni una promesa de cobertura completa.
+
+`pg_trgm` no sirve para patrones de menos de tres caracteres, que siguen
+requiriendo un recorrido secuencial. `pnpm bench:search-indexes` ejecuta
+`EXPLAIN (ANALYZE, BUFFERS)` sobre un esquema desechable y una sola condición
+de una columna: mide el mecanismo del índice, no el endpoint completo
+`/api/v1/search` ni un corpus real de WACHUMA. Con un corpus de una especie,
+un `EXPLAIN ANALYZE` de la ruta tendría valor diagnóstico limitado.
