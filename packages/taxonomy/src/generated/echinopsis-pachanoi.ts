@@ -18,6 +18,66 @@ export const editorialSpeciesDocument = {
     "Ficha pública inicial anclada a POWO/Kew y GBIF. Conserva la diferencia entre una especie aceptada en POWO, una coincidencia GBIF con estado sinónimo y los nombres culturales documentados en contextos específicos.",
   claims: [
     {
+      publicId: "claim-ipni-echinopsis-pachanoi-protologue-1920",
+      predicate: "historicalTaxonomy",
+      statement:
+        "IPNI registra que el nombre fue publicado originalmente como Trichocereus pachanoi por Britton y Rose el 9 de septiembre de 1920, en The Cactaceae 2:134–135; el registro nomenclatural cita material recolectado por J. N. Rose, A. Pachano y George Rose cerca de Cuenca y un holotipo en NY.",
+      assertionType: "academic_publication",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-ipni-trichocereus-pachanoi-1920",
+      sourceRecordId: "ipni:name:257116-2",
+      authorPerspective:
+        "IPNI; WACHUMA resume el registro nomenclatural y no convierte el material tipo en una descripción de todos los ejemplares actuales.",
+      recordedOn: "2026-09-05",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-ipni-echinopsis-pachanoi-combinations",
+      predicate: "historicalTaxonomy",
+      statement:
+        "La historia nomenclatural incluye la combinación Cereus pachanoi (1931) y la combinación Echinopsis pachanoi de 1974; POWO trata Trichocereus pachanoi como sinónimo de Echinopsis pachanoi en su backbone actual.",
+      assertionType: "taxonomic_fact",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-ipni-trichocereus-pachanoi-1920",
+      sourceRecordId: "ipni:name:257116-2",
+      authorPerspective:
+        "IPNI y POWO mantienen los actos nomenclaturales separados de la decisión editorial sobre el nombre aceptado.",
+      recordedOn: "2026-09-05",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-schlumpberger-renner-echinopsis-plastid-2012",
+      predicate: "molecularPhylogeny",
+      statement:
+        "Schlumpberger y Renner analizaron 3.800 nucleótidos de ADN del cloroplasto en 162 plantas que representaban 144 especies y subespecies. Su filogenia de máxima verosimilitud encontró que Echinopsis sensu lato no era monofilético y que la forma de crecimiento y el modo de polinización eran caracteres evolutivamente lábiles. Este resultado informa la historia de clasificación del grupo; no es un genoma de referencia ni identifica por sí solo un clon de Echinopsis pachanoi.",
+      assertionType: "academic_publication",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-schlumpberger-renner-echinopsis-2012",
+      sourceRecordId: "doi:10.3732/ajb.1100288",
+      authorPerspective:
+        "Schlumpberger y Renner; WACHUMA conserva el alcance del muestreo y evita presentarlo como una prueba de identidad individual.",
+      recordedOn: "2026-09-05",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-albesiano-terrazas-trichocereus-chloroplast-2012",
+      predicate: "chloroplastPhylogeny",
+      statement:
+        "Albesiano y Terrazas combinaron 39 caracteres exomorfológicos con secuencias de los marcadores de cloroplasto trnL-F y rpl16 en un muestreo que incluyó 17 especies de Trichocereus y géneros relacionados. Su análisis recuperó Trichocereus como monofilético bajo una circunscripción que incluía dos especies de Harrisia, una hipótesis que difiere de otros tratamientos amplios de Echinopsis.",
+      assertionType: "academic_publication",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-albesiano-terrazas-trichocereus-2012",
+      sourceRecordId: "haseltonia:17:3-23",
+      authorPerspective:
+        "Albesiano y Terrazas; WACHUMA presenta esta hipótesis junto a la evidencia plastídica alternativa y no fuerza una resolución taxonómica única.",
+      recordedOn: "2026-09-05",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
       publicId: "claim-utn-echinopsis-pachanoi-habitat-model-2017",
       predicate: "distributionModel",
       statement:
@@ -213,6 +273,50 @@ export const editorialSpeciesDocument = {
     },
   ],
   sources: [
+    {
+      publicId: "source-ipni-trichocereus-pachanoi-1920",
+      title: "IPNI · Trichocereus pachanoi Britton & Rose",
+      citation:
+        "International Plant Names Index. Trichocereus pachanoi Britton & Rose, The Cactaceae 2:134–135 (1920), nomenclatural record 257116-2. Consultado el 5 de septiembre de 2026.",
+      url: "https://www.ipni.org/n/257116-2",
+      sourceType: "historical_account",
+      license: "CC BY 3.0",
+      attribution:
+        "International Plant Names Index; Royal Botanic Gardens, Kew, Harvard University Herbaria y Australian National Herbarium",
+      publishedOn: "1920-09-09",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "historical_account",
+    },
+    {
+      publicId: "source-schlumpberger-renner-echinopsis-2012",
+      title: "Molecular phylogenetics of Echinopsis (Cactaceae)",
+      citation:
+        "Schlumpberger, B. O. & Renner, S. S. (2012). Molecular phylogenetics of Echinopsis (Cactaceae): Polyphyly at all levels and convergent evolution of pollination modes and growth forms. American Journal of Botany, 99(8), 1335–1349.",
+      url: "https://doi.org/10.3732/ajb.1100288",
+      doi: "10.3732/ajb.1100288",
+      sourceType: "scientific_publication",
+      license: "publisher access; metadata and abstract cited",
+      attribution:
+        "Boris O. Schlumpberger; Susanne S. Renner; American Journal of Botany",
+      publishedOn: "2012-08-01",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "academic_publication",
+    },
+    {
+      publicId: "source-albesiano-terrazas-trichocereus-2012",
+      title:
+        "Cladistic Analysis of Trichocereus Based on Morphological Data and Chloroplast DNA Sequences",
+      citation:
+        "Albesiano, S. & Terrazas, T. (2012). Cladistic Analysis of Trichocereus (Cactaceae: Cactoideae: Trichocereeae) Based on Morphological Data and Chloroplast DNA Sequences. Haseltonia, 17, 3–23.",
+      url: "https://www.cactusconservation.org/CCI/library/pdf/Albesiano_Terrazas_2012_Haseltonia_17_3-23.pdf",
+      sourceType: "scientific_publication",
+      license: "publisher access; article metadata and text cited",
+      attribution:
+        "Sofía Albesiano; Teresa Terrazas; Cactus and Succulent Society of America",
+      publishedOn: "2012-01-01",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "academic_publication",
+    },
     {
       publicId: "source-utn-echinopsis-pachanoi-habitat-2017",
       title:

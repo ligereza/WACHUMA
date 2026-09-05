@@ -11,6 +11,7 @@ const commands = [
   ["build"],
   ["quality:taxonomy-fixture"],
   ["quality:content"],
+  ["quality:pachanoi-knowledge"],
   ["quality:content-manifest"],
   ["quality:licenses"],
   ["quality:sbom"],

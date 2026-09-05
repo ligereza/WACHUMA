@@ -30,6 +30,7 @@
     "content:taxonomy-fixture": "node scripts/generate-taxonomy-fixture.mjs",
     "quality:taxonomy-fixture": "node scripts/generate-taxonomy-fixture.mjs --check",
     "quality:content": "node scripts/validate-content.mjs",
+    "quality:pachanoi-knowledge": "node scripts/validate-pachanoi-knowledge.mjs",
     "quality:content-manifest": "node --test scripts/editorial-content.test.mjs",
     "content:manifest": "node scripts/print-content-manifest.mjs",
     "quality:corpus": "node scripts/audit-corpus.mjs",
