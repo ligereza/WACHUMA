@@ -15,6 +15,23 @@ test("executable species fixture preserves canonical content guardrails", async 
   const content = JSON.parse(await readFile(contentPath, "utf8"));
 
   assert.equal(demoSpeciesDocument.publicId, content.publicId);
+  assert.equal(demoSpeciesDocument.taxonomicStatus, "unresolved");
+  assert.deepEqual(
+    demoSpeciesDocument.externalIdentifiers.map((identifier) => ({
+      namespace: identifier.namespace,
+      identifier: identifier.identifier,
+      canonicalUrl: identifier.canonicalUrl,
+    })),
+    content.externalIdentifiers.map((identifier) => ({
+      namespace: identifier.namespace,
+      identifier: identifier.identifier,
+      canonicalUrl: identifier.canonicalUrl,
+    })),
+  );
+  assert.deepEqual(
+    demoSpeciesDocument.taxonomicVariants,
+    content.taxonomicVariants,
+  );
   assert.deepEqual(
     demoSpeciesDocument.vernacularNames.map((item) => item.term),
     content.vernacularNames.map((item) => item.term),

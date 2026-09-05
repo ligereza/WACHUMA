@@ -99,6 +99,11 @@ try {
   ).text();
   assert.match(echinopsis, /Echinopsis pachanoi/i);
   assert.match(echinopsis, /Trichocereus pachanoi/i);
+  assert.match(echinopsis, /Desacuerdo taxonómico no resuelto/i);
+  assert.match(echinopsis, /Trichocereus macrogonus var\. pachanoi/i);
+  assert.match(echinopsis, /77125731-1/);
+  assert.match(echinopsis, /Plants of the World Online/i);
+  assert.match(echinopsis, /Albesiano.*Kiesling.*2012/i);
   assert.match(echinopsis, /editorial/i);
   assert.match(echinopsis, /Estudio material/i);
   assert.match(echinopsis, /No hay claims químicos publicables/i);

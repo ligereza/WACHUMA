@@ -156,6 +156,11 @@ const ids = {
   claimIpniCombinations: "00000000-0000-4000-8000-000000000227",
   claimSchlumpberger: "00000000-0000-4000-8000-000000000228",
   claimAlbesiano: "00000000-0000-4000-8000-000000000229",
+  sourceRecordIpniMacrogonus: "00000000-0000-4000-8000-000000000230",
+  sourceRecordAlbesianoKiesling: "00000000-0000-4000-8000-000000000231",
+  sourceIpniMacrogonus: "00000000-0000-4000-8000-000000000232",
+  sourceAlbesianoKiesling: "00000000-0000-4000-8000-000000000233",
+  claimAlbesianoKiesling: "00000000-0000-4000-8000-000000000234",
 } as const;
 
 const guideIdByPublicId = new Map([
@@ -210,8 +215,13 @@ const sourceIdByPublicId = new Map([
   ["source-untumbes-echinopsis-metabolomics-2020", ids.sourceUntumbes],
   ["source-scielo-echinopsis-pachanoi-rhizosphere-2025", ids.sourceScielo],
   ["source-ipni-trichocereus-pachanoi-1920", ids.sourceIpni],
+  [
+    "source-ipni-trichocereus-macrogonus-var-pachanoi-2012",
+    ids.sourceIpniMacrogonus,
+  ],
   ["source-schlumpberger-renner-echinopsis-2012", ids.sourceSchlumpberger],
   ["source-albesiano-terrazas-trichocereus-2012", ids.sourceAlbesiano],
+  ["source-albesiano-kiesling-macrogonus-2012", ids.sourceAlbesianoKiesling],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
 ]);
 
@@ -227,8 +237,13 @@ const seedSourceIdByPublicId = new Map([
   ["source-armijos-saraguro-yachakkuna-2014", ids.sourceSaraguro],
   ["source-gbif", ids.sourceGbifOccurrence],
   ["source-ipni-trichocereus-pachanoi-1920", ids.sourceIpni],
+  [
+    "source-ipni-trichocereus-macrogonus-var-pachanoi-2012",
+    ids.sourceIpniMacrogonus,
+  ],
   ["source-schlumpberger-renner-echinopsis-2012", ids.sourceSchlumpberger],
   ["source-albesiano-terrazas-trichocereus-2012", ids.sourceAlbesiano],
+  ["source-albesiano-kiesling-macrogonus-2012", ids.sourceAlbesianoKiesling],
 ]);
 
 const editorialTaxonIdBySpeciesPublicId = new Map([
@@ -258,6 +273,10 @@ const editorialClaimIdByPublicId = new Map([
     "claim-albesiano-terrazas-trichocereus-chloroplast-2012",
     ids.claimAlbesiano,
   ],
+  [
+    "claim-albesiano-kiesling-macrogonus-pachanoi-2012",
+    ids.claimAlbesianoKiesling,
+  ],
 ]);
 
 const editorialSourceRecordIdByProviderRecordId = new Map([
@@ -271,8 +290,10 @@ const editorialSourceRecordIdByProviderRecordId = new Map([
   ["taxon:88444-2", ids.sourceRecordPowo],
   ["species:5622352", ids.sourceRecordGbif],
   ["ipni:name:257116-2", ids.sourceRecordIpni],
+  ["ipni:name:77125731-1", ids.sourceRecordIpniMacrogonus],
   ["doi:10.3732/ajb.1100288", ids.sourceRecordSchlumpberger],
   ["haseltonia:17:3-23", ids.sourceRecordAlbesiano],
+  ["doi:10.2985/1070-0048-17.1.3", ids.sourceRecordAlbesianoKiesling],
 ]);
 
 function resolveSeedSourceId(publicId: string): string {
@@ -756,6 +777,13 @@ try {
         status: "accepted",
       },
       {
+        id: ids.sourceRecordIpniMacrogonus,
+        sourcePublicId: "source-ipni-trichocereus-macrogonus-var-pachanoi-2012",
+        sourceRecordId: "ipni:name:77125731-1",
+        assertionType: "taxonomic_fact",
+        status: "accepted",
+      },
+      {
         id: ids.sourceRecordSchlumpberger,
         sourcePublicId: "source-schlumpberger-renner-echinopsis-2012",
         sourceRecordId: "doi:10.3732/ajb.1100288",
@@ -766,6 +794,13 @@ try {
         id: ids.sourceRecordAlbesiano,
         sourcePublicId: "source-albesiano-terrazas-trichocereus-2012",
         sourceRecordId: "haseltonia:17:3-23",
+        assertionType: "academic_publication",
+        status: "accepted",
+      },
+      {
+        id: ids.sourceRecordAlbesianoKiesling,
+        sourcePublicId: "source-albesiano-kiesling-macrogonus-2012",
+        sourceRecordId: "doi:10.2985/1070-0048-17.1.3",
         assertionType: "academic_publication",
         status: "accepted",
       },
@@ -1012,6 +1047,11 @@ try {
         true,
       ],
       [
+        ids.sourceRecordIpniMacrogonus,
+        "Seed editorial: registro nomenclatural IPNI de la combinación de 2012, licencia, atribución y alcance taxonómico revisados.",
+        true,
+      ],
+      [
         ids.sourceRecordSchlumpberger,
         "Seed editorial: artículo filogenético, alcance del muestreo y límites de inferencia revisados.",
         true,
@@ -1019,6 +1059,11 @@ try {
       [
         ids.sourceRecordAlbesiano,
         "Seed editorial: artículo de marcadores plastídicos, atribución y alcance de la hipótesis revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordAlbesianoKiesling,
+        "Seed editorial: tratamiento nomenclatural de Albesiano y Kiesling, atribución y alcance revisados sin resolverlo frente a POWO.",
         true,
       ],
     ] as const) {
@@ -1166,6 +1211,7 @@ try {
       FROM (
         VALUES
           (${ids.sourceRecordPowo}, 'ipni', '88444-2', ${ids.sourcePowo}),
+          (${ids.sourceRecordIpniMacrogonus}, 'ipni', '77125731-1', ${ids.sourceIpniMacrogonus}),
           (${ids.sourceRecordGbif}, 'gbif', '5622352', ${ids.sourceGbif}),
           (${ids.sourceRecordGbif}, 'gbif', '11093098', ${ids.sourceGbif})
       ) AS mapping(source_record_id, namespace, identifier, source_id)
@@ -1180,6 +1226,8 @@ try {
         source_record_id, taxon_id, assertion_type
       ) VALUES
         (${ids.sourceRecordPowo}, ${ids.taxon}, 'taxonomic_fact'),
+        (${ids.sourceRecordIpniMacrogonus}, ${ids.taxon}, 'taxonomic_fact'),
+        (${ids.sourceRecordAlbesianoKiesling}, ${ids.taxon}, 'taxonomic_fact'),
         (${ids.sourceRecordGbif}, ${ids.taxon}, 'taxonomic_fact')
       ON CONFLICT DO NOTHING
     `;
@@ -1189,6 +1237,8 @@ try {
         source_record_id, biological_entity_id, assertion_type
       ) VALUES
         (${ids.sourceRecordPowo}, ${ids.biologicalEntity}, 'taxonomic_fact'),
+        (${ids.sourceRecordIpniMacrogonus}, ${ids.biologicalEntity}, 'taxonomic_fact'),
+        (${ids.sourceRecordAlbesianoKiesling}, ${ids.biologicalEntity}, 'taxonomic_fact'),
         (${ids.sourceRecordGbif}, ${ids.biologicalEntity}, 'taxonomic_fact')
       ON CONFLICT DO NOTHING
     `;
@@ -1204,12 +1254,12 @@ try {
         'taxon',
         ${ids.taxon},
         'taxonomicStatus',
-        'POWO registra Echinopsis pachanoi como especie aceptada; su rango nativo se indica desde el sur de Ecuador hasta Perú.',
+        'Plants of the World Online (POWO) acepta Echinopsis pachanoi como especie y lista Trichocereus macrogonus var. pachanoi como sinónimo. WACHUMA conserva esta postura sin usarla para resolver el tratamiento alternativo de Albesiano y Kiesling.',
         'taxonomic_fact',
         'documented',
         ${ids.sourcePowo},
         ${ids.sourceRecordPowo},
-        'Plants of the World Online; lectura editorial de WACHUMA.',
+        'Plants of the World Online, Royal Botanic Gardens, Kew; WACHUMA conserva esta postura como la evaluación de ese proveedor.',
         '2026-08-23',
         'public',
         'CC BY 3.0',

@@ -9,13 +9,13 @@ export const editorialSpeciesDocument = {
   publicId: "biological-entity-echinopsis-pachanoi",
   scientificName: "Echinopsis pachanoi",
   rank: "species",
-  taxonomicStatus: "accepted",
+  taxonomicStatus: "unresolved",
   entityType: "species",
   authorityNote:
     "Entidad editorial anclada a fuentes taxonómicas externas; no equipara nombres culturales con el taxón.",
   visibility: "public",
   description:
-    "Ficha pública inicial anclada a POWO/Kew y GBIF. Conserva la diferencia entre una especie aceptada en POWO, una coincidencia GBIF con estado sinónimo y los nombres culturales documentados en contextos específicos.",
+    "Ficha pública anclada a fuentes taxonómicas externas. Conserva sin resolver la diferencia entre el tratamiento de POWO, que acepta Echinopsis pachanoi como especie, y el de Albesiano y Kiesling (2012), que la trata como Trichocereus macrogonus var. pachanoi; también mantiene separados los nombres culturales documentados en contextos específicos.",
   claims: [
     {
       publicId: "claim-ipni-echinopsis-pachanoi-protologue-1920",
@@ -141,14 +141,29 @@ export const editorialSpeciesDocument = {
       publicId: "claim-powo-echinopsis-pachanoi-accepted",
       predicate: "taxonomicStatus",
       statement:
-        "POWO registra Echinopsis pachanoi como especie aceptada; su rango nativo se indica desde el sur de Ecuador hasta Perú.",
+        "Plants of the World Online (POWO) acepta Echinopsis pachanoi como especie y lista Trichocereus macrogonus var. pachanoi como sinónimo. WACHUMA conserva esta postura sin usarla para resolver el tratamiento alternativo de Albesiano y Kiesling.",
       assertionType: "taxonomic_fact",
       evidenceLevel: "documented",
       sourcePublicId: "source-powo-echinopsis-pachanoi",
       sourceRecordId: "taxon:88444-2",
       authorPerspective:
-        "Plants of the World Online; lectura editorial de WACHUMA.",
+        "Plants of the World Online, Royal Botanic Gardens, Kew; WACHUMA conserva esta postura como la evaluación de ese proveedor.",
       recordedOn: "2026-08-23",
+      visibility: "public",
+      reviewStatus: "accepted",
+    },
+    {
+      publicId: "claim-albesiano-kiesling-macrogonus-pachanoi-2012",
+      predicate: "taxonomicStatus",
+      statement:
+        "Albesiano y Kiesling (2012) presentaron Trichocereus pachanoi como variedad de Trichocereus macrogonus y establecieron Trichocereus macrogonus var. pachanoi (Britton & Rose) S.Albesiano & R.Kiesling, comb. et stat. nov. Este tratamiento nomenclatural no identifica por sí solo ejemplares ni resuelve la postura distinta de POWO.",
+      assertionType: "taxonomic_fact",
+      evidenceLevel: "documented",
+      sourcePublicId: "source-albesiano-kiesling-macrogonus-2012",
+      sourceRecordId: "doi:10.2985/1070-0048-17.1.3",
+      authorPerspective:
+        "Sofía Albesiano y Roberto Kiesling; WACHUMA conserva este tratamiento de 2012 junto a la postura de POWO, sin fundirlas.",
+      recordedOn: "2012-03-31",
       visibility: "public",
       reviewStatus: "accepted",
     },
@@ -221,6 +236,12 @@ export const editorialSpeciesDocument = {
       license: "CC BY 3.0",
     },
     {
+      namespace: "ipni",
+      identifier: "77125731-1",
+      canonicalUrl: "https://www.ipni.org/n/77125731-1",
+      license: "CC BY 3.0",
+    },
+    {
       namespace: "gbif",
       identifier: "5622352",
       canonicalUrl: "https://www.gbif.org/species/5622352",
@@ -261,6 +282,14 @@ export const editorialSpeciesDocument = {
       sourcePublicId: "source-gbif-echinopsis-pachanoi",
       reviewStatus: "draft",
     },
+    {
+      name: "Trichocereus macrogonus var. pachanoi",
+      relationType: "unresolved_variant",
+      context:
+        "Tratamiento de Albesiano y Kiesling (2012), conservado junto a la aceptación de Echinopsis pachanoi en POWO; WACHUMA no lo promueve como una resolución taxonómica propia.",
+      sourcePublicId: "source-albesiano-kiesling-macrogonus-2012",
+      reviewStatus: "under-review",
+    },
   ],
   vernacularNames: [
     {
@@ -284,6 +313,20 @@ export const editorialSpeciesDocument = {
       attribution:
         "International Plant Names Index; Royal Botanic Gardens, Kew, Harvard University Herbaria y Australian National Herbarium",
       publishedOn: "1920-09-09",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "historical_account",
+    },
+    {
+      publicId: "source-ipni-trichocereus-macrogonus-var-pachanoi-2012",
+      title: "IPNI · Trichocereus macrogonus var. pachanoi",
+      citation:
+        "International Plant Names Index. Trichocereus macrogonus var. pachanoi (Britton & Rose) Albesiano & R.Kiesling, Haseltonia 17:32 (2012), nomenclatural record 77125731-1. Consultado el 5 de septiembre de 2026.",
+      url: "https://www.ipni.org/n/77125731-1",
+      sourceType: "historical_account",
+      license: "CC BY 3.0",
+      attribution:
+        "International Plant Names Index; Royal Botanic Gardens, Kew, Harvard University Herbaria y Australian National Herbarium",
+      publishedOn: "2012-03-31",
       accessedAt: "2026-09-05T00:00:00Z",
       assertionType: "historical_account",
     },
@@ -314,6 +357,22 @@ export const editorialSpeciesDocument = {
       attribution:
         "Sofía Albesiano; Teresa Terrazas; Cactus and Succulent Society of America",
       publishedOn: "2012-01-01",
+      accessedAt: "2026-09-05T00:00:00Z",
+      assertionType: "academic_publication",
+    },
+    {
+      publicId: "source-albesiano-kiesling-macrogonus-2012",
+      title:
+        "Identity and Neotypification of Cereus macrogonus, the Type Species of the Genus Trichocereus (Cactaceae)",
+      citation:
+        "Albesiano, S. & Kiesling, R. (2012). Identity and Neotypification of Cereus macrogonus, the Type Species of the Genus Trichocereus (Cactaceae). Haseltonia, 17, 24–34. https://doi.org/10.2985/1070-0048-17.1.3.",
+      url: "https://cactusconservation.org/wp-content/uploads/2020/03/Albesiano_Kiesling_2012_Haseltonia_17_24-34.pdf",
+      doi: "10.2985/1070-0048-17.1.3",
+      sourceType: "scientific_publication",
+      license: "publisher access; article metadata and text cited",
+      attribution:
+        "Sofía Albesiano; Roberto Kiesling; Cactus and Succulent Society of America",
+      publishedOn: "2012-03-31",
       accessedAt: "2026-09-05T00:00:00Z",
       assertionType: "academic_publication",
     },

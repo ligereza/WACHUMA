@@ -246,6 +246,50 @@ test(
         url: "/api/v1/species/biological-entity-echinopsis-pachanoi",
       });
       assert.equal(echinopsis.statusCode, 200);
+      const echinopsisBody = echinopsis.json() as {
+        taxonomicStatus: string;
+        externalIdentifiers: Array<{ namespace: string; identifier: string }>;
+        sources: Array<{ publicId: string }>;
+      };
+      assert.equal(echinopsisBody.taxonomicStatus, "unresolved");
+      assert.ok(
+        echinopsisBody.externalIdentifiers.some(
+          (identifier) =>
+            identifier.namespace === "ipni" &&
+            identifier.identifier === "77125731-1",
+        ),
+      );
+      assert.ok(
+        echinopsisBody.sources.some(
+          (source) =>
+            source.publicId === "source-albesiano-kiesling-macrogonus-2012",
+        ),
+      );
+      const taxonomicClaims = await app.inject({
+        method: "GET",
+        url: "/api/v1/claims?subjectPublicId=biological-entity-echinopsis-pachanoi&limit=100",
+      });
+      assert.equal(taxonomicClaims.statusCode, 200);
+      const taxonomicPositions = taxonomicClaims
+        .json()
+        .filter(
+          (claim: { predicate: string }) =>
+            claim.predicate === "taxonomicStatus",
+        );
+      assert.deepEqual(
+        taxonomicPositions
+          .map((claim: { publicId: string }) => claim.publicId)
+          .sort(),
+        [
+          "claim-albesiano-kiesling-macrogonus-pachanoi-2012",
+          "claim-powo-echinopsis-pachanoi-accepted",
+        ],
+      );
+      assert.ok(
+        taxonomicPositions.some((claim: { objectText: string }) =>
+          claim.objectText.includes("Trichocereus macrogonus var. pachanoi"),
+        ),
+      );
       assert.ok(echinopsis.json().ecology.length >= 2);
       assert.ok(
         echinopsis

@@ -41,6 +41,71 @@ const ipni = sourceByPublicId.get("source-ipni-trichocereus-pachanoi-1920");
 assert.ok(ipni, "The IPNI protologue source is required");
 assert.equal(ipni.url, "https://www.ipni.org/n/257116-2");
 
+assert.equal(
+  species.taxonomicStatus,
+  "unresolved",
+  "The editorial record must not choose between the documented taxonomic treatments",
+);
+const powoTreatment = claims.find(
+  (claim) => claim.publicId === "claim-powo-echinopsis-pachanoi-accepted",
+);
+const albesianoKieslingTreatment = claims.find(
+  (claim) =>
+    claim.publicId === "claim-albesiano-kiesling-macrogonus-pachanoi-2012",
+);
+assert.ok(powoTreatment, "The POWO taxonomic treatment is required");
+assert.equal(powoTreatment.predicate, "taxonomicStatus");
+assert.equal(powoTreatment.sourcePublicId, "source-powo-echinopsis-pachanoi");
+assert.match(powoTreatment.statement, /Echinopsis pachanoi.*especie/i);
+assert.ok(
+  albesianoKieslingTreatment,
+  "The Albesiano and Kiesling taxonomic treatment is required",
+);
+assert.equal(albesianoKieslingTreatment.predicate, "taxonomicStatus");
+assert.equal(
+  albesianoKieslingTreatment.sourcePublicId,
+  "source-albesiano-kiesling-macrogonus-2012",
+);
+assert.equal(
+  albesianoKieslingTreatment.sourceRecordId,
+  "doi:10.2985/1070-0048-17.1.3",
+);
+assert.match(
+  albesianoKieslingTreatment.statement,
+  /Trichocereus macrogonus var\. pachanoi/i,
+);
+assert.match(
+  albesianoKieslingTreatment.statement,
+  /no identifica por sí solo/i,
+);
+
+const albesianoKieslingSource = sourceByPublicId.get(
+  "source-albesiano-kiesling-macrogonus-2012",
+);
+assert.ok(
+  albesianoKieslingSource,
+  "The Albesiano and Kiesling source is required",
+);
+assert.equal(albesianoKieslingSource.doi, "10.2985/1070-0048-17.1.3");
+assert.equal(albesianoKieslingSource.publishedOn, "2012-03-31");
+assert.match(albesianoKieslingSource.citation, /Haseltonia, 17, 24–34/);
+
+const combinationIpni = species.externalIdentifiers?.find(
+  (identifier) =>
+    identifier.namespace === "ipni" && identifier.identifier === "77125731-1",
+);
+assert.ok(combinationIpni, "The 2012 combination needs its IPNI identifier");
+assert.equal(combinationIpni.canonicalUrl, "https://www.ipni.org/n/77125731-1");
+assert.ok(
+  species.taxonomicVariants?.some(
+    (variant) =>
+      variant.name === "Trichocereus macrogonus var. pachanoi" &&
+      variant.relationType === "unresolved_variant" &&
+      variant.reviewStatus === "under-review",
+  ),
+  "The alternate treatment must remain an unresolved variant",
+);
+
 const molecularClaims = claims.filter((claim) =>
   ["molecularPhylogeny", "chloroplastPhylogeny"].includes(claim.predicate),
 );
@@ -70,6 +135,12 @@ console.log(
       chloroplastPhylogeny: claimCounts.get("chloroplastPhylogeny") ?? 0,
       scopeLimitation: true,
       ipniSource: ipni.publicId,
+      taxonomicStatus: species.taxonomicStatus,
+      taxonomicTreatments: [
+        powoTreatment.publicId,
+        albesianoKieslingTreatment.publicId,
+      ],
+      combinationIpni: combinationIpni.identifier,
     },
     null,
     2,
