@@ -378,6 +378,18 @@ export interface AdminSourceRecordTarget {
   canonicalUrl?: string;
 }
 
+export interface AdminSourceRecordPublicationDiff {
+  state: "published" | "restricted" | "unlinked";
+  targets: Array<{
+    kind: AdminSourceRecordTarget["kind"];
+    publicId?: PublicId;
+    id?: string;
+    currentVisibility?: Visibility;
+    currentLicense?: string;
+    licenseDelta: "same" | "different" | "unavailable";
+  }>;
+}
+
 export interface AdminSourceRecord {
   id: string;
   providerKey: string;
@@ -385,6 +397,7 @@ export interface AdminSourceRecord {
   sourceUrl?: string;
   retrievedAt: string;
   license: string;
+  providerLicense?: string;
   attribution: string;
   assertionType: string;
   rawPayload: Record<string, unknown>;
@@ -393,6 +406,7 @@ export interface AdminSourceRecord {
   reviewedBy?: string;
   reviewedAt?: string;
   targets: AdminSourceRecordTarget[];
+  publishedDiff: AdminSourceRecordPublicationDiff;
 }
 
 export interface AdminTaxonPromotion {

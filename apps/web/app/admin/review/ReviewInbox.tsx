@@ -32,6 +32,7 @@ type SourceRecord = {
   sourceUrl?: string;
   retrievedAt: string;
   license: string;
+  providerLicense?: string;
   attribution: string;
   assertionType: string;
   rawPayload: Record<string, unknown>;
@@ -40,6 +41,17 @@ type SourceRecord = {
   reviewedBy?: string;
   reviewedAt?: string;
   targets: SourceRecordTarget[];
+  publishedDiff: {
+    state: "published" | "restricted" | "unlinked";
+    targets: Array<{
+      kind: SourceRecordTarget["kind"];
+      publicId?: string;
+      id?: string;
+      currentVisibility?: string;
+      currentLicense?: string;
+      licenseDelta: "same" | "different" | "unavailable";
+    }>;
+  };
 };
 
 type PublicationDecision = {
@@ -59,6 +71,24 @@ const publicationBlockerLabels: Record<string, string> = {
   publication_decision_blocked: "La decisión de publicación está bloqueada.",
   trait_mapping_pending:
     "Falta mapear el trait a una definición local publicable.",
+};
+
+const publicationStateLabels: Record<
+  SourceRecord["publishedDiff"]["state"],
+  string
+> = {
+  published: "Hay una proyección pública vinculada.",
+  restricted: "Hay una proyección vinculada, pero permanece restringida.",
+  unlinked: "Sin proyección pública vinculada; no hay diff aplicable.",
+};
+
+const licenseDeltaLabels: Record<
+  SourceRecord["publishedDiff"]["targets"][number]["licenseDelta"],
+  string
+> = {
+  same: "licencia coincide",
+  different: "licencia difiere",
+  unavailable: "licencia de destino no disponible",
 };
 
 const apiUrl = (
@@ -191,8 +221,12 @@ function SourceRecordCard({
       </div>
       <dl className="review-facts">
         <div>
-          <dt>Licencia</dt>
+          <dt>Licencia del registro</dt>
           <dd>{record.license}</dd>
+        </div>
+        <div>
+          <dt>Licencia declarada por proveedor</dt>
+          <dd>{record.providerLicense ?? "No declarada por el proveedor"}</dd>
         </div>
         <div>
           <dt>Consultado</dt>
@@ -203,6 +237,30 @@ function SourceRecordCard({
           <dd>{record.attribution}</dd>
         </div>
       </dl>
+      <div className="review-evidence-grid">
+        <details className="review-payload" open>
+          <summary>Payload crudo del origen</summary>
+          <pre>{JSON.stringify(record.rawPayload, null, 2)}</pre>
+        </details>
+        <section className="review-diff" aria-label="Diff contra lo publicado">
+          <p className="card-kicker">Diff contra lo publicado</p>
+          <p>{publicationStateLabels[record.publishedDiff.state]}</p>
+          {record.publishedDiff.targets.length ? (
+            <ul>
+              {record.publishedDiff.targets.map((target) => (
+                <li key={`${target.kind}:${target.publicId ?? target.id}`}>
+                  <strong>{target.kind}</strong>{" "}
+                  {target.publicId ?? target.id ?? "destino sin identificador"}
+                  {target.currentVisibility
+                    ? ` · visibilidad ${target.currentVisibility}`
+                    : " · sin visibilidad publicable"}
+                  {` · ${licenseDeltaLabels[target.licenseDelta]}`}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </section>
+      </div>
       <section className="review-targets" aria-label="Objetos derivados">
         <div>
           <p className="card-kicker">Objetos derivados</p>
@@ -275,10 +333,6 @@ function SourceRecordCard({
           </ul>
         </section>
       ) : null}
-      <details className="review-payload">
-        <summary>Payload estructurado del origen</summary>
-        <pre>{JSON.stringify(record.rawPayload, null, 2)}</pre>
-      </details>
       {record.sourceUrl ? (
         <a href={record.sourceUrl} target="_blank" rel="noreferrer">
           Abrir registro de origen ↗

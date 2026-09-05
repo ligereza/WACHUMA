@@ -138,6 +138,24 @@ test(
       );
       assert.equal(typeof promotedSourceRecord.rawPayload, "object");
       assert.ok(promotedSourceRecord.rawPayload);
+      assert.equal(promotedSourceRecord.providerLicense, "CC BY 4.0");
+      assert.equal(promotedSourceRecord.publishedDiff.state, "published");
+      assert.ok(Array.isArray(promotedSourceRecord.publishedDiff.targets));
+
+      const pendingPageRecords = await app.inject({
+        method: "GET",
+        url: "/api/v1/admin/source-records?provider=web-page&status=pending&limit=1",
+        headers: { authorization: "Bearer integration-token" },
+      });
+      assert.equal(pendingPageRecords.statusCode, 200);
+      const pendingPageRecord = pendingPageRecords.json()[0] as
+        | {
+            providerLicense?: string;
+            publishedDiff: { state: string };
+          }
+        | undefined;
+      assert.equal(pendingPageRecord?.providerLicense, "per-record-review");
+      assert.equal(pendingPageRecord?.publishedDiff.state, "unlinked");
 
       const fungalTraitsSourceRecordKey = "fungaltraits:integration-guard";
       const fungalTraitsSourceRecordId = "00000000-0000-4000-9000-000000000778";

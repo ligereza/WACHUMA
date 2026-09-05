@@ -249,6 +249,39 @@ body {
     sans-serif;
   overflow-wrap: anywhere;
 }
+.review-evidence-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+  gap: 1rem;
+  align-items: start;
+}
+.review-diff {
+  display: grid;
+  gap: 0.55rem;
+  border: 1px solid rgba(73, 107, 80, 0.24);
+  border-radius: 0.8rem;
+  background: rgba(232, 225, 211, 0.34);
+  padding: 0.9rem;
+  color: var(--muted);
+  font:
+    0.82rem/1.45 system-ui,
+    sans-serif;
+}
+.review-diff p {
+  margin: 0;
+}
+.review-diff ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.review-diff li {
+  overflow-wrap: anywhere;
+}
+.review-diff strong {
+  color: var(--leaf);
+}
 .review-targets {
   display: grid;
   gap: 0.8rem;
@@ -383,6 +416,7 @@ body {
   }
   .review-toolbar,
   .review-facts,
+  .review-evidence-grid,
   .review-targets li {
     grid-template-columns: 1fr;
   }
