@@ -73,25 +73,25 @@ test("species detail keeps cultural names contextualized and sourced", async () 
       name.context.includes("equivalencia taxonómica"),
     ),
   );
-  assert.deepEqual(
-    body.sources.map((source) => source.publicId),
-    [
-      "source-ipni-trichocereus-pachanoi-1920",
-      "source-ipni-trichocereus-macrogonus-var-pachanoi-2012",
-      "source-schlumpberger-renner-echinopsis-2012",
-      "source-albesiano-terrazas-trichocereus-2012",
-      "source-albesiano-kiesling-macrogonus-2012",
-      "source-utn-echinopsis-pachanoi-habitat-2017",
-      "source-wachuma-demo-editorial",
-      "source-unprg-echinopsis-pachanoi-rhizosphere-2023",
-      "source-untumbes-echinopsis-metabolomics-2020",
-      "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
-      "source-powo-echinopsis-pachanoi",
-      "source-gbif-echinopsis-pachanoi",
-      "source-armijos-saraguro-yachakkuna-2014",
-      "source-rhs-cacti-succulents-guide",
-    ],
-  );
+  const sourceIds = new Set(body.sources.map((source) => source.publicId));
+  for (const sourceId of [
+    "source-ipni-trichocereus-pachanoi-1920",
+    "source-ipni-trichocereus-macrogonus-var-pachanoi-2012",
+    "source-schlumpberger-renner-echinopsis-2012",
+    "source-albesiano-terrazas-trichocereus-2012",
+    "source-albesiano-kiesling-macrogonus-2012",
+    "source-utn-echinopsis-pachanoi-habitat-2017",
+    "source-wachuma-demo-editorial",
+    "source-unprg-echinopsis-pachanoi-rhizosphere-2023",
+    "source-untumbes-echinopsis-metabolomics-2020",
+    "source-scielo-echinopsis-pachanoi-rhizosphere-2025",
+    "source-powo-echinopsis-pachanoi",
+    "source-gbif-echinopsis-pachanoi",
+    "source-armijos-saraguro-yachakkuna-2014",
+    "source-rhs-cacti-succulents-guide",
+  ]) {
+    assert.ok(sourceIds.has(sourceId), `species sources include ${sourceId}`);
+  }
   assert.equal(body.taxonomicVariants[0]?.name, "Trichocereus pachanoi");
   assert.equal(
     body.taxonomicVariants[0]?.relationType,

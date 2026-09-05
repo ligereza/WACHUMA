@@ -12,7 +12,17 @@ test(
   "PostgreSQL/PostGIS seed exposes the public vertical and hides restricted data",
   { skip: !run || !databaseUrl },
   async () => {
-    const sql = postgres(databaseUrl!);
+    const observedSearchQueries: Array<{
+      query: string;
+      parameters: unknown[];
+    }> = [];
+    const sql = postgres(databaseUrl!, {
+      debug: (_connection, query, parameters) => {
+        if (query.includes("WITH search_params AS")) {
+          observedSearchQueries.push({ query, parameters });
+        }
+      },
+    });
     const app = buildApi({ sql, adminToken: "integration-token" });
     try {
       const health = await app.inject({
@@ -95,6 +105,23 @@ test(
           ),
       );
 
+      const observedSearch = observedSearchQueries.at(-1);
+      assert.ok(
+        observedSearch,
+        "the integration test must capture the real search query",
+      );
+      assert.match(observedSearch.query, /ILIKE/);
+      const [searchPlanRow] = await sql.unsafe<
+        Array<{ "QUERY PLAN": Array<Record<string, unknown>> }>
+      >(
+        `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${observedSearch.query}`,
+        observedSearch.parameters,
+      );
+      const searchPlan = searchPlanRow?.["QUERY PLAN"]?.[0];
+      assert.ok(searchPlan);
+      assert.ok(Number(searchPlan["Execution Time"]) >= 0);
+      assert.ok(searchPlan["Plan"]);
+
       const restrictedSearch = await app.inject({
         method: "GET",
         url: "/api/v1/search?q=wachuma&limit=20",
@@ -138,6 +165,37 @@ test(
       );
       assert.equal(typeof promotedSourceRecord.rawPayload, "object");
       assert.ok(promotedSourceRecord.rawPayload);
+      assert.equal(promotedSourceRecord.providerLicense, "CC BY 4.0");
+      assert.equal(promotedSourceRecord.publishedDiff.state, "published");
+      assert.ok(Array.isArray(promotedSourceRecord.publishedDiff.targets));
+
+      const pendingPageRecords = await app.inject({
+        method: "GET",
+        url: "/api/v1/admin/source-records?provider=web-page&status=pending&limit=1",
+        headers: { authorization: "Bearer integration-token" },
+      });
+      assert.equal(pendingPageRecords.statusCode, 200);
+      const pendingPageRecord = pendingPageRecords.json()[0] as
+        | {
+            providerLicense?: string;
+            publishedDiff: { state: string };
+            reviewProposal?: {
+              sourceRecordId: string;
+              license: { status: string };
+              supportedStatements: string[];
+              notSupported: string[];
+            };
+          }
+        | undefined;
+      assert.equal(pendingPageRecord?.providerLicense, "per-record-review");
+      assert.equal(pendingPageRecord?.publishedDiff.state, "unlinked");
+      assert.ok(pendingPageRecord?.reviewProposal);
+      assert.equal(
+        pendingPageRecord?.reviewProposal?.sourceRecordId,
+        pendingPageRecords.json()[0].sourceRecordId,
+      );
+      assert.ok(pendingPageRecord?.reviewProposal?.supportedStatements.length);
+      assert.ok(pendingPageRecord?.reviewProposal?.notSupported.length);
 
       const fungalTraitsSourceRecordKey = "fungaltraits:integration-guard";
       const fungalTraitsSourceRecordId = "00000000-0000-4000-9000-000000000778";
@@ -288,6 +346,46 @@ test(
       assert.ok(
         taxonomicPositions.some((claim: { objectText: string }) =>
           claim.objectText.includes("Trichocereus macrogonus var. pachanoi"),
+        ),
+      );
+      const pathogenicityPositions = taxonomicClaims
+        .json()
+        .filter(
+          (claim: { predicate: string }) => claim.predicate === "pathogenicity",
+        );
+      assert.equal(pathogenicityPositions.length, 4);
+      assert.deepEqual(
+        pathogenicityPositions
+          .map((claim: { objectType?: string; objectId?: string }) => [
+            claim.objectType,
+            claim.objectId,
+          ])
+          .every(
+            ([objectType, objectId]: [
+              string | undefined,
+              string | undefined,
+            ]) => objectType === "biological_entity" && Boolean(objectId),
+          ),
+        true,
+      );
+      const relatedTaxonPositions = taxonomicClaims
+        .json()
+        .filter(
+          (claim: { predicate: string }) => claim.predicate === "relatedTaxon",
+        );
+      assert.deepEqual(
+        relatedTaxonPositions
+          .map((claim: { publicId: string }) => claim.publicId)
+          .sort(),
+        [
+          "claim-pachanoi-related-echinopsis-lageniformis",
+          "claim-pachanoi-related-echinopsis-peruviana",
+        ],
+      );
+      assert.ok(
+        relatedTaxonPositions.every(
+          (claim: { objectType?: string; objectId?: string }) =>
+            claim.objectType === "biological_entity" && Boolean(claim.objectId),
         ),
       );
       assert.ok(echinopsis.json().ecology.length >= 2);
@@ -467,7 +565,13 @@ test(
         echinopsisGuide?.sections.find(
           (section: { sectionKey: string }) => section.sectionKey === "light",
         )?.status,
-        "not_documented",
+        "documented",
+      );
+      assert.equal(
+        echinopsisGuide?.sections.filter(
+          (section: { status: string }) => section.status === "not_documented",
+        ).length,
+        0,
       );
       assert.equal(
         guides

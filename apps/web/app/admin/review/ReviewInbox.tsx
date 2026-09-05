@@ -32,6 +32,7 @@ type SourceRecord = {
   sourceUrl?: string;
   retrievedAt: string;
   license: string;
+  providerLicense?: string;
   attribution: string;
   assertionType: string;
   rawPayload: Record<string, unknown>;
@@ -40,6 +41,49 @@ type SourceRecord = {
   reviewedBy?: string;
   reviewedAt?: string;
   targets: SourceRecordTarget[];
+  publishedDiff: {
+    state: "published" | "restricted" | "unlinked";
+    targets: Array<{
+      kind: SourceRecordTarget["kind"];
+      publicId?: string;
+      id?: string;
+      currentVisibility?: string;
+      currentLicense?: string;
+      licenseDelta: "same" | "different" | "unavailable";
+    }>;
+  };
+  reviewProposal?: {
+    sourceRecordId: string;
+    title: string;
+    evidenceUrl: string;
+    checkedOn: string;
+    access:
+      | "primary-publication-reviewed"
+      | "landing-page-reviewed"
+      | "metadata-only"
+      | "access-blocked";
+    license: {
+      declared: string;
+      status:
+        | "confirmed-on-page"
+        | "declared-not-confirmed"
+        | "not-stated"
+        | "fair-use-only";
+      evidenceUrl?: string;
+      note: string;
+    };
+    scope: {
+      samples: string;
+      region: string;
+      method: string;
+      date: string;
+    };
+    supportedStatements: string[];
+    notSupported: string[];
+    recommendedDecision: "accepted" | "rejected" | "hold";
+    rationale: string;
+    reviewerNote: string;
+  };
 };
 
 type PublicationDecision = {
@@ -59,6 +103,53 @@ const publicationBlockerLabels: Record<string, string> = {
   publication_decision_blocked: "La decisión de publicación está bloqueada.",
   trait_mapping_pending:
     "Falta mapear el trait a una definición local publicable.",
+};
+
+const publicationStateLabels: Record<
+  SourceRecord["publishedDiff"]["state"],
+  string
+> = {
+  published: "Hay una proyección pública vinculada.",
+  restricted: "Hay una proyección vinculada, pero permanece restringida.",
+  unlinked: "Sin proyección pública vinculada; no hay diff aplicable.",
+};
+
+const licenseDeltaLabels: Record<
+  SourceRecord["publishedDiff"]["targets"][number]["licenseDelta"],
+  string
+> = {
+  same: "licencia coincide",
+  different: "licencia difiere",
+  unavailable: "licencia de destino no disponible",
+};
+
+const proposalAccessLabels: Record<
+  NonNullable<SourceRecord["reviewProposal"]>["access"],
+  string
+> = {
+  "primary-publication-reviewed": "publicación primaria revisada",
+  "landing-page-reviewed": "ficha de origen revisada",
+  "metadata-only": "sólo metadatos",
+  "access-blocked": "acceso bloqueado",
+};
+
+const proposalLicenseLabels: Record<
+  NonNullable<SourceRecord["reviewProposal"]>["license"]["status"],
+  string
+> = {
+  "confirmed-on-page": "confirmada en la fuente",
+  "declared-not-confirmed": "declarada, no confirmada",
+  "not-stated": "no declarada",
+  "fair-use-only": "sólo fair use",
+};
+
+const proposalDecisionLabels: Record<
+  NonNullable<SourceRecord["reviewProposal"]>["recommendedDecision"],
+  string
+> = {
+  accepted: "Propuesta: aceptar como fuente atribuida",
+  rejected: "Propuesta: rechazar como fuente de claims",
+  hold: "Propuesta: mantener pendiente",
 };
 
 const apiUrl = (
@@ -191,8 +282,12 @@ function SourceRecordCard({
       </div>
       <dl className="review-facts">
         <div>
-          <dt>Licencia</dt>
+          <dt>Licencia del registro</dt>
           <dd>{record.license}</dd>
+        </div>
+        <div>
+          <dt>Licencia declarada por proveedor</dt>
+          <dd>{record.providerLicense ?? "No declarada por el proveedor"}</dd>
         </div>
         <div>
           <dt>Consultado</dt>
@@ -203,6 +298,129 @@ function SourceRecordCard({
           <dd>{record.attribution}</dd>
         </div>
       </dl>
+      {record.reviewProposal ? (
+        <section className="review-proposal" aria-label="Propuesta editorial">
+          <div className="review-proposal-heading">
+            <div>
+              <p className="card-kicker">Propuesta editorial (no decisión)</p>
+              <h3>{record.reviewProposal.title}</h3>
+            </div>
+            <span className="review-proposal-badge">
+              {
+                proposalDecisionLabels[
+                  record.reviewProposal.recommendedDecision
+                ]
+              }
+            </span>
+          </div>
+          <p className="review-proposal-warning">
+            Esta preparación orienta al revisor; no cambia el estado, no publica
+            datos y no sustituye la confirmación manual de licencia, atribución,
+            privacidad ni alcance.
+          </p>
+          <dl className="review-proposal-facts">
+            <div>
+              <dt>Acceso revisado</dt>
+              <dd>{proposalAccessLabels[record.reviewProposal.access]}</dd>
+            </div>
+            <div>
+              <dt>Licencia propuesta</dt>
+              <dd>
+                {proposalLicenseLabels[record.reviewProposal.license.status]} ·{" "}
+                {record.reviewProposal.license.declared}
+              </dd>
+            </div>
+            <div>
+              <dt>Comprobado</dt>
+              <dd>{record.reviewProposal.checkedOn}</dd>
+            </div>
+          </dl>
+          <div className="review-proposal-columns">
+            <div>
+              <h4>Qué sostiene</h4>
+              <ul>
+                {record.reviewProposal.supportedStatements.map((statement) => (
+                  <li key={statement}>{statement}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4>Qué no sostiene</h4>
+              <ul>
+                {record.reviewProposal.notSupported.map((statement) => (
+                  <li key={statement}>{statement}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <dl className="review-proposal-scope">
+            <div>
+              <dt>Muestras / corpus</dt>
+              <dd>{record.reviewProposal.scope.samples}</dd>
+            </div>
+            <div>
+              <dt>Región</dt>
+              <dd>{record.reviewProposal.scope.region}</dd>
+            </div>
+            <div>
+              <dt>Método</dt>
+              <dd>{record.reviewProposal.scope.method}</dd>
+            </div>
+            <div>
+              <dt>Fecha / periodo</dt>
+              <dd>{record.reviewProposal.scope.date}</dd>
+            </div>
+          </dl>
+          <p className="review-proposal-rationale">
+            <strong>Razonamiento:</strong> {record.reviewProposal.rationale}
+          </p>
+          <p className="review-proposal-rationale">
+            <strong>Nota sugerida:</strong> {record.reviewProposal.reviewerNote}
+          </p>
+          <div className="review-proposal-links">
+            <a
+              href={record.reviewProposal.evidenceUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Abrir evidencia revisada ↗
+            </a>
+            {record.reviewProposal.license.evidenceUrl ? (
+              <a
+                href={record.reviewProposal.license.evidenceUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Abrir evidencia de licencia ↗
+              </a>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
+      <div className="review-evidence-grid">
+        <details className="review-payload" open>
+          <summary>Payload crudo del origen</summary>
+          <pre>{JSON.stringify(record.rawPayload, null, 2)}</pre>
+        </details>
+        <section className="review-diff" aria-label="Diff contra lo publicado">
+          <p className="card-kicker">Diff contra lo publicado</p>
+          <p>{publicationStateLabels[record.publishedDiff.state]}</p>
+          {record.publishedDiff.targets.length ? (
+            <ul>
+              {record.publishedDiff.targets.map((target) => (
+                <li key={`${target.kind}:${target.publicId ?? target.id}`}>
+                  <strong>{target.kind}</strong>{" "}
+                  {target.publicId ?? target.id ?? "destino sin identificador"}
+                  {target.currentVisibility
+                    ? ` · visibilidad ${target.currentVisibility}`
+                    : " · sin visibilidad publicable"}
+                  {` · ${licenseDeltaLabels[target.licenseDelta]}`}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </section>
+      </div>
       <section className="review-targets" aria-label="Objetos derivados">
         <div>
           <p className="card-kicker">Objetos derivados</p>
@@ -275,10 +493,6 @@ function SourceRecordCard({
           </ul>
         </section>
       ) : null}
-      <details className="review-payload">
-        <summary>Payload estructurado del origen</summary>
-        <pre>{JSON.stringify(record.rawPayload, null, 2)}</pre>
-      </details>
       {record.sourceUrl ? (
         <a href={record.sourceUrl} target="_blank" rel="noreferrer">
           Abrir registro de origen ↗

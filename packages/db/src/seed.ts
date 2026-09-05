@@ -96,6 +96,24 @@ const ids = {
   guideClaimRhsWatering: "00000000-0000-4000-8000-000000000150",
   guideClaimRhsPropagation: "00000000-0000-4000-8000-000000000151",
   guideClaimRhsWinter: "00000000-0000-4000-8000-000000000152",
+  guideClaimDemoWatering: "00000000-0000-4000-8000-000000000240",
+  guideClaimDemoLight: "00000000-0000-4000-8000-000000000241",
+  guideClaimDemoTemperature: "00000000-0000-4000-8000-000000000242",
+  guideClaimDemoHumidity: "00000000-0000-4000-8000-000000000243",
+  guideClaimDemoNutrition: "00000000-0000-4000-8000-000000000244",
+  guideClaimDemoCalendar: "00000000-0000-4000-8000-000000000245",
+  guideClaimDemoPests: "00000000-0000-4000-8000-000000000246",
+  guideClaimDemoDiseases: "00000000-0000-4000-8000-000000000247",
+  guideClaimDemoTransplant: "00000000-0000-4000-8000-000000000248",
+  guideClaimDemoFruiting: "00000000-0000-4000-8000-000000000249",
+  guideClaimRhsLight: "00000000-0000-4000-8000-000000000250",
+  guideClaimRhsHumidity: "00000000-0000-4000-8000-000000000251",
+  guideClaimRhsNutrition: "00000000-0000-4000-8000-000000000252",
+  guideClaimRhsCalendar: "00000000-0000-4000-8000-000000000253",
+  guideClaimRhsPests: "00000000-0000-4000-8000-000000000254",
+  guideClaimRhsDiseases: "00000000-0000-4000-8000-000000000255",
+  guideClaimRhsTransplant: "00000000-0000-4000-8000-000000000256",
+  guideClaimRhsFruiting: "00000000-0000-4000-8000-000000000257",
   claimPowoRange: "00000000-0000-4000-8000-000000000153",
   claimPowoBiome: "00000000-0000-4000-8000-000000000154",
   dataSourceSaraguro: "00000000-0000-4000-8000-000000000180",
@@ -161,6 +179,37 @@ const ids = {
   sourceIpniMacrogonus: "00000000-0000-4000-8000-000000000232",
   sourceAlbesianoKiesling: "00000000-0000-4000-8000-000000000233",
   claimAlbesianoKiesling: "00000000-0000-4000-8000-000000000234",
+  taxonBipolarisCactivora: "00000000-0000-4000-8000-000000000300",
+  entityBipolarisCactivora: "00000000-0000-4000-8000-000000000301",
+  taxonPectobacteriumCacticida: "00000000-0000-4000-8000-000000000302",
+  entityPectobacteriumCacticida: "00000000-0000-4000-8000-000000000303",
+  taxonFusariumOxysporum: "00000000-0000-4000-8000-000000000304",
+  entityFusariumOxysporum: "00000000-0000-4000-8000-000000000305",
+  taxonPhytophthoraCactorum: "00000000-0000-4000-8000-000000000306",
+  entityPhytophthoraCactorum: "00000000-0000-4000-8000-000000000307",
+  sourceRecordGbifBipolaris: "00000000-0000-4000-8000-000000000308",
+  sourceRecordGbifPectobacterium: "00000000-0000-4000-8000-000000000309",
+  sourceRecordGbifFusarium: "00000000-0000-4000-8000-000000000310",
+  sourceRecordGbifPhytophthora: "00000000-0000-4000-8000-000000000311",
+  sourceRecordFdacsCactusRot: "00000000-0000-4000-8000-000000000312",
+  sourceRecordPectobacteriumCactusRot: "00000000-0000-4000-8000-000000000313",
+  sourceRecordFusariumCactusRot: "00000000-0000-4000-8000-000000000314",
+  claimPathogenBipolaris: "00000000-0000-4000-8000-000000000315",
+  claimPathogenPectobacterium: "00000000-0000-4000-8000-000000000316",
+  claimPathogenFusarium: "00000000-0000-4000-8000-000000000317",
+  claimPathogenPhytophthora: "00000000-0000-4000-8000-000000000318",
+  taxonEchinopsisPeruviana: "00000000-0000-4000-8000-000000000320",
+  entityEchinopsisPeruviana: "00000000-0000-4000-8000-000000000321",
+  taxonEchinopsisLageniformis: "00000000-0000-4000-8000-000000000322",
+  entityEchinopsisLageniformis: "00000000-0000-4000-8000-000000000323",
+  sourceRecordGbifPeruviana: "00000000-0000-4000-8000-000000000324",
+  sourceRecordGbifLageniformis: "00000000-0000-4000-8000-000000000325",
+  sourceRecordGbifBridgesii: "00000000-0000-4000-8000-000000000326",
+  sourceRecordPowoMacrogona: "00000000-0000-4000-8000-000000000327",
+  sourceRecordPowoLageniformis: "00000000-0000-4000-8000-000000000328",
+  sourceRecordPowoBridgesii: "00000000-0000-4000-8000-000000000329",
+  claimRelatedPeruviana: "00000000-0000-4000-8000-000000000330",
+  claimRelatedLageniformis: "00000000-0000-4000-8000-000000000331",
 } as const;
 
 const guideIdByPublicId = new Map([
@@ -187,6 +236,16 @@ const guideClaimIdsByPublicId = new Map<string, readonly string[]>([
       ids.guideClaimPropagation,
       ids.guideClaimSubstrate,
       ids.guideClaimObservation,
+      ids.guideClaimDemoWatering,
+      ids.guideClaimDemoLight,
+      ids.guideClaimDemoTemperature,
+      ids.guideClaimDemoHumidity,
+      ids.guideClaimDemoNutrition,
+      ids.guideClaimDemoCalendar,
+      ids.guideClaimDemoPests,
+      ids.guideClaimDemoDiseases,
+      ids.guideClaimDemoTransplant,
+      ids.guideClaimDemoFruiting,
     ],
   ],
   [
@@ -196,6 +255,14 @@ const guideClaimIdsByPublicId = new Map<string, readonly string[]>([
       ids.guideClaimRhsWatering,
       ids.guideClaimRhsPropagation,
       ids.guideClaimRhsWinter,
+      ids.guideClaimRhsLight,
+      ids.guideClaimRhsHumidity,
+      ids.guideClaimRhsNutrition,
+      ids.guideClaimRhsCalendar,
+      ids.guideClaimRhsPests,
+      ids.guideClaimRhsDiseases,
+      ids.guideClaimRhsTransplant,
+      ids.guideClaimRhsFruiting,
     ],
   ],
 ]);
@@ -223,6 +290,34 @@ const sourceIdByPublicId = new Map([
   ["source-albesiano-terrazas-trichocereus-2012", ids.sourceAlbesiano],
   ["source-albesiano-kiesling-macrogonus-2012", ids.sourceAlbesianoKiesling],
   ["source-rhs-cacti-succulents-guide", ids.sourceRhs],
+  [
+    "source-gbif-pathogens",
+    deterministicUuid("editorial-source:source-gbif-pathogens"),
+  ],
+  [
+    "source-fdacs-cactus-stem-rot-1978",
+    deterministicUuid("editorial-source:source-fdacs-cactus-stem-rot-1978"),
+  ],
+  [
+    "source-pectobacterium-cacticida-soft-rot-2023",
+    deterministicUuid(
+      "editorial-source:source-pectobacterium-cacticida-soft-rot-2023",
+    ),
+  ],
+  [
+    "source-fusarium-oxysporum-cactus-basal-rot-2004",
+    deterministicUuid(
+      "editorial-source:source-fusarium-oxysporum-cactus-basal-rot-2004",
+    ),
+  ],
+  [
+    "source-gbif-related-cacti",
+    deterministicUuid("editorial-source:source-gbif-related-cacti"),
+  ],
+  [
+    "source-powo-related-cacti",
+    deterministicUuid("editorial-source:source-powo-related-cacti"),
+  ],
 ]);
 
 const seedSourceIdByPublicId = new Map([
@@ -244,10 +339,86 @@ const seedSourceIdByPublicId = new Map([
   ["source-schlumpberger-renner-echinopsis-2012", ids.sourceSchlumpberger],
   ["source-albesiano-terrazas-trichocereus-2012", ids.sourceAlbesiano],
   ["source-albesiano-kiesling-macrogonus-2012", ids.sourceAlbesianoKiesling],
+  [
+    "source-gbif-pathogens",
+    deterministicUuid("editorial-source:source-gbif-pathogens"),
+  ],
+  [
+    "source-fdacs-cactus-stem-rot-1978",
+    deterministicUuid("editorial-source:source-fdacs-cactus-stem-rot-1978"),
+  ],
+  [
+    "source-pectobacterium-cacticida-soft-rot-2023",
+    deterministicUuid(
+      "editorial-source:source-pectobacterium-cacticida-soft-rot-2023",
+    ),
+  ],
+  [
+    "source-fusarium-oxysporum-cactus-basal-rot-2004",
+    deterministicUuid(
+      "editorial-source:source-fusarium-oxysporum-cactus-basal-rot-2004",
+    ),
+  ],
+  [
+    "source-gbif-related-cacti",
+    deterministicUuid("editorial-source:source-gbif-related-cacti"),
+  ],
+  [
+    "source-powo-related-cacti",
+    deterministicUuid("editorial-source:source-powo-related-cacti"),
+  ],
 ]);
 
 const editorialTaxonIdBySpeciesPublicId = new Map([
   ["biological-entity-echinopsis-pachanoi", ids.taxon],
+]);
+
+const editorialPathogenIdsByPublicId = new Map([
+  [
+    "biological-entity-bipolaris-cactivora",
+    {
+      taxonId: ids.taxonBipolarisCactivora,
+      entityId: ids.entityBipolarisCactivora,
+    },
+  ],
+  [
+    "biological-entity-pectobacterium-cacticida",
+    {
+      taxonId: ids.taxonPectobacteriumCacticida,
+      entityId: ids.entityPectobacteriumCacticida,
+    },
+  ],
+  [
+    "biological-entity-fusarium-oxysporum",
+    {
+      taxonId: ids.taxonFusariumOxysporum,
+      entityId: ids.entityFusariumOxysporum,
+    },
+  ],
+  [
+    "biological-entity-phytophthora-cactorum",
+    {
+      taxonId: ids.taxonPhytophthoraCactorum,
+      entityId: ids.entityPhytophthoraCactorum,
+    },
+  ],
+]);
+
+const editorialRelatedTaxonIdsByPublicId = new Map([
+  [
+    "biological-entity-echinopsis-peruviana",
+    {
+      taxonId: ids.taxonEchinopsisPeruviana,
+      entityId: ids.entityEchinopsisPeruviana,
+    },
+  ],
+  [
+    "biological-entity-echinopsis-lageniformis",
+    {
+      taxonId: ids.taxonEchinopsisLageniformis,
+      entityId: ids.entityEchinopsisLageniformis,
+    },
+  ],
 ]);
 
 const editorialClaimIdByPublicId = new Map([
@@ -277,6 +448,18 @@ const editorialClaimIdByPublicId = new Map([
     "claim-albesiano-kiesling-macrogonus-pachanoi-2012",
     ids.claimAlbesianoKiesling,
   ],
+  ["claim-pachanoi-risk-bipolaris-cactivora", ids.claimPathogenBipolaris],
+  [
+    "claim-pachanoi-risk-pectobacterium-cacticida",
+    ids.claimPathogenPectobacterium,
+  ],
+  ["claim-pachanoi-risk-fusarium-oxysporum", ids.claimPathogenFusarium],
+  ["claim-pachanoi-risk-phytophthora-cactorum", ids.claimPathogenPhytophthora],
+  ["claim-pachanoi-related-echinopsis-peruviana", ids.claimRelatedPeruviana],
+  [
+    "claim-pachanoi-related-echinopsis-lageniformis",
+    ids.claimRelatedLageniformis,
+  ],
 ]);
 
 const editorialSourceRecordIdByProviderRecordId = new Map([
@@ -294,6 +477,19 @@ const editorialSourceRecordIdByProviderRecordId = new Map([
   ["doi:10.3732/ajb.1100288", ids.sourceRecordSchlumpberger],
   ["haseltonia:17:3-23", ids.sourceRecordAlbesiano],
   ["doi:10.2985/1070-0048-17.1.3", ids.sourceRecordAlbesianoKiesling],
+  ["species:165628953", ids.sourceRecordGbifBipolaris],
+  ["species:102828396", ids.sourceRecordGbifPectobacterium],
+  ["species:5251961", ids.sourceRecordGbifFusarium],
+  ["species:3203674", ids.sourceRecordGbifPhytophthora],
+  ["publication:fdacs-pp191-1978", ids.sourceRecordFdacsCactusRot],
+  ["doi:10.1094/PHYTOFR-11-22-0133-A", ids.sourceRecordPectobacteriumCactusRot],
+  ["doi:10.1094/PDIS.2004.88.1.85A", ids.sourceRecordFusariumCactusRot],
+  ["species:7281309", ids.sourceRecordGbifPeruviana],
+  ["species:5622588", ids.sourceRecordGbifLageniformis],
+  ["species:7282728", ids.sourceRecordGbifBridgesii],
+  ["taxon:88459-2", ids.sourceRecordPowoMacrogona],
+  ["taxon:132706-1", ids.sourceRecordPowoLageniformis],
+  ["taxon:138904-1", ids.sourceRecordPowoBridgesii],
 ]);
 
 function resolveSeedSourceId(publicId: string): string {
@@ -513,6 +709,114 @@ try {
             updated_at = now()
         WHERE id = ${entity.id}
       `;
+    }
+
+    // Pathogen entities remain restricted because the reviewed literature
+    // documents other cacti, not direct infection of E. pachanoi. Their
+    // public risk relations are still published on the pachanoi taxon with
+    // the limitation stated in each claim.
+    for (const speciesDocument of editorialContent.species) {
+      for (const pathogen of speciesDocument.pathogens ?? []) {
+        const identity = editorialPathogenIdsByPublicId.get(pathogen.publicId);
+        if (!identity) {
+          throw new Error(
+            `Pathogen ${pathogen.publicId} has no deterministic seed identity`,
+          );
+        }
+        await transaction`
+          INSERT INTO taxa (
+            id, public_id, scientific_name, rank, taxonomic_status, description
+          ) VALUES (
+            ${identity.taxonId},
+            ${`taxon-${pathogen.publicId.replace(/^biological-entity-/, "")}`},
+            ${pathogen.scientificName},
+            ${pathogen.rank ?? "species"},
+            ${pathogen.taxonomicStatus ?? "accepted"},
+            ${pathogen.description ?? null}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            scientific_name = EXCLUDED.scientific_name,
+            rank = EXCLUDED.rank,
+            taxonomic_status = EXCLUDED.taxonomic_status,
+            description = EXCLUDED.description,
+            updated_at = now()
+        `;
+        await transaction`
+          INSERT INTO biological_entities (
+            id, public_id, entity_type, display_name, taxon_id,
+            authority_note, visibility
+          ) VALUES (
+            ${identity.entityId},
+            ${pathogen.publicId},
+            ${pathogen.entityType ?? "species"},
+            ${pathogen.scientificName},
+            ${identity.taxonId},
+            ${pathogen.authorityNote ?? null},
+            ${pathogen.visibility ?? "restricted"}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            entity_type = EXCLUDED.entity_type,
+            display_name = EXCLUDED.display_name,
+            taxon_id = EXCLUDED.taxon_id,
+            authority_note = EXCLUDED.authority_note,
+            visibility = EXCLUDED.visibility,
+            updated_at = now()
+        `;
+      }
+    }
+
+    // Related cacti remain restricted records: the public pachanoi taxon can
+    // cite their relationship without turning the monograph into a catalog.
+    for (const speciesDocument of editorialContent.species) {
+      for (const relatedTaxon of speciesDocument.relatedTaxa ?? []) {
+        const identity = editorialRelatedTaxonIdsByPublicId.get(
+          relatedTaxon.publicId,
+        );
+        if (!identity) {
+          throw new Error(
+            `Related taxon ${relatedTaxon.publicId} has no deterministic seed identity`,
+          );
+        }
+        await transaction`
+          INSERT INTO taxa (
+            id, public_id, scientific_name, rank, taxonomic_status, description
+          ) VALUES (
+            ${identity.taxonId},
+            ${`taxon-${relatedTaxon.publicId.replace(/^biological-entity-/, "")}`},
+            ${relatedTaxon.scientificName},
+            ${relatedTaxon.rank ?? "species"},
+            ${relatedTaxon.taxonomicStatus ?? "accepted"},
+            ${relatedTaxon.description ?? null}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            scientific_name = EXCLUDED.scientific_name,
+            rank = EXCLUDED.rank,
+            taxonomic_status = EXCLUDED.taxonomic_status,
+            description = EXCLUDED.description,
+            updated_at = now()
+        `;
+        await transaction`
+          INSERT INTO biological_entities (
+            id, public_id, entity_type, display_name, taxon_id,
+            authority_note, visibility
+          ) VALUES (
+            ${identity.entityId},
+            ${relatedTaxon.publicId},
+            ${relatedTaxon.entityType ?? "species"},
+            ${relatedTaxon.scientificName},
+            ${identity.taxonId},
+            ${relatedTaxon.authorityNote ?? null},
+            ${relatedTaxon.visibility ?? "restricted"}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            entity_type = EXCLUDED.entity_type,
+            display_name = EXCLUDED.display_name,
+            taxon_id = EXCLUDED.taxon_id,
+            authority_note = EXCLUDED.authority_note,
+            visibility = EXCLUDED.visibility,
+            updated_at = now()
+        `;
+      }
     }
 
     for (const [id, publicId, visibility] of [
@@ -804,6 +1108,27 @@ try {
         assertionType: "academic_publication",
         status: "accepted",
       },
+      {
+        id: ids.sourceRecordFdacsCactusRot,
+        sourcePublicId: "source-fdacs-cactus-stem-rot-1978",
+        sourceRecordId: "publication:fdacs-pp191-1978",
+        assertionType: "academic_publication",
+        status: "accepted",
+      },
+      {
+        id: ids.sourceRecordPectobacteriumCactusRot,
+        sourcePublicId: "source-pectobacterium-cacticida-soft-rot-2023",
+        sourceRecordId: "doi:10.1094/PHYTOFR-11-22-0133-A",
+        assertionType: "academic_publication",
+        status: "accepted",
+      },
+      {
+        id: ids.sourceRecordFusariumCactusRot,
+        sourcePublicId: "source-fusarium-oxysporum-cactus-basal-rot-2004",
+        sourceRecordId: "doi:10.1094/PDIS.2004.88.1.85A",
+        assertionType: "academic_publication",
+        status: "accepted",
+      },
     ];
     for (const pageRecord of pachanoiPageSourceRecords) {
       const editorialSource = editorialContent.sources.find(
@@ -898,6 +1223,205 @@ try {
         importer_version = EXCLUDED.importer_version,
         status = EXCLUDED.status
     `;
+
+    for (const [sourceRecordId, providerRecordId, scientificName, usageKey] of [
+      [
+        ids.sourceRecordGbifBipolaris,
+        "species:165628953",
+        "Bipolaris cactivora",
+        165628953,
+      ],
+      [
+        ids.sourceRecordGbifPectobacterium,
+        "species:102828396",
+        "Pectobacterium cacticida",
+        102828396,
+      ],
+      [
+        ids.sourceRecordGbifFusarium,
+        "species:5251961",
+        "Fusarium oxysporum",
+        5251961,
+      ],
+      [
+        ids.sourceRecordGbifPhytophthora,
+        "species:3203674",
+        "Phytophthora cactorum",
+        3203674,
+      ],
+    ] as const) {
+      const rawPayload = {
+        provider: "GBIF Backbone Taxonomy",
+        scientificName,
+        usageKey,
+        scope:
+          "taxonomic identifier for a pathogen entity; not host-pathogenicity evidence",
+      };
+      await transaction`
+        INSERT INTO source_records (
+          id, data_source_id, source_record_id, source_url, retrieved_at,
+          license_uri, attribution, assertion_type, raw_payload, raw_checksum,
+          importer_version, status
+        ) VALUES (
+          ${sourceRecordId},
+          ${ids.dataSourceGbif},
+          ${providerRecordId},
+          ${`https://www.gbif.org/${providerRecordId.replace(":", "/")}`},
+          '2026-09-05T00:00:00Z',
+          'CC BY 4.0',
+          'GBIF Secretariat; GBIF Backbone Taxonomy.',
+          'taxonomic_fact',
+          ${json(rawPayload)},
+          ${payloadChecksum(rawPayload)},
+          'gbif-pathogen-manual-review-0.1.0',
+          'accepted'
+        )
+        ON CONFLICT (id) DO UPDATE SET
+          data_source_id = EXCLUDED.data_source_id,
+          source_record_id = EXCLUDED.source_record_id,
+          source_url = EXCLUDED.source_url,
+          retrieved_at = EXCLUDED.retrieved_at,
+          license_uri = EXCLUDED.license_uri,
+          attribution = EXCLUDED.attribution,
+          assertion_type = EXCLUDED.assertion_type,
+          raw_payload = EXCLUDED.raw_payload,
+          raw_checksum = EXCLUDED.raw_checksum,
+          importer_version = EXCLUDED.importer_version,
+          status = EXCLUDED.status
+      `;
+    }
+
+    for (const [sourceRecordId, providerRecordId, scientificName, usageKey] of [
+      [
+        ids.sourceRecordGbifPeruviana,
+        "species:7281309",
+        "Echinopsis peruviana",
+        7281309,
+      ],
+      [
+        ids.sourceRecordGbifLageniformis,
+        "species:5622588",
+        "Echinopsis lageniformis",
+        5622588,
+      ],
+      [
+        ids.sourceRecordGbifBridgesii,
+        "species:7282728",
+        "Trichocereus bridgesii",
+        7282728,
+      ],
+    ] as const) {
+      const rawPayload = {
+        provider: "GBIF Backbone Taxonomy",
+        scientificName,
+        usageKey,
+        scope:
+          "taxonomic identifier for a related cactus; not evidence of identity or direct phylogenetic relationship with Echinopsis pachanoi",
+      };
+      await transaction`
+        INSERT INTO source_records (
+          id, data_source_id, source_record_id, source_url, retrieved_at,
+          license_uri, attribution, assertion_type, raw_payload, raw_checksum,
+          importer_version, status
+        ) VALUES (
+          ${sourceRecordId},
+          ${ids.dataSourceGbif},
+          ${providerRecordId},
+          ${`https://www.gbif.org/${providerRecordId.replace(":", "/")}`},
+          '2026-09-05T00:00:00Z',
+          'CC BY 4.0',
+          'GBIF Secretariat; GBIF Backbone Taxonomy.',
+          'taxonomic_fact',
+          ${json(rawPayload)},
+          ${payloadChecksum(rawPayload)},
+          'gbif-related-cacti-manual-review-0.1.0',
+          'accepted'
+        )
+        ON CONFLICT (id) DO UPDATE SET
+          data_source_id = EXCLUDED.data_source_id,
+          source_record_id = EXCLUDED.source_record_id,
+          source_url = EXCLUDED.source_url,
+          retrieved_at = EXCLUDED.retrieved_at,
+          license_uri = EXCLUDED.license_uri,
+          attribution = EXCLUDED.attribution,
+          assertion_type = EXCLUDED.assertion_type,
+          raw_payload = EXCLUDED.raw_payload,
+          raw_checksum = EXCLUDED.raw_checksum,
+          importer_version = EXCLUDED.importer_version,
+          status = EXCLUDED.status
+      `;
+    }
+
+    for (const [
+      sourceRecordId,
+      providerRecordId,
+      scientificName,
+      ipniNameId,
+      status,
+    ] of [
+      [
+        ids.sourceRecordPowoMacrogona,
+        "taxon:88459-2",
+        "Echinopsis macrogona",
+        "88459-2",
+        "synonym",
+      ],
+      [
+        ids.sourceRecordPowoLageniformis,
+        "taxon:132706-1",
+        "Echinopsis lageniformis",
+        "132706-1",
+        "accepted",
+      ],
+      [
+        ids.sourceRecordPowoBridgesii,
+        "taxon:138904-1",
+        "Trichocereus bridgesii",
+        "138904-1",
+        "synonym",
+      ],
+    ] as const) {
+      const rawPayload = {
+        provider: "Plants of the World Online",
+        scientificName,
+        ipniNameId,
+        status,
+        scope:
+          "current provider treatment used to contextualize a related cactus; not an editorial resolution of the pachanoi relationship",
+      };
+      await transaction`
+        INSERT INTO source_records (
+          id, data_source_id, source_record_id, source_url, retrieved_at,
+          license_uri, attribution, assertion_type, raw_payload, raw_checksum,
+          importer_version, status
+        ) VALUES (
+          ${sourceRecordId},
+          ${ids.dataSourcePowo},
+          ${providerRecordId},
+          ${`https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:${ipniNameId}/general-information`},
+          '2026-09-05T00:00:00Z',
+          'CC BY 3.0',
+          'Royal Botanic Gardens, Kew; Plants of the World Online.',
+          'taxonomic_fact',
+          ${json(rawPayload)},
+          ${payloadChecksum(rawPayload)},
+          'powo-related-cacti-manual-review-0.1.0',
+          'accepted'
+        )
+        ON CONFLICT (id) DO UPDATE SET
+          data_source_id = EXCLUDED.data_source_id,
+          source_record_id = EXCLUDED.source_record_id,
+          source_url = EXCLUDED.source_url,
+          retrieved_at = EXCLUDED.retrieved_at,
+          license_uri = EXCLUDED.license_uri,
+          attribution = EXCLUDED.attribution,
+          assertion_type = EXCLUDED.assertion_type,
+          raw_payload = EXCLUDED.raw_payload,
+          raw_checksum = EXCLUDED.raw_checksum,
+          importer_version = EXCLUDED.importer_version,
+          status = EXCLUDED.status
+      `;
+    }
 
     await transaction`
       INSERT INTO source_records (
@@ -1066,6 +1590,71 @@ try {
         "Seed editorial: tratamiento nomenclatural de Albesiano y Kiesling, atribución y alcance revisados sin resolverlo frente a POWO.",
         true,
       ],
+      [
+        ids.sourceRecordGbifBipolaris,
+        "Seed editorial: identificador GBIF del hongo, licencia, atribución y separación del alcance fitopatológico revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordGbifPectobacterium,
+        "Seed editorial: identificador GBIF de la bacteria, licencia, atribución y separación del alcance fitopatológico revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordGbifFusarium,
+        "Seed editorial: identificador GBIF del hongo, licencia, atribución y separación del alcance fitopatológico revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordGbifPhytophthora,
+        "Seed editorial: identificador GBIF del oomiceto, licencia, atribución y clasificación no fúngica revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordFdacsCactusRot,
+        "Seed editorial: circular fitopatológica, atribución y alcance a géneros de Cactaceae revisados; no es evidencia específica de Echinopsis pachanoi.",
+        false,
+      ],
+      [
+        ids.sourceRecordPectobacteriumCactusRot,
+        "Seed editorial: artículo de patología bacteriana, atribución y alcance a cactus revisados; no es evidencia específica de Echinopsis pachanoi.",
+        true,
+      ],
+      [
+        ids.sourceRecordFusariumCactusRot,
+        "Seed editorial: artículo de pudrición basal con inoculación, atribución y alcance a Echinocactus grusonii revisados; no es evidencia específica de Echinopsis pachanoi.",
+        true,
+      ],
+      [
+        ids.sourceRecordGbifPeruviana,
+        "Seed editorial: identificador GBIF de Echinopsis peruviana, licencia, atribución y separación entre taxonomía relacionada y evidencia de identidad revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordGbifLageniformis,
+        "Seed editorial: identificador GBIF de Echinopsis lageniformis, licencia, atribución y separación entre taxonomía relacionada y evidencia de identidad revisados.",
+        true,
+      ],
+      [
+        ids.sourceRecordGbifBridgesii,
+        "Seed editorial: identificador GBIF de Trichocereus bridgesii, licencia, atribución y tratamiento como sinónimo separados de la relación con pachanoi.",
+        true,
+      ],
+      [
+        ids.sourceRecordPowoMacrogona,
+        "Seed editorial: tratamiento POWO de Echinopsis macrogona y su relación con Echinopsis peruviana revisado; no se usa para resolver la ficha de pachanoi.",
+        true,
+      ],
+      [
+        ids.sourceRecordPowoLageniformis,
+        "Seed editorial: tratamiento POWO aceptado de Echinopsis lageniformis revisado junto con el sinónimo Trichocereus bridgesii.",
+        true,
+      ],
+      [
+        ids.sourceRecordPowoBridgesii,
+        "Seed editorial: tratamiento POWO de Trichocereus bridgesii como sinónimo revisado; no se presenta como entidad independiente.",
+        true,
+      ],
     ] as const) {
       await transaction`
         INSERT INTO source_record_reviews (
@@ -1185,6 +1774,293 @@ try {
       }
     }
 
+    for (const speciesDocument of editorialContent.species) {
+      for (const pathogen of speciesDocument.pathogens ?? []) {
+        const identity = editorialPathogenIdsByPublicId.get(pathogen.publicId);
+        if (!identity) throw new Error(`Unknown pathogen ${pathogen.publicId}`);
+        for (const identifier of pathogen.externalIdentifiers ?? []) {
+          if (!identifier.license) {
+            throw new Error(
+              `External identifier ${identifier.namespace}:${identifier.identifier} needs a license`,
+            );
+          }
+          await transaction`
+            INSERT INTO external_identifiers (
+              namespace, identifier, canonical_url, retrieved_at, license_uri,
+              biological_entity_id
+            ) VALUES (
+              ${identifier.namespace},
+              ${identifier.identifier},
+              ${identifier.canonicalUrl ?? null},
+              '2026-09-05T00:00:00Z',
+              ${identifier.license},
+              ${identity.entityId}
+            )
+            ON CONFLICT (namespace, identifier) DO UPDATE SET
+              canonical_url = EXCLUDED.canonical_url,
+              retrieved_at = EXCLUDED.retrieved_at,
+              license_uri = EXCLUDED.license_uri,
+              biological_entity_id = EXCLUDED.biological_entity_id
+          `;
+        }
+      }
+    }
+
+    for (const speciesDocument of editorialContent.species) {
+      for (const relatedTaxon of speciesDocument.relatedTaxa ?? []) {
+        const identity = editorialRelatedTaxonIdsByPublicId.get(
+          relatedTaxon.publicId,
+        );
+        if (!identity)
+          throw new Error(`Unknown related taxon ${relatedTaxon.publicId}`);
+        for (const identifier of relatedTaxon.externalIdentifiers ?? []) {
+          if (!identifier.license) {
+            throw new Error(
+              `External identifier ${identifier.namespace}:${identifier.identifier} needs a license`,
+            );
+          }
+          await transaction`
+            INSERT INTO external_identifiers (
+              namespace, identifier, canonical_url, retrieved_at, license_uri,
+              biological_entity_id
+            ) VALUES (
+              ${identifier.namespace},
+              ${identifier.identifier},
+              ${identifier.canonicalUrl ?? null},
+              '2026-09-05T00:00:00Z',
+              ${identifier.license},
+              ${identity.entityId}
+            )
+            ON CONFLICT (namespace, identifier) DO UPDATE SET
+              canonical_url = EXCLUDED.canonical_url,
+              retrieved_at = EXCLUDED.retrieved_at,
+              license_uri = EXCLUDED.license_uri,
+              biological_entity_id = EXCLUDED.biological_entity_id
+          `;
+        }
+      }
+    }
+
+    for (const speciesDocument of editorialContent.species) {
+      const taxonId = editorialTaxonIdBySpeciesPublicId.get(
+        speciesDocument.publicId,
+      );
+      if (!taxonId)
+        throw new Error(
+          `Unknown editorial species ${speciesDocument.publicId}`,
+        );
+      for (const claim of speciesDocument.pathogenicityClaims ?? []) {
+        const claimId = editorialClaimIdByPublicId.get(claim.publicId);
+        const pathogen = editorialPathogenIdsByPublicId.get(
+          claim.pathogenPublicId,
+        );
+        const sourceId = seedSourceIdByPublicId.get(claim.sourcePublicId);
+        const sourceRecordId = editorialSourceRecordIdByProviderRecordId.get(
+          claim.sourceRecordId,
+        );
+        const source = editorialContent.sources.find(
+          (candidate) => candidate.publicId === claim.sourcePublicId,
+        );
+        if (!claimId || !pathogen || !sourceId || !sourceRecordId || !source) {
+          throw new Error(
+            `Pathogenicity claim ${claim.publicId} has no claim, pathogen, source or source-record mapping`,
+          );
+        }
+        await transaction`
+          INSERT INTO claims (
+            id, public_id, subject_type, subject_id, predicate,
+            object_type, object_id, assertion_type, evidence_level,
+            source_id, source_record_id, author_perspective, recorded_on,
+            visibility, license_uri, review_status
+          ) VALUES (
+            ${claimId}, ${claim.publicId}, 'taxon', ${taxonId},
+            ${claim.predicate}, 'biological_entity', ${pathogen.entityId},
+            ${claim.assertionType}, ${claim.evidenceLevel}, ${sourceId},
+            ${sourceRecordId}, ${claim.authorPerspective}, ${claim.recordedOn},
+            ${claim.visibility}, ${source.license}, ${claim.reviewStatus}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            public_id = EXCLUDED.public_id,
+            subject_type = EXCLUDED.subject_type,
+            subject_id = EXCLUDED.subject_id,
+            predicate = EXCLUDED.predicate,
+            object_type = EXCLUDED.object_type,
+            object_id = EXCLUDED.object_id,
+            object_uri = NULL,
+            object_text = NULL,
+            value_json = NULL,
+            assertion_type = EXCLUDED.assertion_type,
+            evidence_level = EXCLUDED.evidence_level,
+            source_id = EXCLUDED.source_id,
+            source_record_id = EXCLUDED.source_record_id,
+            author_perspective = EXCLUDED.author_perspective,
+            recorded_on = EXCLUDED.recorded_on,
+            visibility = EXCLUDED.visibility,
+            license_uri = EXCLUDED.license_uri,
+            review_status = EXCLUDED.review_status,
+            updated_at = now()
+        `;
+        await transaction`
+          DELETE FROM claim_sources
+          WHERE claim_id = ${claimId}
+        `;
+        await transaction`
+          INSERT INTO claim_sources (claim_id, source_id, source_record_id, role)
+          VALUES (${claimId}, ${sourceId}, ${sourceRecordId}, 'primary')
+          ON CONFLICT (claim_id, source_id) DO UPDATE SET
+            source_record_id = EXCLUDED.source_record_id,
+            role = EXCLUDED.role
+        `;
+      }
+    }
+
+    for (const speciesDocument of editorialContent.species) {
+      const taxonId = editorialTaxonIdBySpeciesPublicId.get(
+        speciesDocument.publicId,
+      );
+      if (!taxonId)
+        throw new Error(
+          `Unknown editorial species ${speciesDocument.publicId}`,
+        );
+      for (const claim of speciesDocument.relatedTaxonClaims ?? []) {
+        const claimId = editorialClaimIdByPublicId.get(claim.publicId);
+        const relatedTaxon = editorialRelatedTaxonIdsByPublicId.get(
+          claim.relatedTaxonPublicId,
+        );
+        const sourceId = seedSourceIdByPublicId.get(claim.sourcePublicId);
+        const sourceRecordId = editorialSourceRecordIdByProviderRecordId.get(
+          claim.sourceRecordId,
+        );
+        const source = editorialContent.sources.find(
+          (candidate) => candidate.publicId === claim.sourcePublicId,
+        );
+        if (
+          !claimId ||
+          !relatedTaxon ||
+          !sourceId ||
+          !sourceRecordId ||
+          !source
+        ) {
+          throw new Error(
+            `Related-taxon claim ${claim.publicId} has no claim, entity, source or source-record mapping`,
+          );
+        }
+        await transaction`
+          INSERT INTO claims (
+            id, public_id, subject_type, subject_id, predicate,
+            object_type, object_id, assertion_type, evidence_level,
+            source_id, source_record_id, author_perspective, recorded_on,
+            visibility, license_uri, review_status
+          ) VALUES (
+            ${claimId}, ${claim.publicId}, 'taxon', ${taxonId},
+            ${claim.predicate}, 'biological_entity', ${relatedTaxon.entityId},
+            ${claim.assertionType}, ${claim.evidenceLevel}, ${sourceId},
+            ${sourceRecordId}, ${claim.authorPerspective}, ${claim.recordedOn},
+            ${claim.visibility}, ${source.license}, ${claim.reviewStatus}
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            public_id = EXCLUDED.public_id,
+            subject_type = EXCLUDED.subject_type,
+            subject_id = EXCLUDED.subject_id,
+            predicate = EXCLUDED.predicate,
+            object_type = EXCLUDED.object_type,
+            object_id = EXCLUDED.object_id,
+            object_uri = NULL,
+            object_text = NULL,
+            value_json = NULL,
+            assertion_type = EXCLUDED.assertion_type,
+            evidence_level = EXCLUDED.evidence_level,
+            source_id = EXCLUDED.source_id,
+            source_record_id = EXCLUDED.source_record_id,
+            author_perspective = EXCLUDED.author_perspective,
+            recorded_on = EXCLUDED.recorded_on,
+            visibility = EXCLUDED.visibility,
+            license_uri = EXCLUDED.license_uri,
+            review_status = EXCLUDED.review_status,
+            updated_at = now()
+        `;
+        await transaction`
+          DELETE FROM claim_sources
+          WHERE claim_id = ${claimId}
+        `;
+        await transaction`
+          INSERT INTO claim_sources (claim_id, source_id, source_record_id, role)
+          VALUES (${claimId}, ${sourceId}, ${sourceRecordId}, 'primary')
+          ON CONFLICT (claim_id, source_id) DO UPDATE SET
+            source_record_id = EXCLUDED.source_record_id,
+            role = EXCLUDED.role
+        `;
+        const supportingSourceId = seedSourceIdByPublicId.get(
+          "source-powo-related-cacti",
+        );
+        const supportingRecordId =
+          claim.relatedTaxonPublicId ===
+          "biological-entity-echinopsis-peruviana"
+            ? ids.sourceRecordPowoMacrogona
+            : ids.sourceRecordPowoLageniformis;
+        if (supportingSourceId) {
+          await transaction`
+            INSERT INTO claim_sources (claim_id, source_id, source_record_id, role)
+            VALUES (${claimId}, ${supportingSourceId}, ${supportingRecordId}, 'supporting')
+            ON CONFLICT (claim_id, source_id) DO UPDATE SET
+              source_record_id = EXCLUDED.source_record_id,
+              role = EXCLUDED.role
+          `;
+        }
+      }
+    }
+
+    await transaction`
+      INSERT INTO record_provenance (
+        source_record_id, external_identifier_id, source_id, assertion_type
+      )
+      SELECT mapping.source_record_id::uuid,
+             external_identifier.id,
+             mapping.source_id::uuid,
+             'taxonomic_fact'
+      FROM (
+        VALUES
+          (${ids.sourceRecordGbifPeruviana}, 'gbif', '7281309', ${deterministicUuid("editorial-source:source-gbif-related-cacti")}),
+          (${ids.sourceRecordGbifLageniformis}, 'gbif', '5622588', ${deterministicUuid("editorial-source:source-gbif-related-cacti")}),
+          (${ids.sourceRecordGbifBridgesii}, 'gbif', '7282728', ${deterministicUuid("editorial-source:source-gbif-related-cacti")}),
+          (${ids.sourceRecordPowoMacrogona}, 'ipni', '88459-2', ${deterministicUuid("editorial-source:source-powo-related-cacti")}),
+          (${ids.sourceRecordPowoLageniformis}, 'ipni', '132706-1', ${deterministicUuid("editorial-source:source-powo-related-cacti")}),
+          (${ids.sourceRecordPowoBridgesii}, 'ipni', '138904-1', ${deterministicUuid("editorial-source:source-powo-related-cacti")})
+      ) AS mapping(source_record_id, namespace, identifier, source_id)
+      JOIN external_identifiers AS external_identifier
+        ON external_identifier.namespace = mapping.namespace
+       AND external_identifier.identifier = mapping.identifier
+      ON CONFLICT DO NOTHING
+    `;
+
+    for (const speciesDocument of editorialContent.species) {
+      for (const relatedTaxon of speciesDocument.relatedTaxa ?? []) {
+        const identity = editorialRelatedTaxonIdsByPublicId.get(
+          relatedTaxon.publicId,
+        );
+        const sourceRecordId = editorialSourceRecordIdByProviderRecordId.get(
+          relatedTaxon.sourceRecordId,
+        );
+        if (!identity || !sourceRecordId) {
+          throw new Error(
+            `Related taxon ${relatedTaxon.publicId} has no source-record mapping`,
+          );
+        }
+        await transaction`
+          INSERT INTO record_provenance (
+            source_record_id, taxon_id, assertion_type
+          ) VALUES (${sourceRecordId}, ${identity.taxonId}, 'taxonomic_fact')
+          ON CONFLICT DO NOTHING
+        `;
+        await transaction`
+          INSERT INTO record_provenance (
+            source_record_id, biological_entity_id, assertion_type
+          ) VALUES (${sourceRecordId}, ${identity.entityId}, 'taxonomic_fact')
+          ON CONFLICT DO NOTHING
+        `;
+      }
+    }
+
     await transaction`
       INSERT INTO external_identifiers (
         namespace, identifier, canonical_url, retrieved_at, license_uri, taxon_id
@@ -1223,6 +2099,27 @@ try {
 
     await transaction`
       INSERT INTO record_provenance (
+        source_record_id, external_identifier_id, source_id, assertion_type
+      )
+      SELECT mapping.source_record_id::uuid,
+             external_identifier.id,
+             ${deterministicUuid("editorial-source:source-gbif-pathogens")}::uuid,
+             'taxonomic_fact'
+      FROM (
+        VALUES
+          (${ids.sourceRecordGbifBipolaris}, 'gbif', '165628953'),
+          (${ids.sourceRecordGbifPectobacterium}, 'gbif', '102828396'),
+          (${ids.sourceRecordGbifFusarium}, 'gbif', '5251961'),
+          (${ids.sourceRecordGbifPhytophthora}, 'gbif', '3203674')
+      ) AS mapping(source_record_id, namespace, identifier)
+      JOIN external_identifiers AS external_identifier
+        ON external_identifier.namespace = mapping.namespace
+       AND external_identifier.identifier = mapping.identifier
+      ON CONFLICT DO NOTHING
+    `;
+
+    await transaction`
+      INSERT INTO record_provenance (
         source_record_id, taxon_id, assertion_type
       ) VALUES
         (${ids.sourceRecordPowo}, ${ids.taxon}, 'taxonomic_fact'),
@@ -1242,6 +2139,32 @@ try {
         (${ids.sourceRecordGbif}, ${ids.biologicalEntity}, 'taxonomic_fact')
       ON CONFLICT DO NOTHING
     `;
+
+    for (const speciesDocument of editorialContent.species) {
+      for (const pathogen of speciesDocument.pathogens ?? []) {
+        const identity = editorialPathogenIdsByPublicId.get(pathogen.publicId);
+        const sourceRecordId = editorialSourceRecordIdByProviderRecordId.get(
+          pathogen.sourceRecordId,
+        );
+        if (!identity || !sourceRecordId) {
+          throw new Error(
+            `Pathogen ${pathogen.publicId} has no GBIF source-record mapping`,
+          );
+        }
+        await transaction`
+          INSERT INTO record_provenance (
+            source_record_id, taxon_id, assertion_type
+          ) VALUES (${sourceRecordId}, ${identity.taxonId}, 'taxonomic_fact')
+          ON CONFLICT DO NOTHING
+        `;
+        await transaction`
+          INSERT INTO record_provenance (
+            source_record_id, biological_entity_id, assertion_type
+          ) VALUES (${sourceRecordId}, ${identity.entityId}, 'taxonomic_fact')
+          ON CONFLICT DO NOTHING
+        `;
+      }
+    }
 
     await transaction`
       INSERT INTO claims (

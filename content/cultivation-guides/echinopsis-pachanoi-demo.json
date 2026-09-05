@@ -7,30 +7,34 @@
   "title": "Guía de demostración · Echinopsis pachanoi",
   "biologicalEntityPublicId": "biological-entity-echinopsis-pachanoi",
   "status": "archived",
-  "summary": "Documento público de demostración del esquema. No presenta recomendaciones de cultivo sin bibliografía verificable.",
+  "summary": "Documento archivado de demostración del esquema. Conserva orientación general de RHS para cactáceas y suculentas, con alcance británico y sin presentarla como protocolo específico de Echinopsis pachanoi.",
   "coverage": {
     "sections": [
       {
         "sectionKey": "propagation",
-        "status": "in_review",
-        "note": "Claim editorial de demostración; falta investigación horticultural específica."
+        "status": "documented",
+        "note": "Orientación general RHS; describe esquejes y semillas, no un protocolo específico de injerto."
       },
       {
         "sectionKey": "substrate",
-        "status": "in_review",
-        "note": "Claim editorial de demostración; no es una recomendación publicada."
+        "status": "documented",
+        "note": "Orientación general RHS para contenedores; no es una mezcla validada específicamente para Echinopsis pachanoi."
       },
-      { "sectionKey": "watering", "status": "not_documented" },
-      { "sectionKey": "light", "status": "not_documented" },
-      { "sectionKey": "temperature", "status": "not_documented" },
-      { "sectionKey": "humidity", "status": "not_documented" },
-      { "sectionKey": "nutrition", "status": "not_documented" },
-      { "sectionKey": "calendar", "status": "not_documented" },
-      { "sectionKey": "pests", "status": "not_documented" },
-      { "sectionKey": "diseases", "status": "not_documented" },
-      { "sectionKey": "transplant", "status": "not_documented" },
-      { "sectionKey": "fruiting", "status": "not_documented" },
-      { "sectionKey": "harvest", "status": "not_documented" },
+      { "sectionKey": "watering", "status": "documented" },
+      { "sectionKey": "light", "status": "documented" },
+      { "sectionKey": "temperature", "status": "documented" },
+      { "sectionKey": "humidity", "status": "documented" },
+      { "sectionKey": "nutrition", "status": "documented" },
+      { "sectionKey": "calendar", "status": "documented" },
+      { "sectionKey": "pests", "status": "documented" },
+      { "sectionKey": "diseases", "status": "documented" },
+      { "sectionKey": "transplant", "status": "documented" },
+      { "sectionKey": "fruiting", "status": "documented" },
+      {
+        "sectionKey": "harvest",
+        "status": "not_applicable",
+        "note": "La guía RHS es ornamental y no ofrece un protocolo de cosecha; WACHUMA no infiere uno."
+      },
       {
         "sectionKey": "observations",
         "status": "in_review",
@@ -42,17 +46,87 @@
   "claims": [
     {
       "sectionKey": "propagation",
-      "statement": "Pendiente de documentar métodos de propagación con una fuente verificable y contexto regional.",
-      "evidenceLevel": "unverified",
-      "sourcePublicId": "source-wachuma-demo-editorial",
-      "assertionType": "editorial_interpretation"
+      "statement": "RHS indica que los cactus columnares pueden propagarse por esquejes de tallo; deja el extremo cortado secar y formar callo, y coloca el esqueje en una mezcla ligeramente húmeda para reducir el riesgo de pudrición. La guía no describe injertos y WACHUMA no infiere un método de injerto.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
     },
     {
       "sectionKey": "substrate",
-      "statement": "Pendiente de documentar sustrato, drenaje y condiciones de cultivo; no es una recomendación publicada.",
-      "evidenceLevel": "unverified",
-      "sourcePublicId": "source-wachuma-demo-editorial",
-      "assertionType": "editorial_interpretation"
+      "statement": "RHS recomienda para cactáceas y suculentas en contenedor un compost muy drenante y con material granular; propone compost de cactus sin turba o John Innes No. 2 con hasta 30 % de grava. Es orientación general británica, no una mezcla validada específicamente para Echinopsis pachanoi.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "watering",
+      "statement": "RHS recomienda regar abundantemente cuando la superficie del compost está seca durante primavera y verano, dejar escurrir el exceso y no dejar el contenedor en agua; la frecuencia depende del clima y del recipiente.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "light",
+      "statement": "RHS indica que la mayoría de los cactus y suculentas de interior prefieren luz brillante y que muchos toleran un alféizar soleado; también advierte que la luz insuficiente produce plantas débiles y deformadas. No lo presenta como umbral específico de Echinopsis pachanoi.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "temperature",
+      "statement": "Para la mayoría de los cactus de interior, RHS describe un reposo con noches de 8–10 °C; advierte que el contexto es de cultivo doméstico británico y que las excepciones tropicales requieren otro manejo.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "humidity",
+      "statement": "RHS señala que los cactus y suculentas generalmente prefieren baja humedad atmosférica y buena ventilación, con excepciones para especies epífitas tropicales; no establece un porcentaje aplicable a Echinopsis pachanoi.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "nutrition",
+      "statement": "RHS recomienda alimentar una vez al mes durante la temporada de crecimiento (abril–septiembre en su contexto) con fertilizante líquido rico en potasio o uno específico para cactus; el calendario debe ajustarse al clima local.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "calendar",
+      "statement": "RHS sitúa el reposo de la mayoría de los cactus de interior entre noviembre y comienzos de marzo, con condiciones más frescas y riego mínimo o nulo; lo presenta como calendario británico y no como estación universal para los Andes.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "pests",
+      "statement": "Entre los problemas de cactáceas y suculentas, RHS enumera insectos chupadores como cochinillas, ácaros rojos y cochinillas escama; la lista no demuestra presencia ni prevalencia en Echinopsis pachanoi.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "diseases",
+      "statement": "RHS relaciona el exceso de riego con daño radicular y pudrición, y describe edema, daños por frío y costra corchosa asociados a condiciones inadecuadas; no ofrece un diagnóstico fitopatológico específico para Echinopsis pachanoi.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "transplant",
+      "statement": "RHS recomienda trasplantar en primavera cuando las raíces llenan el recipiente o la planta lo supera, y evitar macetas demasiado grandes porque el volumen sobrante puede permanecer húmedo y favorecer la pudrición.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
+    },
+    {
+      "sectionKey": "fruiting",
+      "statement": "RHS indica que muchos cactus producen flores y que un periodo fresco y seco de reposo, junto con mucha luz, puede estimular la floración; no atribuye ese resultado específicamente a Echinopsis pachanoi.",
+      "evidenceLevel": "documented",
+      "sourcePublicId": "source-rhs-cacti-succulents-guide",
+      "assertionType": "horticultural_guidance"
     },
     {
       "sectionKey": "observations",

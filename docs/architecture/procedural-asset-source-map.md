@@ -7,9 +7,18 @@ la presentación web. La fecha de esta auditoría es 2026-08-27.
 ## Ruta activa
 
 ```text
-apps/web/app/preview/svg-loft/page.tsx
-  -> apps/web/app/components/GeometryNodesPachanoiPreview.tsx
+apps/web/scripts/generate-demo-glb.ts
+  -> packages/procgen/src/pachanoi-surface.ts
+  -> apps/web/public/models/echinopsis-pachanoi-demo.glb
+  -> apps/web/app/components/Garden3DPreview.tsx
+```
+
+La ruta de desarrollo apical mantiene una segunda salida comparativa:
+
+```text
+integrations/blender/export_pachanoi_sequence.py
   -> apps/web/public/models/pachanoi-sequence/frame-*.glb
+  -> apps/web/app/components/GeometryNodesPachanoiPreview.tsx
 ```
 
 La página activa no importa `SvgLoftPreview.tsx`. El componente web carga diez
@@ -23,23 +32,26 @@ criptográfica dentro de la GPU.
 
 ## Fuente generativa canónica
 
-| Capa            | Ruta                                                                  | Responsabilidad                                                                                                    | Estado                                       |
-| --------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
-| Generador       | `integrations/blender/generate_pachanoi_geometry_nodes.py`            | Crea el árbol Geometry Nodes, sockets, materiales, módulos rib–valley, areolas, espinas y cierre corporal derivado | Canónica                                     |
-| Fuente editable | `integrations/blender/projects/wachuma-pachanoi-geometry-nodes.blend` | Conserva el árbol GN y los valores evaluables de Blender                                                           | Canónica                                     |
-| Exportador      | `integrations/blender/export_pachanoi_sequence.py`                    | Evalúa frames del mismo `.blend`, exporta GLB y escribe el manifest con hashes, parámetros y sidecar de identidad  | Canónica de exportación                      |
-| Secuencia web   | `apps/web/public/models/pachanoi-sequence/frame-*.glb`                | Snapshots horneados para el navegador                                                                              | Derivada                                     |
-| Manifest activo | `apps/web/public/models/pachanoi-sequence/sequence.manifest.json`     | Hashes, frames, parámetros, versión, seed, identidad declarada y limitaciones                                      | Derivada, versionada                         |
-| Preview         | `apps/web/app/components/GeometryNodesPachanoiPreview.tsx`            | Carga GLB y presenta controles; actualmente también deforma vértices en shaders para redondeo y escala de espinas  | Presentación con aproximación geométrica web |
+| Capa               | Ruta                                                                  | Responsabilidad                                                                                                       | Estado                            |
+| ------------------ | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| Generador procgen  | `packages/procgen/src/pachanoi-surface.ts`                            | Produce la superficie cerrada de costillas, la retícula de areolas y las espinas con semilla y parámetros versionados | Canónica in-process               |
+| Exportador Node    | `apps/web/scripts/generate-demo-glb.ts`                               | Convierte la superficie procgen a GLB, escribe hash/manifiesto y no necesita Blender                                  | Canónica de exportación           |
+| Asset demo         | `apps/web/public/models/echinopsis-pachanoi-demo.glb`                 | Malla corporal cerrada más areolas/espinas para la escena del jardín                                                  | Derivada, versionada              |
+| Manifest demo      | `apps/web/public/models/echinopsis-pachanoi-demo.manifest.json`       | Semilla, algoritmo, diagnósticos, topología, licencia, atribución y diferencia con Blender                            | Derivada, versionada              |
+| Preview jardín     | `apps/web/app/components/Garden3DPreview.tsx`                         | Carga el GLB generado in-process; la escena sigue siendo una interpretación procedural                                | Presentación con aproximación web |
+| Generador Blender  | `integrations/blender/generate_pachanoi_geometry_nodes.py`            | Conserva la hipótesis Geometry Nodes y sus snapshots de desarrollo                                                    | Comparación externa               |
+| Fuente editable    | `integrations/blender/projects/wachuma-pachanoi-geometry-nodes.blend` | Valores evaluables del adaptador Blender                                                                              | Comparación externa               |
+| Exportador Blender | `integrations/blender/export_pachanoi_sequence.py`                    | Exporta la secuencia animada comparativa y su manifest                                                                | Comparación externa               |
+| Secuencia Blender  | `apps/web/public/models/pachanoi-sequence/frame-*.glb`                | Snapshots de desarrollo apical para el preview especializado                                                          | Derivada, externa                 |
 
-El GLB no es la fuente primaria: no contiene el árbol GN, sus sockets, la
-regla generativa ni la procedencia completa. `pnpm validate:glb` comprueba la
-especificación glTF; `pnpm quality:topology` añade una comprobación limitada
-sobre la superficie corporal exportada (soldadura geométrica de posiciones,
-aristas de frontera, aristas no-manifold, orientación y degenerados), además de
-los hashes SHA-256 de cada GLB y la consistencia cardinal de la identidad
-lateral declarada en el manifiesto. Ninguno de los dos prueba continuidad C²,
-Jacobianos, auto-intersecciones ni identidad biológica de vértices.
+El GLB no es la fuente primaria: no contiene la regla generativa ni la
+procedencia completa. `pnpm quality:procgen-glb` regenera dos veces el asset
+desde `@wachuma/procgen`, compara sus bytes y hash, y comprueba cuerpo cerrado,
+aristas de frontera/no-manifold, orientación, degenerados, siete costillas y
+auto-intersecciones por SAT espacial. `pnpm validate:glb` comprueba la
+especificación glTF; `pnpm quality:topology` mantiene la misma auditoría para
+la secuencia Blender comparativa. Ninguno de los gates prueba continuidad C²,
+identidad biológica de vértices ni una reconstrucción científica.
 
 ## Artefactos legacy o no activos
 
@@ -68,10 +80,10 @@ El mismo reporte encontró que `rib_id`, `areola_id`, `u`, `delta_theta`,
 ni como atributos glTF. El manifest contiene un sidecar procedural declarado,
 pero la correspondencia sidecar–vértice exportado no está demostrada.
 
-La secuencia contiene hashes coincidentes para los diez GLB, versión del
-generador, hash del generador, hash del `.blend`, parámetros, seed y estado de
-validación. Eso prueba trazabilidad de artefactos, no una ley biológica ni una
-identidad geométrica persistente a nivel de vértice.
+El asset procgen contiene un hash estable para la misma semilla y un manifiesto
+con diagnósticos de superficie. La secuencia Blender contiene además hash del
+generador y del `.blend`; ambas rutas prueban trazabilidad de artefactos, no una
+ley biológica ni una identidad geométrica persistente a nivel de vértice.
 
 `GeometryNodesPachanoiPreview.tsx` escribe `transformed` en el vertex shader
 para `Inner Rib Roundness` y `Spine Scale`. En consecuencia, la presentación
@@ -82,6 +94,12 @@ puramente material del GLB.
 
 ```text
 hipótesis o requisito matemático
+  -> packages/procgen/src/pachanoi-surface.ts
+  -> apps/web/scripts/generate-demo-glb.ts
+  -> GLB + echinopsis-pachanoi-demo.manifest.json
+  -> Garden3DPreview.tsx
+
+comparación de desarrollo (opcional, Blender externo)
   -> generate_pachanoi_geometry_nodes.py
   -> wachuma-pachanoi-geometry-nodes.blend
   -> export_pachanoi_sequence.py
@@ -89,8 +107,11 @@ hipótesis o requisito matemático
   -> GeometryNodesPachanoiPreview.tsx
 ```
 
-Un cambio de geometría debe comenzar en el generador y regenerar el `.blend`,
-los GLB y el manifest. Un cambio exclusivamente visual puede comenzar en el
-preview, pero no puede presentarse como corrección del generador. Mientras el
-preview deforme vértices, cualquier comparación debe distinguir la salida GLB
-de la aproximación final de la GPU.
+Un cambio de geometría canónica debe comenzar en `packages/procgen` y regenerar
+el GLB demo y su manifest con `pnpm --filter @wachuma/web generate:demo-model`.
+La secuencia Blender sólo se regenera en el adaptador externo para comparar el
+desarrollo apical; sus bytes no son requisito del núcleo. Un cambio
+exclusivamente visual puede comenzar en el preview, pero no puede presentarse
+como corrección del generador. Mientras el preview Blender deforme vértices,
+cualquier comparación debe distinguir la salida GLB de la aproximación final
+de la GPU.

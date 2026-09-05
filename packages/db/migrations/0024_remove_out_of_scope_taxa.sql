@@ -125,6 +125,18 @@ BEGIN
      OR (subject_type = 'taxon' AND subject_id = ANY(retired_taxa))
      OR (subject_type = 'biological_entity' AND subject_id = ANY(retired_entities));
 
+  -- Guide provenance has to go before the guide row itself; old seeds linked
+  -- published guides here even when the focused fixture did not.
+  DELETE FROM record_provenance
+  WHERE source_record_id IN (SELECT id FROM retired_source_records)
+     OR growing_guide_id IN (SELECT id FROM retired_guides)
+     OR taxon_id = ANY(retired_taxa)
+     OR biological_entity_id = ANY(retired_entities)
+     OR specimen_id IN (SELECT id FROM retired_specimens)
+     OR culture_id IN (SELECT id FROM retired_cultures)
+     OR observation_id IN (SELECT id FROM retired_observations)
+     OR cultural_relation_id IN (SELECT id FROM retired_relations);
+
   DELETE FROM growing_guide_claims
   WHERE growing_guide_id IN (SELECT id FROM retired_guides);
   DELETE FROM growing_guides WHERE id IN (SELECT id FROM retired_guides);
@@ -147,15 +159,6 @@ BEGIN
      OR biological_entity_id = ANY(retired_entities)
      OR specimen_id IN (SELECT id FROM retired_specimens);
 
-  DELETE FROM record_provenance
-  WHERE source_record_id IN (SELECT id FROM retired_source_records)
-     OR taxon_id = ANY(retired_taxa)
-     OR biological_entity_id = ANY(retired_entities)
-     OR specimen_id IN (SELECT id FROM retired_specimens)
-     OR culture_id IN (SELECT id FROM retired_cultures)
-     OR observation_id IN (SELECT id FROM retired_observations)
-     OR cultural_relation_id IN (SELECT id FROM retired_relations)
-     OR growing_guide_id IN (SELECT id FROM retired_guides);
   DELETE FROM record_provenance
   WHERE media_id IN (SELECT media_id FROM retired_media)
      OR lineage_relationship_id IN (SELECT id FROM retired_lineages);
