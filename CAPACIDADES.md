@@ -57,6 +57,14 @@ silencioso.
 hash y manifiesto, recetas deterministas con semilla, y el rótulo
 `procedural-interpretation` que impide leer un render como evidencia.
 
+El GLB exportado no conserva identidad de vértice (`rib_id`, `areole_id`, `u`,
+`local_s`, `birth_frame`); esa correspondencia requeriría un sidecar versionado
+y una prueba contra el GLB.
+
+**Buscar con cobertura declarada.** La búsqueda textual es parcial: se limita a
+los campos comparados por sus índices y los patrones de menos de tres caracteres
+quedan fuera de la cobertura de `pg_trgm`.
+
 **Exportarse sin perder identidad**, a Darwin Core, JSON-LD/PROV-O y RO-Crate.
 
 **Medirse solo.** `pnpm verify:release` corre la batería completa —tipos, lint,
