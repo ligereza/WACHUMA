@@ -63,6 +63,10 @@ fuentes bibliográficas compartidas y elimina un `source_record` sólo cuando ya
 no tiene provenance, claims, revisiones ni referencias de escenas. El seed no
 recrea esos registros. `pnpm quality:retired-scope` prueba el caso heredado en
 una transacción aislada y hace rollback al terminar.
+`pnpm quality:legacy-db` reconstruye además un esquema desde las migraciones
+previas a `0024`, ejecuta el seed histórico de `eff8048`, aplica la migración y
+corre la suite API contra el estado resultante antes de eliminar el esquema
+temporal.
 
 Lo que sí entra alrededor del eje son las cactáceas emparentadas —_Echinopsis
 peruviana_, _Echinopsis lageniformis_ / _Trichocereus bridgesii_ y los taxones

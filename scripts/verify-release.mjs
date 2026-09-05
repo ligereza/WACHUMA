@@ -24,6 +24,7 @@ const commands = [
   ["quality:topology"],
   ["format:check"],
   ["db:verify"],
+  ["quality:legacy-db"],
   ["quality:corpus"],
   ["quality:content-db"],
   ["quality:public-corpus"],
