@@ -27,6 +27,7 @@
     "import:pachanoi:page-harvest": "pnpm --filter @wachuma/db build && node scripts/import-pachanoi-page-harvest.mjs",
     "import:garden:ledger": "pnpm --filter @wachuma/importer-garden build && node scripts/import-garden-ledger.mjs",
     "bench:search-indexes": "node scripts/benchmark-search-indexes.mjs",
+    "bench:public-search": "node scripts/benchmark-public-search.mjs",
     "content:taxonomy-fixture": "node scripts/generate-taxonomy-fixture.mjs",
     "quality:taxonomy-fixture": "node scripts/generate-taxonomy-fixture.mjs --check",
     "quality:content": "node scripts/validate-content.mjs",

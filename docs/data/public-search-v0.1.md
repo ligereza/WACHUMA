@@ -36,5 +36,13 @@ adicionales ni una promesa de cobertura completa.
 requiriendo un recorrido secuencial. `pnpm bench:search-indexes` ejecuta
 `EXPLAIN (ANALYZE, BUFFERS)` sobre un esquema desechable y una sola condición
 de una columna: mide el mecanismo del índice, no el endpoint completo
-`/api/v1/search` ni un corpus real de WACHUMA. Con un corpus de una especie,
-un `EXPLAIN ANALYZE` de la ruta tendría valor diagnóstico limitado.
+`/api/v1/search` ni un corpus real de WACHUMA.
+
+`pnpm bench:public-search -- --rows 200000` escala temporalmente la rama de
+claims con filas públicas sintéticas, ejecuta el repositorio de búsqueda y
+repite la consulta SQL capturada con `EXPLAIN (ANALYZE, BUFFERS)`. La transacción
+se revierte siempre; no crea especies, ejemplares, lugares ni relaciones
+culturales ficticias. La prueba de integración de PostgreSQL hace la misma
+medición sobre la consulta completa y el seed revisado, por lo que la cobertura
+de rendimiento sigue siendo parcial: no representa todavía un corpus multirama
+de producción.

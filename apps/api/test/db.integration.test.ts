@@ -12,7 +12,17 @@ test(
   "PostgreSQL/PostGIS seed exposes the public vertical and hides restricted data",
   { skip: !run || !databaseUrl },
   async () => {
-    const sql = postgres(databaseUrl!);
+    const observedSearchQueries: Array<{
+      query: string;
+      parameters: unknown[];
+    }> = [];
+    const sql = postgres(databaseUrl!, {
+      debug: (_connection, query, parameters) => {
+        if (query.includes("WITH search_params AS")) {
+          observedSearchQueries.push({ query, parameters });
+        }
+      },
+    });
     const app = buildApi({ sql, adminToken: "integration-token" });
     try {
       const health = await app.inject({
@@ -94,6 +104,23 @@ test(
             Array.isArray(result.sourcePublicIds),
           ),
       );
+
+      const observedSearch = observedSearchQueries.at(-1);
+      assert.ok(
+        observedSearch,
+        "the integration test must capture the real search query",
+      );
+      assert.match(observedSearch.query, /ILIKE/);
+      const [searchPlanRow] = await sql.unsafe<
+        Array<{ "QUERY PLAN": Array<Record<string, unknown>> }>
+      >(
+        `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${observedSearch.query}`,
+        observedSearch.parameters,
+      );
+      const searchPlan = searchPlanRow?.["QUERY PLAN"]?.[0];
+      assert.ok(searchPlan);
+      assert.ok(Number(searchPlan["Execution Time"]) >= 0);
+      assert.ok(searchPlan["Plan"]);
 
       const restrictedSearch = await app.inject({
         method: "GET",
