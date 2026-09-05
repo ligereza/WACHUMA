@@ -3,24 +3,14 @@
 // resulting database. A schema is used instead of CREATE DATABASE because the
 // local/CI application role is intentionally not required to own databases.
 //
-// The old seed is materialized directly from git commit eff8048 at runtime;
-// no copy of that historical seed becomes a second editable source of truth.
-// The schema is dropped in finally, so this harness leaves the operator DB
-// unchanged apart from transient objects under its generated schema name.
+// The legacy rows are loaded from the versioned fixture derived once from
+// eff8048; CI therefore does not need the historical git object. The schema is
+// dropped in finally, so this harness leaves the operator DB unchanged apart
+// from transient objects under its generated schema name.
 
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import {
-  chmod,
-  mkdir,
-  mkdtemp,
-  readFile,
-  readdir,
-  rm,
-  unlink,
-  writeFile,
-} from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -35,14 +25,8 @@ if (!databaseUrl) {
 }
 
 const packageManager = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-const legacyCommit = "eff8048";
+const legacyFixturePath = resolve(root, "scripts/fixtures/legacy-eff8048.sql");
 const schema = `wachuma_legacy_${process.pid}_${randomUUID().replaceAll("-", "").slice(0, 12)}`;
-const legacySeedPath = resolve(
-  root,
-  "packages/db/src",
-  `.seed-legacy-harness-${process.pid}-${randomUUID()}.ts`,
-);
-const legacyContentRoot = await mkdtemp("/tmp/wachuma-legacy-content-");
 const scopedDatabaseUrl = new URL(databaseUrl);
 scopedDatabaseUrl.searchParams.set(
   "options",
@@ -115,41 +99,22 @@ try {
   assert.ok(legacyMigrationFiles.length > 0);
   await applyMigrations(legacyMigrationFiles);
 
-  const legacyContentFiles = execFileSync(
-    "git",
-    ["ls-tree", "-r", "--name-only", `${legacyCommit}:content`],
-    { cwd: root, encoding: "utf8" },
-  )
+  const legacyFixture = await readFile(legacyFixturePath, "utf8");
+  assert.match(legacyFixture, /Generated once from eff8048/);
+  assert.match(legacyFixture, /__LEGACY_SCHEMA__/);
+  const fixtureSql = legacyFixture
     .split("\n")
-    .filter((file) => file.endsWith(".json"));
-  for (const contentFile of legacyContentFiles) {
-    const destination = resolve(legacyContentRoot, "content", contentFile);
-    await mkdir(resolve(destination, ".."), { recursive: true });
-    const contents = execFileSync(
-      "git",
-      ["show", `${legacyCommit}:content/${contentFile}`],
-      { cwd: root, encoding: "utf8" },
-    );
-    await writeFile(destination, contents, { mode: 0o600 });
-  }
-
-  const legacySeedSource = execFileSync(
-    "git",
-    ["show", `${legacyCommit}:packages/db/src/seed.ts`],
-    { cwd: root, encoding: "utf8" },
+    .filter(
+      (line) =>
+        !line.startsWith("\\") &&
+        !line.includes(" DISABLE TRIGGER ALL;") &&
+        !line.includes(" ENABLE TRIGGER ALL;"),
+    )
+    .join("\n")
+    .replaceAll("__LEGACY_SCHEMA__", schema);
+  await sql.unsafe(
+    `${fixtureSql}\nSET search_path TO ${quotedSchemaIdentifier()}, public;`,
   );
-  const legacySeed = legacySeedSource.replace(
-    `const editorialContent = await loadEditorialContent(rootDirectory);`,
-    `const editorialContentRoot =\n  process.env.WACHUMA_LEGACY_CONTENT_ROOT ?? rootDirectory;\nconst editorialContent = await loadEditorialContent(editorialContentRoot);`,
-  );
-  assert.notEqual(legacySeed, legacySeedSource);
-  await writeFile(legacySeedPath, legacySeed, { mode: 0o600 });
-  await chmod(legacySeedPath, 0o600);
-  run(["exec", "tsx", legacySeedPath], {
-    DATABASE_URL: isolatedDatabaseUrl,
-    WACHUMA_LEGACY_CONTENT_ROOT: legacyContentRoot,
-    WACHUMA_SEED_PROFILE: "verification",
-  });
 
   const [legacyOutOfScope] = await sql`
     SELECT COUNT(*)::int AS count
@@ -198,7 +163,8 @@ try {
     RUN_DB_INTEGRATION: "1",
   });
   report = {
-    legacyCommit,
+    legacyFixture: "scripts/fixtures/legacy-eff8048.sql",
+    legacyFixtureSourceCommit: "eff8048",
     schema,
     legacyOutOfScopeEntities: legacyOutOfScope.count,
     retiredEntitiesAfter0024: retired.count,
@@ -207,12 +173,6 @@ try {
     schemaDropped: true,
   };
 } finally {
-  try {
-    await unlink(legacySeedPath);
-  } catch (error) {
-    if (error?.code !== "ENOENT") throw error;
-  }
-  await rm(legacyContentRoot, { recursive: true, force: true });
   await sql.unsafe(`DROP SCHEMA IF EXISTS ${quotedSchemaIdentifier()} CASCADE`);
   await sql.end();
 }
