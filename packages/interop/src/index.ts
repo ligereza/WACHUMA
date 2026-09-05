@@ -1,5 +1,7 @@
 import type { Claim, PublicObservation } from "@wachuma/shared";
 
+export * from "./public-export.js";
+
 export interface DarwinCoreOccurrenceInput {
   occurrenceId: string;
   scientificName: string;
@@ -67,6 +69,7 @@ export interface RoCrateEntity {
   attribution?: string;
   derivedFrom?: string[];
   generatedAtTime?: string;
+  properties?: Record<string, unknown>;
 }
 
 export function buildRoCrateMetadata(
@@ -90,6 +93,7 @@ export function buildRoCrateMetadata(
     ...(entity.generatedAtTime
       ? { "prov:generatedAtTime": entity.generatedAtTime }
       : {}),
+    ...(entity.properties ?? {}),
   });
   return {
     "@context": "https://w3id.org/ro/crate/1.2/context",
@@ -105,18 +109,22 @@ export function buildRoCrateMetadata(
   };
 }
 
-export function claimToJsonLd(claim: Claim): JsonLdNode {
+export function claimToJsonLd(
+  claim: Claim & { subjectPublicId?: string },
+): JsonLdNode {
   const node: JsonLdNode = {
     "@id": claim.publicId,
     "@type": "wachuma:Claim",
-    "wachuma:subject": { "@id": claim.subjectId },
+    "wachuma:subject": { "@id": claim.subjectPublicId ?? claim.subjectId },
     "wachuma:predicate": claim.predicate,
     "wachuma:assertionType": claim.assertionType,
     "wachuma:evidenceLevel": claim.evidenceLevel,
     "prov:wasAttributedTo": claim.authorAgentId
       ? { "@id": claim.authorAgentId }
       : undefined,
-    "prov:wasDerivedFrom": { "@id": claim.sourceId },
+    "prov:wasDerivedFrom": {
+      "@id": claim.sourcePublicId ?? claim.sourceId,
+    },
   };
   if (claim.objectId) node["wachuma:object"] = { "@id": claim.objectId };
   if (claim.objectUri) node["wachuma:object"] = claim.objectUri;

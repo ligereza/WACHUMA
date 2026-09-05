@@ -66,6 +66,10 @@ los campos comparados por sus índices y los patrones de menos de tres caractere
 quedan fuera de la cobertura de `pg_trgm`.
 
 **Exportarse sin perder identidad**, a Darwin Core, JSON-LD/PROV-O y RO-Crate.
+`pnpm export:public` produce el archivo Darwin Core, el grafo RO-Crate y un
+manifiesto SHA-256 desde las proyecciones públicas; `pnpm quality:public-export`
+comprueba la reconstrucción, la atribución y que no se filtren registros
+restringidos.
 
 **Medirse solo.** `pnpm verify:release` corre la batería completa —tipos, lint,
 pruebas, build, contenido, licencias, SBOM, migraciones, formato, siembra
