@@ -6,6 +6,9 @@ import type {
   Vector3,
 } from "@wachuma/shared";
 
+export { buildPachanoi, clamp, warpShoot } from "./pachanoi-surface.js";
+export type { PachanoiSurface, Point2, Point3 } from "./pachanoi-surface.js";
+
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
 function normalize(vector: Vector3): Vector3 {
