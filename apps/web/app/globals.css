@@ -249,6 +249,120 @@ body {
     sans-serif;
   overflow-wrap: anywhere;
 }
+.review-proposal {
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid rgba(73, 107, 80, 0.42);
+  border-radius: 0.9rem;
+  background: rgba(189, 201, 166, 0.2);
+  padding: 1rem;
+}
+.review-proposal-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.review-proposal h3 {
+  margin: 0.35rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+.review-proposal-badge {
+  border: 1px solid rgba(73, 107, 80, 0.45);
+  border-radius: 999px;
+  color: var(--leaf);
+  padding: 0.35rem 0.55rem;
+  font:
+    600 0.68rem system-ui,
+    sans-serif;
+  text-align: right;
+}
+.review-proposal-warning,
+.review-proposal-rationale {
+  margin: 0;
+  color: var(--muted);
+  font:
+    0.84rem/1.5 system-ui,
+    sans-serif;
+}
+.review-proposal-warning {
+  border-left: 3px solid var(--sun);
+  padding-left: 0.7rem;
+}
+.review-proposal-facts,
+.review-proposal-scope {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 0;
+}
+.review-proposal-scope {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.review-proposal-facts div,
+.review-proposal-scope div {
+  border-top: 1px solid rgba(73, 107, 80, 0.2);
+  padding-top: 0.55rem;
+}
+.review-proposal-facts dt,
+.review-proposal-scope dt {
+  color: var(--leaf);
+  font:
+    700 0.66rem system-ui,
+    sans-serif;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.review-proposal-facts dd,
+.review-proposal-scope dd {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font:
+    0.82rem/1.45 system-ui,
+    sans-serif;
+  overflow-wrap: anywhere;
+}
+.review-proposal-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.review-proposal-columns h4 {
+  margin: 0;
+  color: var(--leaf);
+  font:
+    700 0.7rem system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.review-proposal-columns ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.45rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font:
+    0.82rem/1.45 system-ui,
+    sans-serif;
+}
+.review-proposal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1rem;
+  font:
+    600 0.8rem system-ui,
+    sans-serif;
+}
+.review-proposal-links a {
+  color: var(--leaf);
+  text-decoration: none;
+}
+.review-proposal-links a:hover {
+  text-decoration: underline;
+}
 .review-evidence-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
@@ -416,9 +530,15 @@ body {
   }
   .review-toolbar,
   .review-facts,
+  .review-proposal-facts,
+  .review-proposal-scope,
+  .review-proposal-columns,
   .review-evidence-grid,
   .review-targets li {
     grid-template-columns: 1fr;
+  }
+  .review-proposal-heading {
+    display: grid;
   }
   .review-targets li {
     display: grid;
