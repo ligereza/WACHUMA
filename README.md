@@ -30,6 +30,8 @@ escena 3D, el linaje y la relación
 cultural del jardín siguen siendo sintéticos o restringidos hasta incorporar
 registros reales revisados.
 
+- [Nomenclatura](NOMENCLATURA.md)
+- [Capacidades](CAPACIDADES.md)
 - [Estudio de referencias](docs/architecture/reference-study.md)
 - [ADR de arquitectura](docs/architecture/ADR-0001-plataforma.md)
 - [Diagrama entidad-relación](docs/architecture/erd.md)
