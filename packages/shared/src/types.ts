@@ -3,31 +3,42 @@ export type Brand<T, B extends string> = T & { readonly __brand: B };
 export type Id = Brand<string, "WachumaId">;
 export type PublicId = Brand<string, "WachumaPublicId">;
 
-export type Visibility =
-  "public" | "restricted" | "sensitive" | "community-controlled";
+/** Runtime values are the source of truth; the unions below cannot drift. */
+export const VISIBILITY_VALUES = [
+  "public",
+  "restricted",
+  "sensitive",
+  "community-controlled",
+] as const;
+export type Visibility = (typeof VISIBILITY_VALUES)[number];
 
-export type TaxonRank =
-  | "domain"
-  | "kingdom"
-  | "phylum"
-  | "class"
-  | "order"
-  | "family"
-  | "genus"
-  | "species"
-  | "subspecies"
-  | "variety"
-  | "form"
-  | "hybrid";
+export const TAXON_RANK_VALUES = [
+  "domain",
+  "kingdom",
+  "phylum",
+  "class",
+  "order",
+  "family",
+  "genus",
+  "species",
+  "subspecies",
+  "variety",
+  "form",
+  "hybrid",
+] as const;
+export type TaxonRank = (typeof TAXON_RANK_VALUES)[number];
 
+export const BIOLOGICAL_ENTITY_TYPE_VALUES = [
+  "species",
+  "subspecies",
+  "variety",
+  "cultivar",
+  "hybrid",
+  "clone",
+  "strain",
+] as const;
 export type BiologicalEntityType =
-  | "species"
-  | "subspecies"
-  | "variety"
-  | "cultivar"
-  | "hybrid"
-  | "clone"
-  | "strain";
+  (typeof BIOLOGICAL_ENTITY_TYPE_VALUES)[number];
 
 export type SpecimenType =
   | "plant-live"

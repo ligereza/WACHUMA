@@ -179,10 +179,23 @@ test(
         | {
             providerLicense?: string;
             publishedDiff: { state: string };
+            reviewProposal?: {
+              sourceRecordId: string;
+              license: { status: string };
+              supportedStatements: string[];
+              notSupported: string[];
+            };
           }
         | undefined;
       assert.equal(pendingPageRecord?.providerLicense, "per-record-review");
       assert.equal(pendingPageRecord?.publishedDiff.state, "unlinked");
+      assert.ok(pendingPageRecord?.reviewProposal);
+      assert.equal(
+        pendingPageRecord?.reviewProposal?.sourceRecordId,
+        pendingPageRecords.json()[0].sourceRecordId,
+      );
+      assert.ok(pendingPageRecord?.reviewProposal?.supportedStatements.length);
+      assert.ok(pendingPageRecord?.reviewProposal?.notSupported.length);
 
       const fungalTraitsSourceRecordKey = "fungaltraits:integration-guard";
       const fungalTraitsSourceRecordId = "00000000-0000-4000-9000-000000000778";

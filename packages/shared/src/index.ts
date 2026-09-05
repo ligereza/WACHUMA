@@ -12,3 +12,4 @@ export * from "./material-fixture.js";
 export { demoMaterialFixture } from "./material-fixture-demo.js";
 export * from "./scroll-experience.js";
 export { echinopsisScrollExperience } from "./scroll-experience-demo.js";
+export * from "./source-review-proposals.js";
