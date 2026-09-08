@@ -8,9 +8,18 @@ la postulación: no corresponde adjuntarlo al FUP.
 
 - Repositorio: `github.com/ligereza/WACHUMA` (público)
 - Rama: `postulacion/fondart-investigacion-2027`
-- Commit: `ebe05470dab9737b53d098cb09de3b1c990d58a5`
+- Commit vigente: `888ffa6efebb368c9164552083bc0021eefd5139`
 - Rama no fusionada a `main` -- el operador decide cuándo/si abrir la PR.
-- Esta nota se agregó en un commit posterior (`d31b120`) que no modifica ningún archivo de entrega -- los comandos de comprobación de abajo se ejecutaron contra el contenido de `ebe0547` y siguen siendo válidos en `d31b120`.
+- Esta nota se agregó originalmente en `d31b120` (documentación, sin tocar
+  archivos de entrega). Desde entonces la rama avanzó con `59541cb`
+  (aclaración de que ese commit es solo documentación), `60d4df9`/`abb7d05`
+  (formato `prettier` sobre los anexos FONDART y `NEXT.md`, gate de release
+  verificado completo) y `888ffa6` (ancla la afirmación de
+  `procedural-interpretation` en la evidencia de release del propio día,
+  agregando dos oraciones a `AVANCE_DE_INVESTIGACION.md` y al dossier
+  principal). Ningún commit posterior a `d31b120` tocó identidad ni datos
+  personales. Los comandos de comprobación de abajo se re-verificaron contra
+  `888ffa6`, no contra `ebe0547`.
 
 ## Rutas de entrega (dentro de esta rama)
 
@@ -30,7 +39,7 @@ cd WACHUMA/postulaciones/fondart-investigacion-2027
 
 # Confirmar el commit publicado
 git log -1 --format=%H
-# -> ebe05470dab9737b53d098cb09de3b1c990d58a5
+# -> 888ffa6efebb368c9164552083bc0021eefd5139
 
 # Paginación de los dos anexos
 pdfinfo ANEXOS/AVANCE_DE_INVESTIGACION.pdf | grep Pages       # -> 15
