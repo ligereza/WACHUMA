@@ -40,6 +40,46 @@ activos hoy.
 | 11 | Fecha de cierre (bases + portal) | `sections` / región del responsable | **parcialmente verificado** | Portal oficial (consultado hoy): 14 de septiembre de 2026, 15:00, para Coquimbo–Magallanes; 16 de septiembre para Arica y Parinacota, Tarapacá, Antofagasta y Atacama. | La fecha exacta aplicable depende de la región del responsable, que sigue `[FALTA]` (fila 1). Deadline duro en cualquier caso: 14 o 16 de septiembre de 2026, no el 10 que tenía la ficha vieja. |
 | 12 | Hash de integridad de las bases conservadas (`03_REQUISITOS_CONDICIONES_ALERTAS.md`) | `01_BASE_ORIGINAL_FONDART_NACIONAL_INVESTIGACION_2027.pdf` | **cumplido, verificado hoy** | `sha256sum` del PDF conservado coincide exactamente con el hash declarado: `9da0ab5f0850fdad354415448829fd88fa1e61beee5fd048c90a4a5b4c418af2`. | Ninguno. |
 
+## Repositorio vs. portal (agregado 2026-09-08)
+
+Separación explícita, para el cierre final, entre lo que ya vive en este
+repositorio y lo que falta cargar o confirmar directamente en la plataforma
+(`www.fondosdecultura.gob.cl`). No repite la verificación de la tabla de
+arriba -- solo la reclasifica en dos columnas.
+
+**Ya resuelto en este repositorio** (rutas dentro de esta misma rama,
+verificadas que existen):
+
+- `ANEXOS/AVANCE_DE_INVESTIGACION.md`, `.html`, `.pdf` -- 15 páginas exactas, bajo control de versiones (fila 5).
+- `ANEXOS/PLAN_ACTIVIDAD_TRANSFERENCIA.md`, `.html`, `.pdf` -- actividad de transferencia declarada (fila 4).
+- Metodología de campo completa en `ANEXOS/AVANCE_DE_INVESTIGACION.md` §6 (fila 3).
+- Documentos condicionales del Anexo N°2: ninguno aplica, verificado contra el propio dossier (fila 6).
+- Ventana de ejecución y montos/topes verificados con aritmética (filas 7, 8).
+- Postulación única en esta línea, ya decidida (fila 10).
+- Hash de integridad de la base oficial conservada (fila 12).
+
+**Pendiente de cargar/confirmar en el portal** (no resoluble desde el
+repositorio -- checklist de plataforma, ninguno existía antes de hoy):
+
+- [ ] Perfil Cultura del responsable: completar y verificar que el
+      *contenido*, no solo la existencia del registro, esté vigente (filas 1, 2).
+- [ ] Domicilio y región del responsable -- determina si el cierre aplicable
+      es el 14 o el 16 de septiembre de 2026 (filas 1, 11).
+- [ ] Cotizaciones reales y revisión laboral/tributaria del presupuesto,
+      reemplazando las estimaciones actuales (fila 9).
+- [ ] Transcribir el FUP en la plataforma sin dejar campos obligatorios vacíos.
+- [ ] Adjuntar los documentos sin comprimir -- nada de ZIP/RAR/7Z -- y cada
+      archivo individual bajo 100MB (`AVANCE_DE_INVESTIGACION.pdf` 143.540 bytes,
+      `PLAN_ACTIVIDAD_TRANSFERENCIA.pdf` 74.683 bytes, remedido hoy con
+      `ls -la`, muy por debajo del tope de 100MB).
+- [ ] Si se declara algún enlace público, confirmar que esté vigente y sin
+      contraseña al momento de la evaluación.
+- [ ] Enviar desde la cuenta del responsable en www.fondosdecultura.gob.cl y
+      descargar el certificado de recepción (fecha, hora, folio) -- ese
+      certificado confirma recepción, no que el proyecto cumpla las bases.
+- [ ] Reconfirmar la fecha de cierre aplicable una última vez antes de
+      enviar, directamente en el portal.
+
 ## Resumen
 
 - **Agente-solvable y cerrado hoy:** filas 3, 4, 5, 6, 7, 8, 10, 12 (8 de 12).
