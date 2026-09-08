@@ -10,6 +10,7 @@ la postulación: no corresponde adjuntarlo al FUP.
 - Rama: `postulacion/fondart-investigacion-2027`
 - Commit: `ebe05470dab9737b53d098cb09de3b1c990d58a5`
 - Rama no fusionada a `main` -- el operador decide cuándo/si abrir la PR.
+- Esta nota se agregó en un commit posterior (`d31b120`) que no modifica ningún archivo de entrega -- los comandos de comprobación de abajo se ejecutaron contra el contenido de `ebe0547` y siguen siendo válidos en `d31b120`.
 
 ## Rutas de entrega (dentro de esta rama)
 
