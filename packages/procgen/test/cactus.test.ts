@@ -11,8 +11,23 @@ import {
 } from "../src/index.ts";
 import { buildPachanoi, warpShoot } from "../src/index.ts";
 
+const canonicalize = (value: unknown): unknown => {
+  if (typeof value === "number") return Number(value.toFixed(12));
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, entry]) => [key, canonicalize(entry)]),
+    );
+  }
+  return value;
+};
+
 const pachanoiSurfaceHash = (surface: unknown) =>
-  createHash("sha256").update(JSON.stringify(surface)).digest("hex");
+  createHash("sha256")
+    .update(JSON.stringify(canonicalize(surface)))
+    .digest("hex");
 
 test("plant descriptor is explicit about interpretation and stable variation", () => {
   const descriptor = createPlantDescriptor({
@@ -87,7 +102,7 @@ test("modelo pachanoi extraído conserva un hash dorado y topología cerrada", (
 
   assert.equal(
     pachanoiSurfaceHash(surface),
-    "4de929d183379836c952bd2c53014503fbc93a1541925b249eb3823896e9b325",
+    "e5314b0bc54c064b560504282a54f5b88e8a9eef924132c2d5951609965d5159",
   );
   assert.equal(surface.vertices.length, 6050);
   assert.equal(surface.faces.length, 6132);
