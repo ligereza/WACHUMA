@@ -24,28 +24,28 @@
 
 ## Dónde está el puntaje
 
-| Criterio | Pondera | Secciones que lo alimentan |
-| --- | ---: | --- |
-| IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA | 40% | `plan_transferencia`, `publicos`, `presupuesto`, `compromisos_difusion` |
-| CALIDAD | 30% | `avance_investigacion`, `estudio_campo`, `metodologia`, `fuentes`, `compromisos_difusion` |
-| CURRÍCULO | 20% | `equipo`, `trayectoria_responsable` |
-| VIABILIDAD | 10% | `objetivos`, `actividades`, `metodologia`, `cronograma`, `presupuesto` |
+| Criterio                                        | Pondera | Secciones que lo alimentan                                                                |
+| ----------------------------------------------- | ------: | ----------------------------------------------------------------------------------------- |
+| IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA |     40% | `plan_transferencia`, `publicos`, `presupuesto`, `compromisos_difusion`                   |
+| CALIDAD                                         |     30% | `avance_investigacion`, `estudio_campo`, `metodologia`, `fuentes`, `compromisos_difusion` |
+| CURRÍCULO                                       |     20% | `equipo`, `trayectoria_responsable`                                                       |
+| VIABILIDAD                                      |     10% | `objetivos`, `actividades`, `metodologia`, `cronograma`, `presupuesto`                    |
 
 ## Fundamentación
 
-*Se evalúa en: sin criterio directo — peso total 0%*
+_Se evalúa en: sin criterio directo — peso total 0%_
 
 <!-- Problema, relevancia y aporte al campo disciplinar. -->
 
 Una representación de conocimiento —una ficha, un mapa de relaciones, una escena tridimensional— puede resultar convincente sin que quien la recorre sepa qué proviene de una fuente verificable, qué es una interpretación editorial y qué es apenas un marcador de trabajo en curso. Esta investigación no busca demostrar una tesis botánica: busca caracterizar cómo un público adulto de artes visuales distingue hecho de interpretación cuando esa distinción puede o no descubrirse, y qué ocurre con esa distinción cuando una representación visual particularmente convincente —una escena tridimensional— compite con el juicio evidencial. El proyecto se inscribe en el Grupo A, en nuevos medios, y en la temática autorizada de caracterización de públicos y consumo cultural.
 
-El estímulo del estudio no se construye desde cero ni como maqueta de laboratorio: es Wachuma, un atlas biológico y jardín digital ya existente sobre *Echinopsis pachanoi*, cuyo modelo de datos separa por esquema —no por intención editorial— qué clase de cosa dijo algo (`sourceType`) de qué clase de afirmación es (`assertionType`), y marca cada representación tridimensional del organismo con el rótulo `procedural-interpretation`, presente en cuatro esquemas distintos del sistema, que impide leer un render generado proceduralmente como una reconstrucción evidencial. Al 7 de septiembre de 2026 el corpus registra 28 fuentes, 67 registros de origen, 69 filas de procedencia y 53 revisiones de esos registros, sobre 7 taxones y 7 ejemplares. Esa arquitectura, y no una promesa, es lo que permite mostrarle a un público una lectura y su origen —o su falta— al mismo tiempo.
+El estímulo del estudio no se construye desde cero ni como maqueta de laboratorio: es Wachuma, un atlas biológico y jardín digital ya existente sobre _Echinopsis pachanoi_, cuyo modelo de datos separa por esquema —no por intención editorial— qué clase de cosa dijo algo (`sourceType`) de qué clase de afirmación es (`assertionType`), y marca cada representación tridimensional del organismo con el rótulo `procedural-interpretation`, presente en cuatro esquemas distintos del sistema, que impide leer un render generado proceduralmente como una reconstrucción evidencial. Al 7 de septiembre de 2026 el corpus registra 28 fuentes, 67 registros de origen, 69 filas de procedencia y 53 revisiones de esos registros, sobre 7 taxones y 7 ejemplares. Esa arquitectura, y no una promesa, es lo que permite mostrarle a un público una lectura y su origen —o su falta— al mismo tiempo.
 
 Lo que Wachuma todavía no tiene es contenido curado en su totalidad ni una superficie pública completa: hay una ficha de especie real y el resto de sus piezas de contenido (ficha cultural, escena tridimensional, una de las dos guías de cultivo) están marcadas `demo` o `restricted` en su propio esquema. Esa condición mixta —parte real, parte declaradamente demostrativa— no es un obstáculo para el estudio: es su segunda fuente de evidencia, porque permite preguntarle a un público real si distingue lo real de lo demostrativo cuando se le da la oportunidad de descubrirlo, y qué pasa cuando no se le da. El objeto evaluable no es la infraestructura sino el estudio de campo: qué distingue, qué rechaza y qué da por hecho un público cuando la procedencia y el estatuto epistémico de lo que ve están, o no están, a la vista.
 
 ## Objetivos
 
-*Se evalúa en: VIABILIDAD 10% — peso total 10%*
+_Se evalúa en: VIABILIDAD 10% — peso total 10%_
 
 <!-- Objetivo general y específicos, con logros observables. -->
 
@@ -53,6 +53,7 @@ Objetivo general:
 Caracterizar cómo un público adulto vinculado a las artes visuales distingue hecho documentado de interpretación al recorrer una pieza de conocimiento biocultural digital, y cómo cambia esa distinción cuando la procedencia y el estatuto epistémico de cada afirmación son explorables frente a cuando no lo son.
 
 Objetivos específicos:
+
 1. Delimitar, dentro del corpus real y demostrativo de Wachuma, un conjunto acotado de contenidos (ficha de especie, guía de cultivo, ficha cultural, escena tridimensional) que permita manipular la disponibilidad de procedencia sin alterar el contenido mostrado.
 2. Implementar dos condiciones de exploración —procedencia cerrada y procedencia abierta— como una capa de interacción reproducible sobre la interfaz pública existente, sin modificar el modelo de datos ni el estatus real de ningún registro.
 3. Diseñar y aplicar un protocolo de campo (cuestionario de entrada, tarea de clasificación con confianza, observación con pensar en voz alta, entrevista breve, ficha de salida comparativa) con consentimiento informado, anonimización y posibilidad de retiro.
@@ -61,7 +62,7 @@ Objetivos específicos:
 
 ## Actividades
 
-*Se evalúa en: VIABILIDAD 10% — peso total 10%*
+_Se evalúa en: VIABILIDAD 10% — peso total 10%_
 
 <!-- Actividades de investigación y productos que cumplen los objetivos. -->
 
@@ -73,7 +74,7 @@ Fase 5 — transferencia y cierre (noviembre de 2027-marzo de 2028): realizar la
 
 ## Estudio de campo
 
-*Se evalúa en: CALIDAD 30% — peso total 30%*
+_Se evalúa en: CALIDAD 30% — peso total 30%_
 
 <!-- Diseño del levantamiento de datos, participantes, instrumentos y resguardos. -->
 
@@ -85,7 +86,7 @@ El protocolo incluye consentimiento informado, retiro voluntario, anonimización
 
 ## Avance de Investigación
 
-*Se evalúa en: CALIDAD 30% — peso total 30%*
+_Se evalúa en: CALIDAD 30% — peso total 30%_
 
 <!-- Problema, objeto de estudio, preguntas o hipótesis, metodología, marco teórico, estado del arte y referencias; el anexo oficial pide 15 páginas tamaño carta. -->
 
@@ -93,7 +94,7 @@ El protocolo incluye consentimiento informado, retiro voluntario, anonimización
 
 Problema: una pieza digital que representa conocimiento puede resultar convincente sin que quien la recorre sepa qué proviene de una fuente verificable, qué es una interpretación editorial y qué es un marcador de trabajo en curso. Esa opacidad es un problema de conocimiento público, no un defecto menor de diseño.
 
-Objeto de estudio: la relación entre un público de artes visuales y una pieza de conocimiento biocultural cuya procedencia y estatuto epistémico pueden o no ponerse a la vista. El caso —Wachuma, *Echinopsis pachanoi*— está fijado de antemano y no se elige durante la ejecución.
+Objeto de estudio: la relación entre un público de artes visuales y una pieza de conocimiento biocultural cuya procedencia y estatuto epistémico pueden o no ponerse a la vista. El caso —Wachuma, _Echinopsis pachanoi_— está fijado de antemano y no se elige durante la ejecución.
 
 Pregunta: ¿cambia la forma en que un público adulto de artes visuales distingue un hecho documentado de una interpretación cuando puede descubrir activamente la procedencia y el estatuto epistémico de lo que observa, frente a la misma pieza sin ese acceso? ¿Y en qué medida, sin ese acceso, la verosimilitud de una escena tridimensional (`procedural-interpretation`) hace que se lea como un hecho? La pregunta secundaria —qué aporta recorrer un organismo digital frente a leer una ficha convencional— queda como dimensión de observación (ruta de entrada), no como hipótesis central.
 
@@ -101,29 +102,29 @@ Hipótesis de trabajo: H1, hacer explorable la procedencia y el estatuto episté
 
 Metodología: estudio de campo intra-sujeto (dos condiciones: procedencia cerrada / procedencia abierta, orden contrabalanceado) con una dimensión de observación entre-sujeto (ruta espacial/3D frente a ficha convencional), sobre un corpus real y demostrativo ya existente —no construido para la ocasión—: ficha de especie real, guía de cultivo real, ficha cultural `demo`, escena tridimensional `restricted`. Instrumentos: cuestionario de entrada, observación con pensar en voz alta, tarea de clasificación con confianza, registro de decisiones de lectura, entrevista breve y ficha de salida comparativa. El detalle completo —participantes, procedimiento por sesión, consideración ética sobre la reserva de información, y plan de análisis— está en el Avance, §6.
 
-Marco teórico y estado del arte: el proyecto articula seis líneas —el estándar de procedencia PROV-O (W3C, 2013); la Carta de Londres y su noción de *paradata* para reconstrucciones interpretativas (Denard, 2009); el heurístico de realismo en credibilidad de medios (Sundar, 2008) y el efecto de detalles seductores (Sundararajan & Adesope, 2020) como mecanismo cognitivo de riesgo; el modelo contextual de aprendizaje en museos (Falk & Dierking, 2013); *Data Feminism* (D'Ignazio & Klein, 2020) como argumento normativo; y la Encuesta Nacional de Participación Cultural (2018) como campo de públicos al que este estudio se suma sin duplicarlo—. El aspecto novedoso, desarrollado con su análisis bibliográfico completo en el Avance §5, es poner a prueba con público real, en un sistema de producción y no en una maqueta, si una arquitectura de datos que ya separa evidencia de interpretación cambia la lectura de un público cuando esa separación se hace explorable.
+Marco teórico y estado del arte: el proyecto articula seis líneas —el estándar de procedencia PROV-O (W3C, 2013); la Carta de Londres y su noción de _paradata_ para reconstrucciones interpretativas (Denard, 2009); el heurístico de realismo en credibilidad de medios (Sundar, 2008) y el efecto de detalles seductores (Sundararajan & Adesope, 2020) como mecanismo cognitivo de riesgo; el modelo contextual de aprendizaje en museos (Falk & Dierking, 2013); _Data Feminism_ (D'Ignazio & Klein, 2020) como argumento normativo; y la Encuesta Nacional de Participación Cultural (2018) como campo de públicos al que este estudio se suma sin duplicarlo—. El aspecto novedoso, desarrollado con su análisis bibliográfico completo en el Avance §5, es poner a prueba con público real, en un sistema de producción y no en una maqueta, si una arquitectura de datos que ya separa evidencia de interpretación cambia la lectura de un público cuando esa separación se hace explorable.
 
 ## Fuentes y trazabilidad
 
-*Se evalúa en: CALIDAD 30% — peso total 30%*
+_Se evalúa en: CALIDAD 30% — peso total 30%_
 
 <!-- Fuentes primarias/secundarias, procedencia, claims y límites de interpretación. -->
 
 El corpus del caso ya está constituido y es consultable. Medido el 7 de septiembre de 2026 sobre la base PostgreSQL/PostGIS del proyecto:
 
-| Tabla | Filas | Qué guarda |
-| --- | ---: | --- |
-| `record_provenance` | 69 | de dónde vino cada registro |
-| `source_records` | 67 | el registro tal como lo entregó su fuente |
-| `source_record_reviews` | 53 | la revisión humana de ese registro |
-| `specimen_locations` | 42 | ubicaciones de ejemplares, **no publicables** |
-| `sources` | 28 | las fuentes citables |
-| `claim_sources` | 23 | qué fuente sostiene qué afirmación |
-| `claims` | 21 | las afirmaciones |
-| `observations` | 21 | observaciones de campo |
-| `external_identifiers` | 14 | identificadores en repositorios externos |
-| `growing_guide_claims` | 12 | afirmaciones de guía de cultivo |
-| `taxa` / `specimens` | 7 / 7 | taxones y ejemplares |
+| Tabla                   | Filas | Qué guarda                                    |
+| ----------------------- | ----: | --------------------------------------------- |
+| `record_provenance`     |    69 | de dónde vino cada registro                   |
+| `source_records`        |    67 | el registro tal como lo entregó su fuente     |
+| `source_record_reviews` |    53 | la revisión humana de ese registro            |
+| `specimen_locations`    |    42 | ubicaciones de ejemplares, **no publicables** |
+| `sources`               |    28 | las fuentes citables                          |
+| `claim_sources`         |    23 | qué fuente sostiene qué afirmación            |
+| `claims`                |    21 | las afirmaciones                              |
+| `observations`          |    21 | observaciones de campo                        |
+| `external_identifiers`  |    14 | identificadores en repositorios externos      |
+| `growing_guide_claims`  |    12 | afirmaciones de guía de cultivo               |
+| `taxa` / `specimens`    | 7 / 7 | taxones y ejemplares                          |
 
 El repositorio del caso es `github.com/ligereza/WACHUMA`, con 83 commits, esquemas de contenido vinculantes e importadores versionados. El rótulo `procedural-interpretation` —que distingue una representación 3D generada de una reconstrucción evidencial— está declarado a nivel de esquema en cuatro archivos distintos del sistema (`garden-scene`, `material-fixture`, `plant-descriptor`, `scroll-experience`), verificado el 7 de septiembre de 2026.
 
@@ -133,7 +134,7 @@ Cada fuente nueva tendrá URL o ruta, fecha, hash, tipo, cita y estado, según e
 
 ## Metodología
 
-*Se evalúa en: VIABILIDAD 10%, CALIDAD 30% — peso total 40%*
+_Se evalúa en: VIABILIDAD 10%, CALIDAD 30% — peso total 40%_
 
 <!-- Cadena de investigación, análisis y validación; separar dato, inferencia y decisión artística. -->
 
@@ -143,7 +144,7 @@ La escena tridimensional y sus interpretaciones son modelos interpretativos decl
 
 ## Cronograma
 
-*Se evalúa en: VIABILIDAD 10% — peso total 10%*
+_Se evalúa en: VIABILIDAD 10% — peso total 10%_
 
 <!-- Ejecución de hasta 12 meses iniciada entre marzo y abril de 2027. -->
 
@@ -164,7 +165,7 @@ El inicio del 1 de abril de 2027 está dentro de la ventana de la convocatoria (
 
 ## Equipo de trabajo
 
-*Se evalúa en: CURRÍCULO 20% — peso total 20%*
+_Se evalúa en: CURRÍCULO 20% — peso total 20%_
 
 <!-- Responsabilidades, competencias y cartas de compromiso cuando corresponda. -->
 
@@ -174,7 +175,7 @@ Esta decisión mantiene la postulación comprobable sin inventar colaboradores. 
 
 ## Trayectoria del responsable
 
-*Se evalúa en: CURRÍCULO 20% — peso total 20%*
+_Se evalúa en: CURRÍCULO 20% — peso total 20%_
 
 <!-- Experiencia pertinente y antecedentes acreditables. -->
 
@@ -184,7 +185,7 @@ Responsable: **[FALTA: nombre legal y RUT]**. Faltan por completar: Perfil Cultu
 
 ## Presupuesto
 
-*Se evalúa en: VIABILIDAD 10%, IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 50%*
+_Se evalúa en: VIABILIDAD 10%, IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 50%_
 
 <!-- Gastos por actividad y funciones, con transferencia entre 5% y 10%, imprevistos hasta 2% y responsable hasta 40%. -->
 
@@ -194,7 +195,7 @@ El presupuesto es una base de trabajo para hacer comprobable la estructura, no u
 
 ## Plan de Actividad de transferencia
 
-*Se evalúa en: IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 40%*
+_Se evalúa en: IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 40%_
 
 <!-- Contenido, metodología, formato, público, resultados esperados, impacto y alcance; mínimo una actividad presencial o virtual. -->
 
@@ -206,7 +207,7 @@ Se presupuestan $600.000, equivalentes al 5% del monto solicitado, dentro del ra
 
 ## Públicos beneficiarios
 
-*Se evalúa en: IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 40%*
+_Se evalúa en: IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 40%_
 
 <!-- Perfil, convocatoria, número estimado y relación con el contenido. -->
 
@@ -216,7 +217,7 @@ La muestra intencional, el número de sesiones y la meta de beneficiarios quedan
 
 ## Compromisos de realización y/o difusión
 
-*Se evalúa en: CALIDAD 30%, IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 70%*
+_Se evalúa en: CALIDAD 30%, IMPACTO POTENCIAL DE LA ACTIVIDAD TRANSFERENCIA 40% — peso total 70%_
 
 <!-- Compromisos firmados de espacios, infraestructuras o medios existentes cuando la formulación los nombre. -->
 
@@ -224,13 +225,13 @@ No se declara en esta versión un espacio físico o medio existente como parte d
 
 ## Riesgos, ética y límites
 
-*Se evalúa en: sin criterio directo — peso total 0%*
+_Se evalúa en: sin criterio directo — peso total 0%_
 
 <!-- Consentimiento, privacidad, derechos, seguridad y límites de la interpretación visual. -->
 
 Riesgos y resguardos: consentimiento informado, retiro voluntario, anonimización, almacenamiento local, no publicación de archivos privados y revisión de derechos de cualquier fuente de terceros. La muestra no incluye menores ni actividades en vía pública o territorios indígenas.
 
-Límite de publicación, explícito por ser el riesgo mayor del caso: la base contiene 42 filas en `specimen_locations`. Las ubicaciones de ejemplares **no se publican, no se muestran al público del estudio y no salen en la pieza**, ni exactas ni aproximadas ni derivables de un mapa. *Echinopsis pachanoi* es una especie con presión de recolección y con significado cultural vivo en los Andes; difundir dónde está un ejemplar es un daño concreto, no un problema de forma. La política de publicación distingue tres niveles —público, restringido y no publicable— y las ubicaciones quedan en el tercero de manera permanente.
+Límite de publicación, explícito por ser el riesgo mayor del caso: la base contiene 42 filas en `specimen_locations`. Las ubicaciones de ejemplares **no se publican, no se muestran al público del estudio y no salen en la pieza**, ni exactas ni aproximadas ni derivables de un mapa. _Echinopsis pachanoi_ es una especie con presión de recolección y con significado cultural vivo en los Andes; difundir dónde está un ejemplar es un daño concreto, no un problema de forma. La política de publicación distingue tres niveles —público, restringido y no publicable— y las ubicaciones quedan en el tercero de manera permanente.
 
 Límite disciplinar: el jardín es una interpretación visual; no entrega diagnósticos, tratamientos, instrucciones de cultivo ni recomendaciones de uso de sustancias. Las fuentes botánicas, culturales y técnicas se mantendrán diferenciadas. Una fuente no se transforma en verdad por aparecer en una visualización; cada relación indicará si es documentada, inferida, hipotética o curatorial.
 
@@ -254,7 +255,7 @@ Riesgos pendientes [FALTA]: cerrar la bibliografía secundaria, revisar derechos
   [FALTA] domicilio/región acreditables y completar el trámite de Perfil Cultura
   (documentos pendientes de enviar en la plataforma).
 - Caso único y corpus primario: **cerrados**. El caso es Wachuma
-  (*Echinopsis pachanoi*) y su corpus es la base medida en «Fuentes y
+  (_Echinopsis pachanoi_) y su corpus es la base medida en «Fuentes y
   trazabilidad».
 - Bibliografía teórica, muestra (24-30 personas), diseño metodológico completo
   y número de sesiones: **cerrados**, en el Avance de Investigación §6-8.

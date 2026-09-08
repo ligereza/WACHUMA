@@ -40,7 +40,7 @@ that file's `allowBuilds`.
 
 ## Scope, which is the thing most likely to drift
 
-WACHUMA is the wachuma: *Echinopsis pachanoi*, permanently. It is not a general
+WACHUMA is the wachuma: _Echinopsis pachanoi_, permanently. It is not a general
 biocultural platform whose first case happens to be a cactus. The scope admits
 two orbits around that axis: related cacti as secondary material, and the fungi
 that attack or rot the cactus -- not mycology in general.

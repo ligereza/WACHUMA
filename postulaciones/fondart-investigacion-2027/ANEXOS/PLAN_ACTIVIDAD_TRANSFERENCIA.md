@@ -11,11 +11,9 @@ Una charla-taller presencial de dos horas, titulada **"Mostrar el trabajo: cómo
 
 Esta es la única actividad de transferencia que el proyecto compromete y financia; cumple el mínimo de una actividad presencial o virtual exigido por las bases (I.3) y no se declara como sustituto de ninguna otra obligación del proyecto.
 
-
 ## 2. Por qué esta actividad y no otra
 
 El estudio de campo (desarrollado en el Avance de Investigación) no produce solamente un hallazgo sobre un caso: produce un protocolo replicable —una manera concreta de distinguir, en cualquier archivo o pieza de visualización, qué es hecho documentado, qué es interpretación editorial y qué es un marcador de trabajo en curso (`demo`/placeholder)— y una constatación empírica sobre qué le pasa a un público real cuando esa distinción se hace o no se hace visible. Ese protocolo tiene valor para cualquier persona que construya un archivo, una base de datos o una pieza de nuevos medios con pretensión de verdad, no sólo para quien trabaje con Wachuma. La actividad de transferencia traslada exactamente eso: no una charla sobre el cactus, sino un método aplicable a otro material, con sus límites declarados con la misma honestidad con que se declaran en la investigación.
-
 
 ## 3. Contenido
 
@@ -25,7 +23,6 @@ La sesión se organiza en cuatro bloques de contenido, coherentes con lo desarro
 2. **Separar claim, interpretación y demostración.** La distinción operativa entre `sourceType`/`assertionType` (qué clase de cosa lo dijo, qué clase de afirmación es) y el rótulo `procedural-interpretation`, presentada no como jerga técnica sino como una pregunta que cualquier archivo puede hacerse: ¿esto que estoy mostrando es un hecho, una lectura mía, o un marcador de que todavía no está listo?
 3. **Qué le pasa a un público cuando esa distinción se hace visible.** Los resultados del estudio de campo, incluido —si así resulta— un hallazgo negativo, presentados con la misma honestidad con que se reportan en el informe final: qué cambió, qué no cambió, y qué se ignora todavía.
 4. **Aplicar la distinción al material propio de cada participante.** Un ejercicio guiado, breve, sobre una pieza que cada participante traiga o describa de su propio trabajo.
-
 
 ## 4. Metodología
 
@@ -38,7 +35,6 @@ La sesión combina cuatro momentos, en un formato de charla-taller y no de confe
 
 Reservas de diez minutos distribuidas entre bloques para preguntas, y cierre con encuesta de salida (ver §6).
 
-
 ## 5. Público beneficiario
 
 **Perfil.** Artistas visuales, mediadores culturales, curadores e investigadores que trabajen o quieran trabajar con archivos, bases de datos o piezas de visualización propias; no se requiere conocimiento técnico previo del modelo de datos de Wachuma ni de programación.
@@ -46,7 +42,6 @@ Reservas de diez minutos distribuidas entre bloques para preguntas, y cierre con
 **Estimación de audiencia.** 20 a 25 personas en la sesión presencial, número acorde a un formato de charla-taller con ejercicio guiado individual en el último bloque —una cifra mayor impediría el acompañamiento del ejercicio final dentro de las dos horas—. El registro en video y el protocolo editable, publicados abiertamente tras la actividad, alcanzan a un público profesional ampliado sin límite de cupo, que recibe el mismo contenido y la misma explicación de sus límites, aunque sin el acompañamiento en vivo del ejercicio guiado.
 
 **Convocatoria.** Difusión en redes propias del campo —escuelas de arte y diseño, redes de mediación cultural, la misma convocatoria usada para reclutar participantes del estudio de campo (sin superposición de personas entre ambas instancias, para no mezclar sujetos de investigación con público de transferencia)—, sin compra de audiencia ni de datos personales, consistente con la partida ya declarada en el presupuesto del proyecto.
-
 
 ## 6. Resultados esperados, impacto y alcance
 
@@ -58,11 +53,9 @@ Reservas de diez minutos distribuidas entre bloques para preguntas, y cierre con
 
 **Aporte al desarrollo profesional del postulante y al campo disciplinar.** La actividad obliga a traducir un hallazgo de investigación a un protocolo utilizable por terceros fuera del caso que lo originó —un ejercicio de mediación que no es automático incluso para quien produjo la investigación—, y deja un artefacto público (protocolo y registro) que otros practicantes del campo de nuevos medios y archivo digital pueden usar sin depender de Wachuma ni de este proyecto.
 
-
 ## 7. Compromisos de realización y difusión
 
 Esta actividad no depende de ningún espacio, infraestructura o medio de comunicación existente declarado en la formulación: se ejecuta con recursos y logística propios del proyecto (ver presupuesto), por lo que no se activa un compromiso de tercero exigible según el Anexo N°2. Si antes del envío se confirma un espacio anfitrión concreto para la sesión presencial, se adjuntará su compromiso firmado o su cotización y se actualizará esta sección y el presupuesto correspondiente.
-
 
 ## 8. Presupuesto y relación con el resto del proyecto
 
