@@ -61,7 +61,7 @@ verificadas que existen):
 repositorio -- checklist de plataforma, ninguno existía antes de hoy):
 
 - [ ] Perfil Cultura del responsable: completar y verificar que el
-      *contenido*, no solo la existencia del registro, esté vigente (filas 1, 2).
+      _contenido_, no solo la existencia del registro, esté vigente (filas 1, 2).
 - [ ] Domicilio y región del responsable -- determina si el cierre aplicable
       es el 14 o el 16 de septiembre de 2026 (filas 1, 11).
 - [ ] Cotizaciones reales y revisión laboral/tributaria del presupuesto,
