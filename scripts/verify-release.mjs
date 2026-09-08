@@ -10,6 +10,7 @@ const commands = [
   ["test"],
   ["build"],
   ["quality:taxonomy-fixture"],
+  ["quality:schemas"],
   ["quality:content"],
   ["quality:pachanoi-knowledge"],
   ["quality:content-manifest"],
